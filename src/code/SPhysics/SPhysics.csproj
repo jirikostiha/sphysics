@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AnalysisLevel>latest-recommended</AnalysisLevel>
+		<NoWarn>CA1725,CA1716,CS1591,CA1715</NoWarn>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+
+		<Product>SPhysics</Product>
+		<Copyright>Copyright © 2025 Jiri Kostiha</Copyright>
+		<Company />
+		<RepositoryUrl>https://github.com/jirikostiha/sphysics</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+		<Title>SPhysics</Title>
+		<Description>Alternative physics library based on .Net 7 generic math.</Description>
+		<PackageTags>physics; generic-physics; csharp</PackageTags>
+		<PackageProjectUrl>https://github.com/jirikostiha/sphysics</PackageProjectUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<SignAssembly>True</SignAssembly>
+		<Version>0.0.0</Version>
+		<Authors>Jiri Kostiha</Authors>
+		<AssemblyOriginatorKeyFile>.\..\..\ijkdata.snk</AssemblyOriginatorKeyFile>
+		<PackageIcon>icon.png</PackageIcon>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Update="icon.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+</Project>

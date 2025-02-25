@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution items", "solution items", "{8ABEA7BE-2CB6-499A-A09E-7D836F189422}"
+	ProjectSection(SolutionItems) = preProject
+		..\.gitattributes = ..\.gitattributes
+		..\.gitignore = ..\.gitignore
+		directory.build.props = directory.build.props
+		..\LICENSE = ..\LICENSE
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ci", "ci", "{1A810558-9123-4E1F-A0A1-B223D2E48C69}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\analyse-code.yml = ..\.github\workflows\analyse-code.yml
+		..\.github\workflows\build.yml = ..\.github\workflows\build.yml
+		..\.github\workflows\clean-history.yml = ..\.github\workflows\clean-history.yml
+		..\.github\workflows\lint-code.yml = ..\.github\workflows\lint-code.yml
+		..\.github\workflows\lint-commit.yml = ..\.github\workflows\lint-commit.yml
+		..\.github\workflows\publish.yml = ..\.github\workflows\publish.yml
+		..\.github\workflows\release.yml = ..\.github\workflows\release.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{2A84844F-120B-4123-BD40-50087BAA6F75}"
+	ProjectSection(SolutionItems) = preProject
+		..\readme.md = ..\readme.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "configs", "configs", "{B05FF84F-A995-4800-938A-F3D6E5412AD4}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\commitlint_config.js = ..\.github\commitlint_config.js
+		..\.github\dependabot.yml = ..\.github\dependabot.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPhysics", "code\SPhysics\SPhysics.csproj", "{78F3C63B-4D35-A3F5-233D-27921183F491}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{78F3C63B-4D35-A3F5-233D-27921183F491}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78F3C63B-4D35-A3F5-233D-27921183F491}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78F3C63B-4D35-A3F5-233D-27921183F491}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78F3C63B-4D35-A3F5-233D-27921183F491}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B05FF84F-A995-4800-938A-F3D6E5412AD4} = {1A810558-9123-4E1F-A0A1-B223D2E48C69}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AE703196-5935-41FB-83E8-8DC5D4797DCF}
+	EndGlobalSection
+EndGlobal

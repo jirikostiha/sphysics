@@ -13,11 +13,25 @@ using System.Runtime.CompilerServices;
 /// </remarks>
 public static class GravitationalIntensity
 {
+    /// <summary>
+    ///
+    /// </summary>
+    /// <typeparam name="N"></typeparam>
+    /// <param name="mass"></param>
+    /// <param name="radius">Distance from center</param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static N Scalar<N>(N mass, N distance, N gravitationConst)
+    public static N Scalar<N>(N mass, N radius)
         where N : INumberBase<N>
         =>
-        gravitationConst * mass / (distance * distance);
+        N.CreateTruncating(-6.67430e-11) * mass / (radius * radius);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static N Scalar<N>(N mass, N radius, N gravitationConst)
+        where N : INumberBase<N>
+        =>
+        -gravitationConst * mass / (radius * radius);
+
 
     //todo inside
 }

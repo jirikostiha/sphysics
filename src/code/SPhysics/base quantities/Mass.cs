@@ -1,4 +1,4 @@
-﻿using SMath.Functions1;
+﻿using System.Numerics;
 
 namespace SPhysics;
 
@@ -15,7 +15,10 @@ public static class Mass
     public const string Dimension = "M";
 
     //from average density
-    public static double FromVolume(double volume, double density) => volume * density;
+    public static N FromVolume<N>(N volume, N density)
+        where N : IMultiplyOperators<N,N,N>
+        =>
+        volume * density;
 
     /// <summary>
     /// Mass
@@ -23,6 +26,8 @@ public static class Mass
     /// <remarks>
     /// <a href="https://math-physics-calc.com/gravitational-force-calculator">calculator</a>
     /// </remarks>
-    public static double FromGravitation(double force, double distance, double mass2, double gravitationConst)
-        => force * Power2.Eval(distance) / (mass2 * gravitationConst);
+    public static N FromGravitation<N>(N force, N distance, N mass2, N gravitationConst)
+        where N : INumberBase<N>
+        =>
+        force * (distance * distance) / (mass2 * gravitationConst);
 }

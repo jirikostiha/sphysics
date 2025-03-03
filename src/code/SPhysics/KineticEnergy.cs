@@ -16,7 +16,7 @@ public static class KineticEnergy
     public static N Linear<N>(N mass, N velocity)
         where N : INumberBase<N>
         =>
-        (N.One / N.CreateTruncating(2)) * mass * (velocity * velocity);
+        N.CreateTruncating(0.5) * mass * (velocity * velocity);
 
     /// <summary>
     /// Kinetic energy of spinning motion.
@@ -24,5 +24,5 @@ public static class KineticEnergy
     public static N Spinning<N>(N momentOfInertia, N angularVelocity)
         where N : INumberBase<N>
         =>
-        (N.One / N.CreateTruncating(2)) * momentOfInertia * (angularVelocity * angularVelocity);
+        N.CreateTruncating(0.5) * momentOfInertia * (angularVelocity * angularVelocity);
 }

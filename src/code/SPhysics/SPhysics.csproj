@@ -29,6 +29,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="SMath" Version="0.7.0" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Update="icon.png">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>

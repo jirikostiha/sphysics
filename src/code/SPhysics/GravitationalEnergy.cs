@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using SMath.GeometryD2;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace SPhysics;
@@ -13,18 +14,35 @@ namespace SPhysics;
 /// </remarks>
 public static class GravitationalEnergy
 {
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static N Eval<N>(N mass1, N mass2, N distance, N gravitationConst)
+    public static N Eval<N>(N mass1, N mass2, N distance)
         where N : INumberBase<N>
         =>
-        - gravitationConst * mass1 * mass2 / distance;
+        //const double G = 6.67430e-11; // m^3 kg^-1 s^-2
+        N.CreateTruncating(-6.67430e-11) * mass1 * mass2 / distance;
 
-    //todo inside
+    public static N Eval<N>(N mass1, N mass2, N distance, N gravitationalConst)
+        where N : INumberBase<N>
+        =>
+        N.CreateTruncating(-gravitationalConst) * mass1 * mass2 / distance;
 
-    //of system in 2d cartesian coord system
-    public static N OfSystem<N>(IList<((N X1, N X2) Coords, N Mass)> bodies, N gravitationConst)
+    public static N Total<N>((N x, N y, N m)[] points)
+        where N : INumberBase<N>, IRootFunctions<N>
     {
-        //todo
-        return default;
+        int n = points.Length;
+        N totalEnergy = N.Zero;
+
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = i + 1; j < n; j++)
+            {
+                N dx = points[i].x - points[j].x;
+                N dy = points[i].y - points[j].y;
+                N distance = Point2.Distance((dx, dy));
+
+                totalEnergy += Eval(points[i].m, points[j].m, distance);
+            }
+        }
+
+        return totalEnergy;
     }
 }

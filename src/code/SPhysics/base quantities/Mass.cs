@@ -27,7 +27,7 @@ public static class Mass
     /// <a href="https://math-physics-calc.com/gravitational-force-calculator">calculator</a>
     /// </remarks>
     public static N FromGravitation<N>(N force, N distance, N mass2, N gravitationConst)
-        where N : INumberBase<N>
+        where N : IMultiplyOperators<N, N, N>, IDivisionOperators<N,N,N>
         =>
         force * (distance * distance) / (mass2 * gravitationConst);
 }

@@ -18,7 +18,7 @@ public static class MomentOfInertia
     public const string Dimension = Mass.Dimension + " " + Length.Dimension + "+2";
 
     public static N Eval<N>(N angularMomentum, N angularVelocity)
-        where N : INumberBase<N>
+        where N : IDivisionOperators<N,N,N>
         =>
         angularMomentum / angularVelocity;
 
@@ -26,13 +26,13 @@ public static class MomentOfInertia
 
     /// <summary> Point mass at a distance from the axis of rotation.. </summary>
     public static N Point<N>(N mass, N distanceRadius)
-        where N : INumberBase<N>
+        where N : IMultiplyOperators<N,N,N>
         =>
         mass * (distanceRadius * distanceRadius);
 
     /// <summary> Two point masses at a distance from the axis of rotation.. </summary>
     public static N TwoPoints<N>(N mass1, N mass2, N distance)
-        where N : INumberBase<N>
+        where N : IMultiplyOperators<N, N, N>, , IDivisionOperators<N, N, N>, IAdditionOperators<N,N,N>
         =>
         (mass1 * mass2 / (mass1 + mass2)) * (distance * distance);
 

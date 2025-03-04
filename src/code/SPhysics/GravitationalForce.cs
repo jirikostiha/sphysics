@@ -14,7 +14,7 @@ public static class GravitationalForce
     /// Attraction force of two bodies above surface.
     /// </summary>
     public static N Outside<N>(N mass1, N mass2, N distance, N gravitationConst)
-        where N : INumberBase<N>
+        where N : IMultiplyOperators<N, N, N>, IDivisionOperators<N, N, N>
         =>
         mass1 * mass2 * gravitationConst / (distance * distance);
 
@@ -26,7 +26,7 @@ public static class GravitationalForce
     /// <a href="https://profoundphysics.com/gravity-underground/">source</a>
     /// </remarks>
     public static N Inside<N>(N distance, N density, N gravitationConst)
-        where N : INumberBase<N>, ITrigonometricFunctions<N>
+        where N : ITrigonometricFunctions<N>
         => N.CreateTruncating(4 / 3) * N.Pi * gravitationConst * (density * distance); //todo test
 
     /// <summary>

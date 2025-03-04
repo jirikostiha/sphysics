@@ -11,12 +11,12 @@ namespace SPhysics.CelestialMechanics;
 public static class MeanMotion
 {
     public static N Eval<N>(N mass1, N mass2, N semiMajorAxis, N gravitationalConstant)
-        where N : INumberBase<N>, IRootFunctions<N>
+        where N : IRootFunctions<N>
         =>
         N.Sqrt(gravitationalConstant * (mass1 + mass2) / (semiMajorAxis * semiMajorAxis *semiMajorAxis));
 
     public static N Eval<N>(N orbitalPeriod)
-        where N : INumberBase<N>, ITrigonometricFunctions<N>
+        where N : ITrigonometricFunctions<N>
         =>
         N.CreateTruncating(2) * N.Pi / orbitalPeriod;
 }

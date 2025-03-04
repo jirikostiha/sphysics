@@ -13,7 +13,7 @@ public static class Density
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N Average<N>(N volume, N mass)
-        where N : INumberBase<N>
+        where N : IDivisionOperators<N, N, N>
         =>
         mass / volume;
 }

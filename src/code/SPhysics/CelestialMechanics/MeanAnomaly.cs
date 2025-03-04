@@ -15,7 +15,7 @@ public static class MeanAnomaly
     /// From the eccentric anomaly
     /// </summary>
     public static N Eval<N>(N eccentricAnomaly, N eccentricity)
-        where N : INumberBase<N>, ITrigonometricFunctions<N>
+        where N : ITrigonometricFunctions<N>
         =>
         eccentricAnomaly - eccentricity * N.Sin(eccentricAnomaly);
 

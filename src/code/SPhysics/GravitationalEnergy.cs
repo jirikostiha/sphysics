@@ -26,7 +26,7 @@ public static class GravitationalEnergy
         N.CreateTruncating(-gravitationalConst) * mass1 * mass2 / distance;
 
     public static N Total<N>((N x, N y, N m)[] points)
-        where N : INumberBase<N>, IRootFunctions<N>
+        where N : IRootFunctions<N>
     {
         int n = points.Length;
         N totalEnergy = N.Zero;

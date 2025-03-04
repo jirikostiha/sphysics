@@ -17,7 +17,7 @@ public static class Force
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N FromAcceleration<N>(N mass, N acceleration)
-        where N : INumberBase<N>
+        where N : IMultiplyOperators<N, N, N>
         =>
         mass * acceleration;
 }

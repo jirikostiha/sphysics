@@ -8,12 +8,6 @@ namespace SPhysics;
 /// </summary>
 public static class Distance
 {
-    /// <summary>
-    /// Distance
-    /// </summary>
-    /// <remarks>
-    /// <a href="https://math-physics-calc.com/gravitational-force-calculator">calculator</a>
-    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N FromGravitation<N>(N mass1, N mass2, N force, N gravitationConst)
         where N : IRootFunctions<N>

@@ -13,7 +13,7 @@ public static class GravitationalPotential
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N Eval<N>(N mass, N distance, N gravitationConst)
-        where N : INumberBase<N>
+        where N : IUnaryNegationOperators<N, N>, IMultiplyOperators<N, N, N>, IDivisionOperators<N, N, N>
         =>
         - gravitationConst * mass / distance;
 

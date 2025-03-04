@@ -17,12 +17,12 @@ public static class Momentum
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N Scalar<N>(N mass, N velocity)
-        where N : INumberBase<N>
+        where N : IMultiplyOperators<N, N, N>
         =>
         mass * velocity;
 
     public static (N px, N py) Total<N>((N vx, N vy, N m)[] bodies)
-        where N : INumberBase<N>
+        where N : IMultiplyOperators<N,N,N>
     {
         N px = bodies.Aggregate(N.Zero, (sum, body) => body.vx * body.m);
         N py = bodies.Aggregate(N.Zero, (sum, body) => body.vy * body.m);

@@ -17,13 +17,13 @@ public static class Velocity
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N FromAcceleration<N>(N acceleration, N time)
-        where N : INumberBase<N>
+        where N : IMultiplyOperators<N, N, N>
         =>
         acceleration * time;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N FromAngularVelocity<N>(N angularVelocity, N radius)
-        where N : INumberBase<N>
+        where N : IMultiplyOperators<N, N, N>
         =>
         angularVelocity * radius;
 }

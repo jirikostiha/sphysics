@@ -13,7 +13,7 @@ public static class AngularVelocity
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N FromLinearVelocity<N>(N velocity, N radius)
-        where N : INumberBase<N>
+        where N : IDivisionOperators<N, N, N>
         =>
         velocity / radius;
 }

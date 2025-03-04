@@ -14,7 +14,7 @@ public static class EscapeVelocity
     /// For a spherically symmetric, massive body such as a star, or planet, the escape velocity for that body, at a given distance.
     /// </summary>
     public static N Eval<N>(N mass, N distance, N gravitationalConstant)
-        where N : INumberBase<N>, IRootFunctions<N>
+        where N : IRootFunctions<N>
         =>
         N.Sqrt(N.CreateTruncating(2) * mass * gravitationalConstant / distance);
 }

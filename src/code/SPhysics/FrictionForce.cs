@@ -13,13 +13,13 @@ public static class FrictionForce
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N Static<N>(N normalForce, N staticFrictionCoef)
-        where N : INumberBase<N>
+        where N : IMultiplyOperators<N, N, N>
         =>
         normalForce * staticFrictionCoef;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N Kinetic<N>(N normalForce, N kineticFrictionCoef)
-        where N : INumberBase<N>
+        where N : IMultiplyOperators<N, N, N>
         =>
         normalForce * kineticFrictionCoef;
 }

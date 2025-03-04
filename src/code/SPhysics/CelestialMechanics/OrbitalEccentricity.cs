@@ -11,7 +11,7 @@ namespace SPhysics.CelestialMechanics;
 public static class OrbitalEccentricity
 {
     public static N Eval<N>(N reducedMass, N totalOrbitalEnergy, N angularMomentum, N inverseSquare)
-        where N : INumberBase<N>, IRootFunctions<N>
+        where N : IRootFunctions<N>
         =>
         N.Sqrt(N.One + N.CreateTruncating(2) * totalOrbitalEnergy * (angularMomentum * angularMomentum)
             / (reducedMass * (inverseSquare * inverseSquare)));

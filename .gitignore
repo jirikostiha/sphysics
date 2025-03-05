@@ -49,6 +49,8 @@ _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
 
+#---Rider---
+*.idea
 
 #---Nuget---
 [Pp]ackages/

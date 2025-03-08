@@ -28,7 +28,7 @@ public static class GravitationalIntensity
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N Scalar<N>(N mass, N radius, N gravitationConst)
-        where N : IUnaryNegationOperators<N,N>, IMultiplyOperators<N,N,N>, IDivisionOperators<N,N,N>
+        where N : IUnaryNegationOperators<N, N>, IMultiplyOperators<N, N, N>, IDivisionOperators<N, N, N>
         =>
         -gravitationConst * mass / (radius * radius);
 

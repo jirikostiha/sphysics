@@ -10,5 +10,5 @@ public static class Acceleration
 {
     public const string Name = "acceleration";
     public const string DefaultSymbol = "a";
-    public const string Dimension = Length.Dimension+" "+Time.Dimension+"-2";
+    public const string Dimension = Length.Dimension + " " + Time.Dimension + "-2";
 }

@@ -11,7 +11,7 @@ namespace SPhysics;
 public static class PotentialEnergy
 {
     public static N Eval<N>(N mass, N g, N height)
-        where N : IMultiplyOperators<N,N,N>
+        where N : IMultiplyOperators<N, N, N>
         =>
         mass * g * height;
 }

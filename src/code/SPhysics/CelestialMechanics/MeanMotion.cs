@@ -13,7 +13,7 @@ public static class MeanMotion
     public static N Eval<N>(N mass1, N mass2, N semiMajorAxis, N gravitationalConstant)
         where N : IRootFunctions<N>
         =>
-        N.Sqrt(gravitationalConstant * (mass1 + mass2) / (semiMajorAxis * semiMajorAxis *semiMajorAxis));
+        N.Sqrt(gravitationalConstant * (mass1 + mass2) / (semiMajorAxis * semiMajorAxis * semiMajorAxis));
 
     public static N Eval<N>(N orbitalPeriod)
         where N : ITrigonometricFunctions<N>

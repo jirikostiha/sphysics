@@ -36,7 +36,7 @@ public static class GravitationalEnergy
     /// /// <param name="gravitationConst"> constant in real world G = 6.67430e-11; // m^3 kg^-1 s^-2 </param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N Eval<N>(N mass1, N mass2, N distance, N gravitationConst)
-        where N : IMultiplyOperators<N, N, N>, IDivisionOperators<N, N, N>, IUnaryNegationOperators<N,N>
+        where N : IMultiplyOperators<N, N, N>, IDivisionOperators<N, N, N>, IUnaryNegationOperators<N, N>
         =>
         -gravitationConst * mass1 * mass2 / distance;
 

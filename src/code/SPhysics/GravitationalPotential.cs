@@ -15,7 +15,7 @@ public static class GravitationalPotential
     public static N Eval<N>(N mass, N distance, N gravitationConst)
         where N : IUnaryNegationOperators<N, N>, IMultiplyOperators<N, N, N>, IDivisionOperators<N, N, N>
         =>
-        - gravitationConst * mass / distance;
+        -gravitationConst * mass / distance;
 
     //todo inside
 }

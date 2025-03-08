@@ -10,5 +10,5 @@ public static class Pressure
 {
     public const string Name = "pressure";
     public const string DefaultSymbol = "p";
-    public const string Dimension = Mass.Dimension+" "+Length.Dimension+"-1 "+Time.Dimension+"-2";
+    public const string Dimension = Mass.Dimension + " " + Length.Dimension + "-1 " + Time.Dimension + "-2";
 }

@@ -20,7 +20,7 @@ public static class MeanAnomaly
         eccentricAnomaly - eccentricity * N.Sin(eccentricAnomaly);
 
     public static N Eval2<N>(N longitudeOfThePericenter, N meanLongitude)
-        where N : ISubtractionOperators<N,N,N>
+        where N : ISubtractionOperators<N, N, N>
         =>
         meanLongitude - longitudeOfThePericenter;
 }

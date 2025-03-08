@@ -17,5 +17,5 @@ public static class OrbitalPeriod
         where N : ITrigonometricFunctions<N>, IRootFunctions<N>
         =>
         N.CreateTruncating(2) * N.Pi * N.Sqrt(semiMajorAxis * semiMajorAxis * semiMajorAxis / (gravitationalConstant * mass));
-        //todo test
+    //todo test
 }

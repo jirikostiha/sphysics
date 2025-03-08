@@ -15,8 +15,8 @@ public static class CenterOfMass
     {
         N totalMass = points.Aggregate(N.Zero, (sum, point) => sum + point.m);
 
-        N x = points.Aggregate(N.Zero, (sum, point) => point.x * point.m ) / totalMass;
-        N y = points.Aggregate(N.Zero, (sum, point) => point.y * point.m ) / totalMass;
+        N x = points.Aggregate(N.Zero, (sum, point) => point.x * point.m) / totalMass;
+        N y = points.Aggregate(N.Zero, (sum, point) => point.y * point.m) / totalMass;
 
         return (x, y);
     }

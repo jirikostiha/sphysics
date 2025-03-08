@@ -10,5 +10,5 @@ public static class Power
 {
     public const string Name = "power";
     public const string DefaultSymbol = "P";
-    public const string Dimension = Mass.Dimension+" "+Length.Dimension+"+2 "+Time.Dimension+"-3";
+    public const string Dimension = Mass.Dimension + " " + Length.Dimension + "+2 " + Time.Dimension + "-3";
 }

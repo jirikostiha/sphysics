@@ -16,7 +16,7 @@ public static class Mass
 
     //from average density
     public static N FromVolume<N>(N volume, N density)
-        where N : IMultiplyOperators<N,N,N>
+        where N : IMultiplyOperators<N, N, N>
         =>
         volume * density;
 
@@ -27,7 +27,7 @@ public static class Mass
     /// <a href="https://math-physics-calc.com/gravitational-force-calculator">calculator</a>
     /// </remarks>
     public static N FromGravitation<N>(N force, N distance, N mass2, N gravitationConst)
-        where N : IMultiplyOperators<N, N, N>, IDivisionOperators<N,N,N>
+        where N : IMultiplyOperators<N, N, N>, IDivisionOperators<N, N, N>
         =>
         force * (distance * distance) / (mass2 * gravitationConst);
 }

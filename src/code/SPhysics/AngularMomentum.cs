@@ -20,7 +20,7 @@ public static class AngularMomentum
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N FromMomentum<N>(N momentum, N radius)
-        where N : IMultiplyOperators<N,N,N>
+        where N : IMultiplyOperators<N, N, N>
         =>
         momentum * radius;
 

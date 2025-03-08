@@ -10,5 +10,5 @@ public static class AbsorbedDose
 {
     public const string Name = "absorbed dose of ionizing radiation";
     public const string DefaultSymbol = "D";
-    public const string Dimension = Length.Dimension+"+2 "+Time.Dimension+"-2"; //J * kg-1
+    public const string Dimension = Length.Dimension + "+2 " + Time.Dimension + "-2"; //J * kg-1
 }

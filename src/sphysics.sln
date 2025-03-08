@@ -35,6 +35,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "configs", "configs", "{B05F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPhysics", "code\SPhysics\SPhysics.csproj", "{78F3C63B-4D35-A3F5-233D-27921183F491}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "quality", "quality", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPhysics__Tests", "quality\SPhysics__Tests\SPhysics__Tests.csproj", "{3D0174C6-90E1-8E17-9D2A-37A3A1D10A88}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,12 +49,17 @@ Global
 		{78F3C63B-4D35-A3F5-233D-27921183F491}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78F3C63B-4D35-A3F5-233D-27921183F491}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78F3C63B-4D35-A3F5-233D-27921183F491}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D0174C6-90E1-8E17-9D2A-37A3A1D10A88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D0174C6-90E1-8E17-9D2A-37A3A1D10A88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D0174C6-90E1-8E17-9D2A-37A3A1D10A88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D0174C6-90E1-8E17-9D2A-37A3A1D10A88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B05FF84F-A995-4800-938A-F3D6E5412AD4} = {1A810558-9123-4E1F-A0A1-B223D2E48C69}
+		{3D0174C6-90E1-8E17-9D2A-37A3A1D10A88} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AE703196-5935-41FB-83E8-8DC5D4797DCF}

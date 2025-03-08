@@ -49,10 +49,10 @@ public static class GravitationalForce
     //    where N : ITrigonometricFunctions<N>
     //    => N.CreateTruncating(4 / 3) * N.Pi * gravitationConst * (density * distance); //todo test
 
-    /// <summary>
-    /// Outside and inside. Inside is counted as homogenous.
-    /// Neni presny, pze r2 se nebere v potaz a pocita se jako hmotny bod.
-    /// </summary>
+    ///// <summary>
+    ///// Outside and inside. Inside is counted as homogenous.
+    ///// Neni presny, pze r2 se nebere v potaz a pocita se jako hmotny bod.
+    ///// </summary>
     //public static N Anywhere<N>(N mass1, N mass2, N radius1, N radius2, N distance, N gravitationConst)
     //    where N : INumberBase<N>
     //    =>

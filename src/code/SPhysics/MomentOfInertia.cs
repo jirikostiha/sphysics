@@ -36,17 +36,17 @@ public static class MomentOfInertia
         =>
         (mass1 * mass2 / (mass1 + mass2)) * (distance * distance);
 
-    /// <summary> Hollow sphere. </summary>
-    //public static double Sphere(double radius, double mass) => SphereBody.MomentOfInertia(radius, mass);
+    ///// <summary> Hollow sphere. </summary>
+    ////public static double Sphere(double radius, double mass) => SphereBody.MomentOfInertia(radius, mass);
 
-    /// <summary> Solid sphere (ball). </summary>
-    //public static double SolidSphere(double radius, double mass) => BallBody.MomentOfInertia(radius, mass);
+    ///// <summary> Solid sphere (ball). </summary>
+    ////public static double SolidSphere(double radius, double mass) => BallBody.MomentOfInertia(radius, mass);
 
-    /// <summary>
-    /// Sphere (shell) of radius r2 and mass m, with centered spherical cavity of radius r1.
-    /// </summary>
-    //  public static double SphereShell(double innerRadius, double outerRadius, double mass)
-    //        => SphericalShellBody.MomentOfInertia(innerRadius, outerRadius, mass);
+    ///// <summary>
+    ///// Sphere (shell) of radius r2 and mass m, with centered spherical cavity of radius r1.
+    ///// </summary>
+    ////  public static double SphereShell(double innerRadius, double outerRadius, double mass)
+    ////        => SphericalShellBody.MomentOfInertia(innerRadius, outerRadius, mass);
 
     #endregion
 }

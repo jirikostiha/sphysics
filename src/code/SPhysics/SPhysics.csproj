@@ -25,8 +25,16 @@
 		<Version>0.1.0</Version>
 		<Authors>Jiri Kostiha</Authors>
 		<AssemblyOriginatorKeyFile>.\..\..\ijkdata.snk</AssemblyOriginatorKeyFile>
-		<PackageReadmeFile>..\..\readme.md</PackageReadmeFile>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\..\readme.md">
+			<Link>readme.md</Link>
+			<Pack>true</Pack>
+			<PackagePath>readme.md</PackagePath>
+		</None>
+	</ItemGroup>
 
 	<ItemGroup>
 	  <PackageReference Include="SMath" Version="0.8.0" />

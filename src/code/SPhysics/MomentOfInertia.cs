@@ -32,7 +32,7 @@ public static class MomentOfInertia
 
     /// <summary> Two point masses at a distance from the axis of rotation.. </summary>
     public static N TwoPoints<N>(N mass1, N mass2, N distance)
-        where N : IMultiplyOperators<N, N, N>, , IDivisionOperators<N, N, N>, IAdditionOperators<N,N,N>
+        where N : IMultiplyOperators<N, N, N>, IDivisionOperators<N, N, N>, IAdditionOperators<N,N,N>
         =>
         (mass1 * mass2 / (mass1 + mass2)) * (distance * distance);
 

@@ -22,7 +22,7 @@ public static class Momentum
         mass * velocity;
 
     public static (N px, N py) Total<N>((N vx, N vy, N m)[] bodies)
-        where N : IMultiplyOperators<N,N,N>
+        where N : INumberBase<N>
     {
         N px = bodies.Aggregate(N.Zero, (sum, body) => body.vx * body.m);
         N py = bodies.Aggregate(N.Zero, (sum, body) => body.vy * body.m);

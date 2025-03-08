@@ -22,7 +22,7 @@
 		<PackageProjectUrl>https://github.com/jirikostiha/sphysics</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<SignAssembly>True</SignAssembly>
-		<Version>0.0.0</Version>
+		<Version>0.1.0</Version>
 		<Authors>Jiri Kostiha</Authors>
 		<AssemblyOriginatorKeyFile>.\..\..\ijkdata.snk</AssemblyOriginatorKeyFile>
 		<PackageIcon>icon.png</PackageIcon>

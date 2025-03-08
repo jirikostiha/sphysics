@@ -26,6 +26,7 @@
 		<Authors>Jiri Kostiha</Authors>
 		<AssemblyOriginatorKeyFile>.\..\..\ijkdata.snk</AssemblyOriginatorKeyFile>
 		<PackageIcon>icon.png</PackageIcon>
+		<PackageReadmeFile>..\..\readme.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>

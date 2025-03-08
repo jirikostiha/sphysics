@@ -29,7 +29,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="SMath" Version="0.7.0" />
+	  <PackageReference Include="SMath" Version="0.8.0" />
 	</ItemGroup>
 
 	<ItemGroup>

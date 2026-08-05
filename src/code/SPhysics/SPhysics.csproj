@@ -1,18 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!-- Must remain on .NET 7 (generic math baseline) -->
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <NoWarn>CA1725,CA1716,CS1591,CA1715</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
-  <!-- Package metadata -->
   <PropertyGroup>
     <Product>SPhysics</Product>
     <Title>SPhysics</Title>
-    <Version>0.1.0</Version>
-    <Description>Physics library based on .NET 7 generic math.</Description>
+    <Version>0.2.0</Version>
+    <Description>Physics library based on .NET generic math.</Description>
     <PackageTags>physics; generic-physics; mechanics; gravitation; csharp</PackageTags>
     <PackageProjectUrl>https://github.com/jirikostiha/sphysics</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

@@ -6,7 +6,7 @@ namespace SMath.Geometry2D;
 public class GravitationalForceTests
 {
     [Fact]
-    public void Eval_AvoidsZeroDistance()
+    public void EvalAvoidsZeroDistance()
     {
         // Arrange: Set up test data with two points at the same location (0, 0)
         var points = new (double X, double Y, double Mass)[]

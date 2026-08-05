@@ -19,8 +19,8 @@
     <File Path="../readme.md" />
   </Folder>
   <Folder Name="/quality/">
-    <Project Path="quality/SPhysics__Benchmarks/SPhysics__Benchmarks.csproj" />
-    <Project Path="quality/SPhysics__Tests/SPhysics__Tests.csproj" />
+    <Project Path="quality/SPhysics.Benchmarks/SPhysics.Benchmarks.csproj" />
+    <Project Path="quality/SPhysics.Tests/SPhysics.Tests.csproj" />
   </Folder>
   <Folder Name="/solution items/">
     <File Path="../.gitattributes" />

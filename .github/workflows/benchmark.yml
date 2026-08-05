@@ -32,7 +32,7 @@ jobs:
         run: dotnet --info
 
       - name: Run benchmark
-        run: cd src/quality/SPhysics__Benchmarks && dotnet run -c Release --exporters json --filter '*'
+        run: cd src/quality/SPhysics.Benchmarks && dotnet run -c Release --exporters json --filter '*'
 
       - name: Find Summary File
         id: find_summary_report_file

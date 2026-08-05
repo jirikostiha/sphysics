@@ -1,0 +1,1 @@
+- This project can only contain static classes and no instance classes. No exceptions.

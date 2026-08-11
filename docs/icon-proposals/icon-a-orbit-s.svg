@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <title>SPhysics icon proposal A — Orbit S</title>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#245c39"/>
+      <stop offset="1" stop-color="#4fa25a"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="256" height="256" rx="54" fill="url(#g)"/>
+  <path d="M 190 70 C 150 70 150 128 128 128 C 106 128 106 186 66 186"
+        fill="none" stroke="#eef7ee" stroke-width="11" stroke-linecap="round"/>
+  <circle cx="128" cy="128" r="15" fill="#eef7ee"/>
+  <circle cx="190" cy="70" r="9" fill="#eef7ee"/>
+  <circle cx="66" cy="186" r="9" fill="#eef7ee"/>
+</svg>

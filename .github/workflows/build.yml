@@ -1,45 +1,28 @@
-name: Build # integration build
-
-env:
-  sln-path: "./src/sphysics.slnx"
+name: Build
 
 on:
   workflow_dispatch:
+    inputs:
+      configuration:
+        description: "Build configuration"
+        type: choice
+        options: [Debug, Release]
+        default: Debug
   push:
     paths:
       - "src/**"
-      - "!src/**.slnx" # ignore sln changes
+      - "!src/**.slnx"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.configuration || 'Debug' }}
+  cancel-in-progress: true
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v6
-        with:
-          dotnet-version: "8.0.x"
-
-      - name: .NET Info
-        run: dotnet --info
-
-      - name: Restore dependencies
-        run: dotnet restore "${{ env.sln-path }}"
-
-      - name: Build debug
-        run: dotnet build "${{ env.sln-path }}" --no-restore -c Debug -p:ContinuousIntegrationBuild=true
-
-      - name: Test
-        run: dotnet test "${{ env.sln-path }}" --no-build --logger "trx;LogFileName=test-results.trx" || true
-
-      - name: Test Report
-        uses: dorny/test-reporter@v3
-        if: always()
-        with:
-          name: Tests ${{ matrix.dotnet-version }}
-          path: "**/test-results.trx"
-          reporter: dotnet-trx
-          fail-on-error: true
+    uses: jirikostiha/ci/.github/workflows/dotnet-build.yml@v1
+    permissions:
+      contents: read
+      checks: write
+    with:
+      solution: ./src/sphysics.slnx
+      configuration: ${{ inputs.configuration || 'Debug' }}

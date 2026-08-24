@@ -1,9 +1,5 @@
 name: Publish
 
-env:
-  sln-path: "./src/sphysics.slnx"
-  package-dir: "packages"
-
 on:
   workflow_run:
     workflows: ["Release"]
@@ -15,36 +11,23 @@ on:
         required: true
 
 jobs:
+  build:
+    uses: jirikostiha/ci/.github/workflows/dotnet-build.yml@v1
+    permissions:
+      contents: read
+      checks: write
+    with:
+      solution: ./src/sphysics.slnx
+      configuration: Release
+      ref: ${{ inputs.tag }}
+      artifacts: true
+      binaries-path: src/code/SPhysics/bin
+
   publish:
-    runs-on: ubuntu-latest
-    environment: production
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    needs: build
+    uses: jirikostiha/ci/.github/workflows/nuget-publish.yml@v1
     permissions:
       contents: read
       id-token: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
-          ref: ${{ inputs.tag || github.event.workflow_run.head_sha }}
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v6
-        with:
-          dotnet-version: "8.0.x"
-
-      - name: Publish
-        run: dotnet publish "${{ env.sln-path }}" -c Release
-
-      - name: Pack
-        run: dotnet pack "${{ env.sln-path }}" -c Release -o "${{ env.package-dir }}" --no-build
-
-      - name: NuGet login (OIDC)
-        uses: NuGet/login@v1
-        id: login
-        with:
-          user: jiri
-
-      - name: Publish to Nuget.org
-        run: dotnet nuget push "${{ env.package-dir }}"/**/*.nupkg --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+    with:
+      user: jiri

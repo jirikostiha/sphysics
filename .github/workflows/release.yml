@@ -21,7 +21,7 @@ jobs:
       configuration: Release
       ref: ${{ inputs.tag || github.ref_name }}
       artifacts: true
-      binaries-path: src/code/SPhysics/bin
+      binaries-path: artf/SPhysics/bin
 
   release:
     needs: build

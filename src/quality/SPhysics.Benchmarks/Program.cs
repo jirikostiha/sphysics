@@ -1,4 +1,5 @@
 using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Exporters.Json;
 using BenchmarkDotNet.Running;
 using System.Runtime.CompilerServices;
 
@@ -20,9 +21,10 @@ public static class Program
         }
 
         ManualConfig config = ManualConfig.Create(DefaultConfig.Instance.WithArtifactsPath("./../../../benchmarks"))
+            .AddExporter(JsonExporter.FullCompressed)
             .WithOption(ConfigOptions.JoinSummary, true)
             .WithOption(ConfigOptions.DisableLogFile, true);
 
-        BenchmarkRunner.Run(typeof(Program).Assembly, config);
+        BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args, config);
     }
 }

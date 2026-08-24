@@ -12,7 +12,7 @@
     <Version>0.2.0</Version>
     <Description>Physics library based on .NET generic math.</Description>
     <PackageTags>physics; generic-physics; mechanics; gravitation; csharp</PackageTags>
-    <PackageProjectUrl>https://github.com/jirikostiha/sphysics</PackageProjectUrl>
+    <PackageProjectUrl>https://jirikostiha.github.io/sphysics/</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>readme.md</PackageReadmeFile>

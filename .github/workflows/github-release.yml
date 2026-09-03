@@ -49,6 +49,7 @@ jobs:
       contents: write
     with:
       tag: ${{ inputs.tag || github.ref_name }}
+      product-name: SPhysics
 
   publish:
     needs: build

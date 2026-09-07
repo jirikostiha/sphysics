@@ -21,5 +21,5 @@ public static class Barycenter
     public static N Eval<N>(N mass1, N mass2, N distance)
         where N : INumberBase<N>
         =>
-        distance * (N.One + (mass1 / mass2));
+        distance * (mass2 / (mass1 + mass2));
 }

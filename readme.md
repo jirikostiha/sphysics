@@ -42,10 +42,10 @@ giving call sites like `GravitationalForce.Outside(m1, m2, r)` or
 | Area | Types |
 | --- | --- |
 | Base quantities | `Length`, `Mass`, `Time`, `ElectricCurrent`, `Temperature`, `AmountOfSubstance`, `LuminousIntensity` |
-| Mechanics | `Velocity`, `Acceleration`, `Momentum`, `AngularMomentum`, `AngularVelocity`, `Impulse`, `Force`, `FrictionForce`, `DragForce`, `MomentOfInertia`, `CenterOfMass`, `CenterOfGravity` |
-| Energy & Power | `Energy`, `KineticEnergy`, `PotencialEnergy`, `GravitationalEnergy`, `Power` |
-| Gravitation | `Gravity`, `GravitationalForce`, `GravitationalIntensity`, `GravitationalPotential` |
-| Celestial mechanics | `Barycenter`, `EscapeVelocity`, `MeanAnomaly`, `MeanMotion`, `OrbitalEccentricity`, `OrbitalPeriod`, `TrueAnomaly` |
+| Mechanics | `Velocity`, `Acceleration`, `Momentum`, `AngularMomentum`, `AngularVelocity`, `Impulse`, `Force`, `FrictionForce`, `DragForce`, `MomentOfInertia`, `CenterOfMass`, `CenterOfGravity`, `VelocityVerlet`, `ElasticCollision` |
+| Energy & Power | `Energy`, `KineticEnergy`, `PotentialEnergy`, `GravitationalEnergy`, `Power` |
+| Gravitation | `Gravity`, `GravitationalForce`, `GravitationalIntensity`, `GravitationalPotential`, `NBodyGravity` |
+| Celestial mechanics | `Barycenter`, `EscapeVelocity`, `MeanAnomaly`, `MeanMotion`, `OrbitalEccentricity`, `OrbitalPeriod`, `SemiMajorAxis`, `TrueAnomaly` |
 | Other | `Density`, `Distance`, `Frequency`, `Pressure`, `AbsorbedDose` |
 
 ## Setup
@@ -55,7 +55,7 @@ giving call sites like `GravitationalForce.Outside(m1, m2, r)` or
 ```
 
 Replace `X.X.X` with the current version from [NuGet](https://www.nuget.org/packages/SPhysics).
-The package targets `net7.0` and runs on any newer runtime.
+The package targets `net8.0` and runs on any newer runtime.
 
 ## Usage
 

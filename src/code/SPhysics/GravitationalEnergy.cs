@@ -61,13 +61,12 @@ public static class GravitationalEnergy
 
                 N dx = x1 - x0; // X distance component
                 N dy = y1 - y0; // Y distance component
-                N r2 = dx * dx + dy * dy; // Squared distance between the two bodies (avoid sqrt)
+                N r2 = dx * dx + dy * dy; // Squared distance between the two bodies
 
                 if (r2 == N.Zero) continue; // Skip if two bodies are at the same location (handle very close bodies)
 
                 // Calculate the gravitational potential energy between the two bodies
-                // Using r2 directly in the energy formula to avoid sqrt calculation
-                N energy = Eval(m0, m1, r2, gravitationConst);
+                N energy = Eval(m0, m1, N.Sqrt(r2), gravitationConst);
 
                 totalEnergy += energy;
             }

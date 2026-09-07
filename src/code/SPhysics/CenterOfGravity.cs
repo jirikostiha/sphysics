@@ -11,13 +11,22 @@ namespace SPhysics;
 public static class CenterOfGravity
 {
     public static (N x, N y) Eval<N>((N x, N y, N m, N g)[] points)
-           where N : INumberBase<N>
+        where N : INumberBase<N>
     {
-        N totalWeight = points.Aggregate(N.Zero, (sum, point) => sum + point.m * point.g);
+        N totalWeight = N.Zero;
+        N x = N.Zero;
+        N y = N.Zero;
 
-        N x = points.Aggregate(N.Zero, (sum, point) => sum + point.x * point.m * point.g) / totalWeight;
-        N y = points.Aggregate(N.Zero, (sum, point) => sum + point.y * point.m * point.g) / totalWeight;
+        for (int i = 0; i < points.Length; i++)
+        {
+            var (px, py, m, g) = points[i];
+            N weight = m * g;
 
-        return (x, y);
+            totalWeight += weight;
+            x += px * weight;
+            y += py * weight;
+        }
+
+        return (x / totalWeight, y / totalWeight);
     }
 }

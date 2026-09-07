@@ -24,8 +24,16 @@ public static class Momentum
     public static (N px, N py) Total<N>((N vx, N vy, N m)[] bodies)
         where N : INumberBase<N>
     {
-        N px = bodies.Aggregate(N.Zero, (sum, body) => sum + body.vx * body.m);
-        N py = bodies.Aggregate(N.Zero, (sum, body) => sum + body.vy * body.m);
+        N px = N.Zero;
+        N py = N.Zero;
+
+        for (int i = 0; i < bodies.Length; i++)
+        {
+            var (vx, vy, m) = bodies[i];
+
+            px += vx * m;
+            py += vy * m;
+        }
 
         return (px, py);
     }

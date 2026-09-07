@@ -13,11 +13,19 @@ public static class CenterOfMass
     public static (N x, N y) Eval<N>((N x, N y, N m)[] points)
         where N : INumberBase<N>
     {
-        N totalMass = points.Aggregate(N.Zero, (sum, point) => sum + point.m);
+        N totalMass = N.Zero;
+        N x = N.Zero;
+        N y = N.Zero;
 
-        N x = points.Aggregate(N.Zero, (sum, point) => sum + point.x * point.m) / totalMass;
-        N y = points.Aggregate(N.Zero, (sum, point) => sum + point.y * point.m) / totalMass;
+        for (int i = 0; i < points.Length; i++)
+        {
+            var (px, py, m) = points[i];
 
-        return (x, y);
+            totalMass += m;
+            x += px * m;
+            y += py * m;
+        }
+
+        return (x / totalMass, y / totalMass);
     }
 }

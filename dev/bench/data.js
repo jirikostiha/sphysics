@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1787588124530,
+  "lastUpdate": 1788813340867,
   "repoUrl": "https://github.com/jirikostiha/sphysics",
   "entries": {
     "Benchmark.Net": [
@@ -58,6 +58,36 @@ window.BENCHMARK_DATA = {
             "value": 11298.632995605469,
             "unit": "ns",
             "range": "± 34.22077281944168"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "committer": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "distinct": false,
+          "id": "2ffb31c7720d2dee1cba21fb124f0a828f20eb9e",
+          "message": "docs: correct the type name, target framework and contents tables\n\n- The class is PotentialEnergy, not PotencialEnergy.\n- The package targets net8.0; the readme still claimed net7.0.\n- Add VelocityVerlet, ElasticCollision, NBodyGravity and the new\n  SemiMajorAxis to the contents tables, which had fallen behind the code.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01Gqq9X7e46kiXtMuU5PuZuT",
+          "timestamp": "2026-09-07T20:11:55Z",
+          "tree_id": "e80d4fa068bcacf9958b4cce7e027e9ea123e90c",
+          "url": "https://github.com/jirikostiha/sphysics/commit/2ffb31c7720d2dee1cba21fb124f0a828f20eb9e"
+        },
+        "date": 1788813340273,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "SPhysics.GravitationalForceBenchmark.Outside",
+            "value": 14027.603776550293,
+            "unit": "ns",
+            "range": "± 12.236313638970772"
           }
         ]
       }

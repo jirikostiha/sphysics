@@ -15,8 +15,8 @@ public static class CenterOfGravity
     {
         N totalWeight = points.Aggregate(N.Zero, (sum, point) => sum + point.m * point.g);
 
-        N x = points.Aggregate(N.Zero, (sum, point) => point.x * point.m * point.g) / totalWeight;
-        N y = points.Aggregate(N.Zero, (sum, point) => point.y * point.m * point.g) / totalWeight;
+        N x = points.Aggregate(N.Zero, (sum, point) => sum + point.x * point.m * point.g) / totalWeight;
+        N y = points.Aggregate(N.Zero, (sum, point) => sum + point.y * point.m * point.g) / totalWeight;
 
         return (x, y);
     }

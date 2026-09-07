@@ -71,7 +71,7 @@ public static class GravitationalForce
     /// <param name="index"> Target point index. </param>
     /// <param name="gravitationConst"> constant in real world G = 6.67430e-11; // m^3 kg^-1 s^-2 </param>
     public static (N Fx, N Fy) Eval<N>(Span<(N X, N Y, N Mass)> points, int index, N gravitationConst)
-        where N : INumberBase<N>
+        where N : IRootFunctions<N>
     {
         N Fx = N.Zero, Fy = N.Zero;
 
@@ -90,8 +90,9 @@ public static class GravitationalForce
 
             if (r2 == N.Zero) continue; // Avoid division by zero (in case two bodies are at the same position)
 
-            N invR2 = N.One / r2; // Inverse square of the distance for efficiency
-            N F_over_r = Gm0 * mi * invR2; // Compute gravitational force divided by distance (no need for square root)
+            N invR = N.One / N.Sqrt(r2);
+            N invR3 = invR * invR * invR;
+            N F_over_r = Gm0 * mi * invR3; // Force magnitude divided by the distance, so multiplying by dx/dy gives the components
 
             Fx += F_over_r * dx; // Calculate the x-component of the force
             Fy += F_over_r * dy; // Calculate the y-component of the force
@@ -108,7 +109,7 @@ public static class GravitationalForce
     /// <param name="points"> All points </param>
     /// <param name="gravitationConst"> constant in real world G = 6.67430e-11; // m^3 kg^-1 s^-2 </param>
     public static (N Fx, N Fy) Eval<N>((N X, N Y, N Mass) targetPoint, Span<(N X, N Y, N Mass)> points, N gravitationConst)
-        where N : INumberBase<N>
+        where N : IRootFunctions<N>
     {
         N Fx = N.Zero, Fy = N.Zero;
 
@@ -127,8 +128,9 @@ public static class GravitationalForce
 
             if (r2 == N.Zero) continue; // Avoid division by zero (in case two points are at the same position)
 
-            N invR2 = N.One / r2; // Inverse square of the distance for efficiency
-            N F_over_r = GmTarget * massOther * invR2; // Compute gravitational force divided by distance (no need for square root)
+            N invR = N.One / N.Sqrt(r2);
+            N invR3 = invR * invR * invR;
+            N F_over_r = GmTarget * massOther * invR3; // Force magnitude divided by the distance, so multiplying by dx/dy gives the components
 
             Fx += F_over_r * dx; // Calculate the x-component of the force
             Fy += F_over_r * dy; // Calculate the y-component of the force

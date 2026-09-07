@@ -1,7 +1,6 @@
-﻿using SPhysics;
-using Xunit;
+﻿using Xunit;
 
-namespace SMath.Geometry2D;
+namespace SPhysics.Tests;
 
 public class GravitationalForceTests
 {

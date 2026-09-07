@@ -108,15 +108,14 @@ public static class ElasticCollision
         N overlap = radius - distance;
         var posOut = (position.X - nx * overlap, position.Y - ny * overlap);
 
-        // If already separating from the obstacle, keep velocity.
-        // (-v) . n > 0  <=>  v . n < 0  <=>  moving toward obstacle.
-        N approach = -(velocity.X * nx + velocity.Y * ny);
-        if (approach > N.Zero)
+        // n points from the body to the obstacle, so v . n < 0 means the body is
+        // already moving away from it; in that case keep the velocity.
+        N vDotN = velocity.X * nx + velocity.Y * ny;
+        if (vDotN < N.Zero)
             return (posOut, velocity);
 
         // Reflection: v' = v - 2 * (v . n) * n
         N two = N.One + N.One;
-        N vDotN = velocity.X * nx + velocity.Y * ny;
         N vx = velocity.X - two * vDotN * nx;
         N vy = velocity.Y - two * vDotN * ny;
 

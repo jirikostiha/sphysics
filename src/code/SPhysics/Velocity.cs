@@ -26,4 +26,18 @@ public static class Velocity
         where N : IMultiplyOperators<N, N, N>
         =>
         angularVelocity * radius;
+
+    /// <summary> Average velocity over a distance travelled in a time span. </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static N Eval<N>(N distance, N time)
+        where N : IDivisionOperators<N, N, N>
+        =>
+        distance / time;
+
+    /// <summary> Velocity of a body of the given mass carrying the given momentum. </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static N FromMomentum<N>(N momentum, N mass)
+        where N : IDivisionOperators<N, N, N>
+        =>
+        momentum / mass;
 }

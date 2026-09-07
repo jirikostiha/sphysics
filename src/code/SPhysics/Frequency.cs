@@ -20,4 +20,11 @@ public static class Frequency
         where N : INumberBase<N>
         =>
         N.One / period;
+
+    /// <summary> Frequency of a rotation with the given angular velocity. </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static N FromAngularVelocity<N>(N angularVelocity)
+        where N : ITrigonometricFunctions<N>
+        =>
+        angularVelocity / (N.CreateTruncating(2) * N.Pi);
 }

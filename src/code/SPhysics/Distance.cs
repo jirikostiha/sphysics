@@ -13,4 +13,11 @@ public static class Distance
         where N : IRootFunctions<N>
         =>
         N.Sqrt(gravitationConst * mass1 * mass2 / force);
+
+    /// <summary> Distance travelled at a constant velocity over a time span. </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static N FromVelocity<N>(N velocity, N time)
+        where N : IMultiplyOperators<N, N, N>
+        =>
+        velocity * time;
 }

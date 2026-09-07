@@ -20,4 +20,11 @@ public static class Force
         where N : IMultiplyOperators<N, N, N>
         =>
         mass * acceleration;
+
+    /// <summary> Force as a change of momentum over a time span. </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static N FromMomentum<N>(N momentumChange, N time)
+        where N : IDivisionOperators<N, N, N>
+        =>
+        momentumChange / time;
 }

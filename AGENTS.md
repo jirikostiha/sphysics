@@ -1,3 +1,5 @@
+# Agent Instructions
+
 - This project can only contain static classes and no instance classes. No exceptions.
 
 <!-- ai-kit:begin - generated, do not edit inside this block -->

@@ -41,6 +41,24 @@ public static class GravitationalEnergy
         -gravitationConst * mass1 * mass2 / distance;
 
     /// <summary>
+    /// Gravitational self energy of a uniform sphere, <c>-3/5 * G * m^2 / r</c>: the potential energy
+    /// its own gravity holds. Its magnitude is the gravitational binding energy, the work needed to
+    /// disperse the sphere to infinity.
+    /// </summary>
+    /// <remarks>
+    /// <a href="https://en.wikipedia.org/wiki/Gravitational_binding_energy">wikipedia</a>
+    /// </remarks>
+    /// <typeparam name="N"> Number type </typeparam>
+    /// <param name="mass"> Mass of the sphere. </param>
+    /// <param name="radius"> Radius of the sphere. </param>
+    /// <param name="gravitationConst"> constant in real world G = 6.67430e-11; // m^3 kg^-1 s^-2 </param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static N UniformSphere<N>(N mass, N radius, N gravitationConst)
+        where N : INumberBase<N>
+        =>
+        -(N.CreateChecked(3) / N.CreateChecked(5)) * gravitationConst * mass * mass / radius;
+
+    /// <summary>
     /// Total gravitational energy of the system.
     /// </summary>
     /// <typeparam name="N"> Number type </typeparam>

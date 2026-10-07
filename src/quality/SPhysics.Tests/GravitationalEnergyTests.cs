@@ -5,6 +5,22 @@ namespace SPhysics.Tests;
 public class GravitationalEnergyTests
 {
     [Fact]
+    public void UniformSphereHoldsThreeFifthsOfThePointEnergy()
+    {
+        // -3/5 * G * m^2 / r = -0.6 * 1.5 * 2 * 2 / 4
+        Assert.Equal(-0.9, GravitationalEnergy.UniformSphere(mass: 2.0, radius: 4.0, gravitationConst: 1.5), 12);
+    }
+
+    [Fact]
+    public void UniformSphereGivesTheBindingEnergyOfTheEarth()
+    {
+        double energy = GravitationalEnergy.UniformSphere(mass: 5.972e24, radius: 6.371e6, gravitationConst: 6.6743e-11);
+
+        // About 2.24e32 J for a uniform Earth.
+        Assert.Equal(-2.2417e32, energy, tolerance: 0.0001e32);
+    }
+
+    [Fact]
     public void TotalUsesDistanceNotSquaredDistance()
     {
         var points = new (double X, double Y, double Mass)[]

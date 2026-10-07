@@ -40,4 +40,12 @@ public static class Velocity
         where N : IDivisionOperators<N, N, N>
         =>
         momentum / mass;
+
+    /// <summary> Speed of a body of the given mass carrying the given kinetic energy, <c>sqrt(2 * E / m)</c>. </summary>
+    /// <remarks> The inverse of <see cref="KineticEnergy.Linear{N}"/>; a negative energy has no real speed and gives NaN. </remarks>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static N FromKineticEnergy<N>(N kineticEnergy, N mass)
+        where N : IRootFunctions<N>
+        =>
+        N.Sqrt(N.CreateChecked(2) * kineticEnergy / mass);
 }

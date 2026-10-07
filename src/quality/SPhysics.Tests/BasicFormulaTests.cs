@@ -26,7 +26,16 @@ public class BasicFormulaTests
     {
         Assert.Equal(2.5, Velocity.Eval(distance: 10.0, time: 4.0), 10);
         Assert.Equal(2.5, Velocity.FromMomentum(momentum: 10.0, mass: 4.0), 10);
+        Assert.Equal(3.0, Velocity.FromKineticEnergy(kineticEnergy: 18.0, mass: 4.0), 10);
         Assert.Equal(12.0, Distance.FromVelocity(velocity: 3.0, time: 4.0), 10);
+    }
+
+    [Fact]
+    public void KineticEnergyAndSpeedRoundTrip()
+    {
+        var energy = KineticEnergy.Linear(mass: 7.35e22, velocity: 1.022e3);
+
+        Assert.Equal(1.022e3, Velocity.FromKineticEnergy(energy, 7.35e22), 9);
     }
 
     [Fact]

@@ -9,7 +9,7 @@
   <PropertyGroup>
     <Product>SPhysics</Product>
     <Title>SPhysics</Title>
-    <Version>0.2.0</Version>
+    <Version>0.3.0-dev</Version>
     <Description>Physics library based on .NET generic math.</Description>
     <PackageTags>physics; generic-physics; mechanics; gravitation; csharp</PackageTags>
     <PackageProjectUrl>https://jirikostiha.github.io/sphysics/</PackageProjectUrl>

@@ -30,6 +30,15 @@ public class BasicFormulaTests
     }
 
     [Fact]
+    public void ReducedMassFormulas()
+    {
+        Assert.Equal(2.4, ReducedMass.Eval(mass1: 4.0, mass2: 6.0), 10);
+
+        // A body much heavier than its partner leaves the partner's own mass.
+        Assert.Equal(1.0, ReducedMass.Eval(mass1: 1.0, mass2: 1e15), 10);
+    }
+
+    [Fact]
     public void MomentumAndImpulseFormulas()
     {
         Assert.Equal(2.5, Force.FromMomentum(momentumChange: 10.0, time: 4.0), 10);

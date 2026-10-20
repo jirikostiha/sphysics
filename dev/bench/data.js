@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1792530027330,
+  "lastUpdate": 1792531736600,
   "repoUrl": "https://github.com/jirikostiha/sphysics",
   "entries": {
     "Benchmark.Net": [
@@ -238,6 +238,36 @@ window.BENCHMARK_DATA = {
             "value": 14023.275192260742,
             "unit": "ns",
             "range": "± 4.208726106691661"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "committer": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "distinct": true,
+          "id": "be4ba3da13989be1ae867d4b7f5c6e2c3784988e",
+          "message": "feat: SolidAngle - quantity, sphere area and cone\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-10-20T23:27:30+02:00",
+          "tree_id": "9ff151722fff32eadac633ec1a64f520072dbfdd",
+          "url": "https://github.com/jirikostiha/sphysics/commit/be4ba3da13989be1ae867d4b7f5c6e2c3784988e"
+        },
+        "date": 1792531736213,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "SPhysics.GravitationalForceBenchmark.Outside",
+            "value": 15924.16923828125,
+            "unit": "ns",
+            "range": "± 21.66667744380403"
           }
         ]
       }

@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1792526736755,
+  "lastUpdate": 1792528861885,
   "repoUrl": "https://github.com/jirikostiha/sphysics",
   "entries": {
     "Benchmark.Net": [
@@ -178,6 +178,36 @@ window.BENCHMARK_DATA = {
             "value": 14024.671882042518,
             "unit": "ns",
             "range": "± 8.269549024885613"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "committer": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "distinct": true,
+          "id": "d556b65a78ab1f736e5d0256bdce88bceb8e5a9c",
+          "message": "docs: list ThermalRadiation, OrbitalVelocity, HillSphere and RocheLimit\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-10-20T22:39:32+02:00",
+          "tree_id": "c932daa0cae8e245fc3b70414be5b73c24862eb5",
+          "url": "https://github.com/jirikostiha/sphysics/commit/d556b65a78ab1f736e5d0256bdce88bceb8e5a9c"
+        },
+        "date": 1792528861294,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "SPhysics.GravitationalForceBenchmark.Outside",
+            "value": 13132.344784327915,
+            "unit": "ns",
+            "range": "± 36.467362452830706"
           }
         ]
       }

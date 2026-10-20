@@ -43,9 +43,9 @@ giving call sites like `GravitationalForce.Outside(m1, m2, r)` or
 | --- | --- |
 | Base quantities | `Length`, `Mass`, `Time`, `ElectricCurrent`, `Temperature`, `AmountOfSubstance`, `LuminousIntensity` |
 | Mechanics | `Velocity`, `Acceleration`, `Momentum`, `AngularMomentum`, `AngularVelocity`, `Impulse`, `Force`, `FrictionForce`, `DragForce`, `MomentOfInertia`, `CenterOfMass`, `CenterOfGravity`, `ReducedMass`, `VelocityVerlet`, `ElasticCollision` |
-| Energy & Power | `Energy`, `KineticEnergy`, `PotentialEnergy`, `GravitationalEnergy`, `Power` |
+| Energy & Power | `Energy`, `KineticEnergy`, `PotentialEnergy`, `GravitationalEnergy`, `Power`, `ThermalRadiation` |
 | Gravitation | `Gravity`, `GravitationalForce`, `GravitationalIntensity`, `GravitationalPotential`, `NBodyGravity` |
-| Celestial mechanics | `Barycenter`, `EscapeVelocity`, `MeanAnomaly`, `MeanMotion`, `OrbitalEccentricity`, `OrbitalPeriod`, `SemiMajorAxis`, `TrueAnomaly` |
+| Celestial mechanics | `Barycenter`, `EscapeVelocity`, `MeanAnomaly`, `MeanMotion`, `OrbitalEccentricity`, `OrbitalPeriod`, `SemiMajorAxis`, `TrueAnomaly`, `OrbitalVelocity`, `HillSphere`, `RocheLimit` |
 | Other | `Density`, `Distance`, `Frequency`, `Pressure`, `AbsorbedDose` |
 
 ## Setup

@@ -36,7 +36,7 @@ dotnet add package SPhysics
 | :--- | :--- |
 | **Base Quantities** | `Length`, `Mass`, `Time`, `ElectricCurrent`, `Temperature`, `AmountOfSubstance`, `LuminousIntensity` |
 | **Mechanics** | `Velocity`, `Acceleration`, `Momentum`, `AngularMomentum`, `AngularVelocity`, `Impulse`, `Force`, `FrictionForce`, `DragForce`, `MomentOfInertia`, `CenterOfMass`, `CenterOfGravity`, `VelocityVerlet`, `ElasticCollision` |
-| **Energy & Power** | `Energy`, `KineticEnergy`, `PotentialEnergy`, `GravitationalEnergy`, `Power` |
+| **Energy & Power** | `Energy`, `KineticEnergy`, `PotentialEnergy`, `GravitationalEnergy`, `Power`, `ThermalRadiation` |
 | **Gravitation** | `Gravity`, `GravitationalForce`, `GravitationalIntensity`, `GravitationalPotential`, `NBodyGravity` |
-| **Celestial Mechanics** | `Barycenter`, `EscapeVelocity`, `MeanAnomaly`, `MeanMotion`, `OrbitalEccentricity`, `OrbitalPeriod`, `SemiMajorAxis`, `TrueAnomaly` |
+| **Celestial Mechanics** | `Barycenter`, `EscapeVelocity`, `MeanAnomaly`, `MeanMotion`, `OrbitalEccentricity`, `OrbitalPeriod`, `SemiMajorAxis`, `TrueAnomaly`, `OrbitalVelocity`, `HillSphere`, `RocheLimit` |
 | **Other Quantities** | `Density`, `Distance`, `Frequency`, `Pressure`, `AbsorbedDose` |

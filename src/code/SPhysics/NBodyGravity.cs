@@ -124,4 +124,125 @@ public static class NBodyGravity
             accelerations[i] = (aix, aiy);
         }
     }
+
+    /// <summary>
+    /// Computes gravitational accelerations for all bodies in 3D pairwise (O(n^2)).
+    /// Uses Newton's third law so each pair is evaluated once.
+    /// A per-body gravitational constant lets bodies in different regions/environments
+    /// experience different G values (positional G-field).
+    /// </summary>
+    /// <typeparam name="N"> Number type. </typeparam>
+    /// <param name="positions"> Body positions. </param>
+    /// <param name="masses"> Body masses (length must equal <paramref name="positions"/>). </param>
+    /// <param name="gravitationalConstants"> Per-body gravitational constant (length must equal <paramref name="positions"/>). </param>
+    /// <param name="softening"> Softening length; the effective squared distance is r^2 + softening^2. </param>
+    /// <param name="accelerations"> Output buffer (length must equal <paramref name="positions"/>). </param>
+    public static void ComputeAccelerations<N>(
+        ReadOnlySpan<(N X, N Y, N Z)> positions,
+        ReadOnlySpan<N> masses,
+        ReadOnlySpan<N> gravitationalConstants,
+        N softening,
+        Span<(N X, N Y, N Z)> accelerations)
+        where N : IRootFunctions<N>
+    {
+        int n = positions.Length;
+        if (masses.Length != n || gravitationalConstants.Length != n || accelerations.Length != n)
+            throw new ArgumentException("masses, gravitationalConstants, and accelerations must have the same length as positions.");
+
+        N soft2 = softening * softening;
+
+        for (int i = 0; i < n; i++)
+            accelerations[i] = (N.Zero, N.Zero, N.Zero);
+
+        for (int i = 0; i < n; i++)
+        {
+            var pi = positions[i];
+            N gI = gravitationalConstants[i];
+            N mI = masses[i];
+            var (aix, aiy, aiz) = accelerations[i];
+
+            for (int j = i + 1; j < n; j++)
+            {
+                var pj = positions[j];
+                N rx = pj.X - pi.X;
+                N ry = pj.Y - pi.Y;
+                N rz = pj.Z - pi.Z;
+                N d2 = rx * rx + ry * ry + rz * rz + soft2;
+                N invR = N.One / N.Sqrt(d2);
+                N invR3 = invR * invR * invR;
+
+                N kI = gI * masses[j] * invR3;
+                aix += rx * kI;
+                aiy += ry * kI;
+                aiz += rz * kI;
+
+                N kJ = gravitationalConstants[j] * mI * invR3;
+                ref var aj = ref accelerations[j];
+                aj.X -= rx * kJ;
+                aj.Y -= ry * kJ;
+                aj.Z -= rz * kJ;
+            }
+
+            accelerations[i] = (aix, aiy, aiz);
+        }
+    }
+
+    /// <summary>
+    /// Computes gravitational accelerations for all bodies in 3D pairwise (O(n^2)) with a single
+    /// gravitational constant shared by every body.
+    /// </summary>
+    /// <typeparam name="N"> Number type. </typeparam>
+    /// <param name="positions"> Body positions. </param>
+    /// <param name="masses"> Body masses (length must equal <paramref name="positions"/>). </param>
+    /// <param name="gravitationalConstant"> Gravitational constant. </param>
+    /// <param name="softening"> Softening length; the effective squared distance is r^2 + softening^2. </param>
+    /// <param name="accelerations"> Output buffer (length must equal <paramref name="positions"/>). </param>
+    public static void ComputeAccelerations<N>(
+        ReadOnlySpan<(N X, N Y, N Z)> positions,
+        ReadOnlySpan<N> masses,
+        N gravitationalConstant,
+        N softening,
+        Span<(N X, N Y, N Z)> accelerations)
+        where N : IRootFunctions<N>
+    {
+        int n = positions.Length;
+        if (masses.Length != n || accelerations.Length != n)
+            throw new ArgumentException("masses and accelerations must have the same length as positions.");
+
+        N soft2 = softening * softening;
+
+        for (int i = 0; i < n; i++)
+            accelerations[i] = (N.Zero, N.Zero, N.Zero);
+
+        for (int i = 0; i < n; i++)
+        {
+            var pi = positions[i];
+            N mI = masses[i];
+            var (aix, aiy, aiz) = accelerations[i];
+
+            for (int j = i + 1; j < n; j++)
+            {
+                var pj = positions[j];
+                N rx = pj.X - pi.X;
+                N ry = pj.Y - pi.Y;
+                N rz = pj.Z - pi.Z;
+                N d2 = rx * rx + ry * ry + rz * rz + soft2;
+                N invR = N.One / N.Sqrt(d2);
+                N invR3 = invR * invR * invR;
+
+                N kI = gravitationalConstant * masses[j] * invR3;
+                aix += rx * kI;
+                aiy += ry * kI;
+                aiz += rz * kI;
+
+                N kJ = gravitationalConstant * mI * invR3;
+                ref var aj = ref accelerations[j];
+                aj.X -= rx * kJ;
+                aj.Y -= ry * kJ;
+                aj.Z -= rz * kJ;
+            }
+
+            accelerations[i] = (aix, aiy, aiz);
+        }
+    }
 }

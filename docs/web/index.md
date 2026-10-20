@@ -39,4 +39,4 @@ dotnet add package SPhysics
 | **Energy & Power** | `Energy`, `KineticEnergy`, `PotentialEnergy`, `GravitationalEnergy`, `Power`, `ThermalRadiation` |
 | **Gravitation** | `Gravity`, `GravitationalForce`, `GravitationalIntensity`, `GravitationalPotential`, `NBodyGravity` |
 | **Celestial Mechanics** | `Barycenter`, `EscapeVelocity`, `MeanAnomaly`, `MeanMotion`, `OrbitalEccentricity`, `OrbitalPeriod`, `SemiMajorAxis`, `TrueAnomaly`, `OrbitalVelocity`, `HillSphere`, `RocheLimit`, `EccentricAnomaly`, `OrbitalStateVectors`, `MeanLongitude` |
-| **Other Quantities** | `Density`, `Distance`, `Frequency`, `Pressure`, `AbsorbedDose` |
+| **Other Quantities** | `Density`, `Distance`, `PlaneAngle`, `Frequency`, `Pressure`, `AbsorbedDose` |

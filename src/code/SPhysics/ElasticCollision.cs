@@ -41,18 +41,11 @@ public static class ElasticCollision
         N nx = dx / distance;
         N ny = dy / distance;
 
-        // Mass handling: 0 mass is treated as infinite/static (invMass = 0).
-        N invMass1 = m1 > N.Zero ? N.One / m1 : N.Zero;
-        N invMass2 = m2 > N.Zero ? N.One / m2 : N.Zero;
-        N totalInverseMass = invMass1 + invMass2;
-
-        if (totalInverseMass <= N.Zero)
+        if (!InverseMasses(m1, m2, out N invMass1, out N invMass2, out N totalInverseMass))
             return null;
 
         // 1. Position correction (separation) distributed by inverse mass.
-        N overlap = minDistance - distance;
-        N corr1 = overlap * (invMass1 / totalInverseMass);
-        N corr2 = overlap * (invMass2 / totalInverseMass);
+        var (corr1, corr2) = Separation(minDistance - distance, invMass1, invMass2, totalInverseMass);
 
         var p1Out = (p1.X - nx * corr1, p1.Y - ny * corr1);
         var p2Out = (p2.X + nx * corr2, p2.Y + ny * corr2);
@@ -68,8 +61,7 @@ public static class ElasticCollision
         // Apply impulse only when bodies are approaching; when already separating keep velocities.
         if (velocityAlongNormal <= N.Zero)
         {
-            N two = N.One + N.One;
-            N impulseMagnitude = -(two * velocityAlongNormal) / totalInverseMass;
+            N impulseMagnitude = Impulse(velocityAlongNormal, totalInverseMass);
             N jx = impulseMagnitude * nx;
             N jy = impulseMagnitude * ny;
 
@@ -130,15 +122,35 @@ public static class ElasticCollision
     public static (N V1, N V2) HeadOn1D<N>(N m1, N v1, N m2, N v2)
         where N : INumberBase<N>, IComparisonOperators<N, N, bool>
     {
-        N invMass1 = m1 > N.Zero ? N.One / m1 : N.Zero;
-        N invMass2 = m2 > N.Zero ? N.One / m2 : N.Zero;
-        N total = invMass1 + invMass2;
-        if (total <= N.Zero)
+        if (!InverseMasses(m1, m2, out N invMass1, out N invMass2, out N total))
             return (v1, v2);
 
-        N two = N.One + N.One;
-        N impulse = -(two * (v2 - v1)) / total;
+        N impulse = Impulse(v2 - v1, total);
 
         return (v1 - impulse * invMass1, v2 + impulse * invMass2);
     }
+
+    // Mass handling: 0 mass is treated as infinite/static (invMass = 0); false when neither body can move.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool InverseMasses<N>(N m1, N m2, out N invMass1, out N invMass2, out N totalInverseMass)
+        where N : INumberBase<N>, IComparisonOperators<N, N, bool>
+    {
+        invMass1 = m1 > N.Zero ? N.One / m1 : N.Zero;
+        invMass2 = m2 > N.Zero ? N.One / m2 : N.Zero;
+        totalInverseMass = invMass1 + invMass2;
+        // not written as > so that a NaN mass keeps going through the update as it did before
+        return !(totalInverseMass <= N.Zero);
+    }
+
+    // Shares of the overlap each body moves by, the lighter body moves more.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static (N First, N Second) Separation<N>(N overlap, N invMass1, N invMass2, N totalInverseMass)
+        where N : INumberBase<N>
+        => (overlap * (invMass1 / totalInverseMass), overlap * (invMass2 / totalInverseMass));
+
+    // Impulse magnitude of an elastic collision, it reverses the relative velocity along the normal.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static N Impulse<N>(N velocityAlongNormal, N totalInverseMass)
+        where N : INumberBase<N>
+        => -((N.One + N.One) * velocityAlongNormal) / totalInverseMass;
 }

@@ -43,6 +43,7 @@ public static class NBodyGravity
         {
             var pi = positions[i];
             N gI = gravitationalConstants[i];
+            N mI = masses[i];
             var (aix, aiy) = accelerations[i];
 
             for (int j = i + 1; j < n; j++)
@@ -58,9 +59,10 @@ public static class NBodyGravity
                 aix += rx * kI;
                 aiy += ry * kI;
 
-                N kJ = gravitationalConstants[j] * masses[i] * invR3;
-                var aj = accelerations[j];
-                accelerations[j] = (aj.X - rx * kJ, aj.Y - ry * kJ);
+                N kJ = gravitationalConstants[j] * mI * invR3;
+                ref var aj = ref accelerations[j];
+                aj.X -= rx * kJ;
+                aj.Y -= ry * kJ;
             }
 
             accelerations[i] = (aix, aiy);
@@ -97,6 +99,7 @@ public static class NBodyGravity
         for (int i = 0; i < n; i++)
         {
             var pi = positions[i];
+            N mI = masses[i];
             var (aix, aiy) = accelerations[i];
 
             for (int j = i + 1; j < n; j++)
@@ -112,9 +115,10 @@ public static class NBodyGravity
                 aix += rx * kI;
                 aiy += ry * kI;
 
-                N kJ = gravitationalConstant * masses[i] * invR3;
-                var aj = accelerations[j];
-                accelerations[j] = (aj.X - rx * kJ, aj.Y - ry * kJ);
+                N kJ = gravitationalConstant * mI * invR3;
+                ref var aj = ref accelerations[j];
+                aj.X -= rx * kJ;
+                aj.Y -= ry * kJ;
             }
 
             accelerations[i] = (aix, aiy);

@@ -60,16 +60,12 @@ public static class VelocityVerlet
         if (velocities.Length != positions.Length)
             throw new ArgumentException("velocities must have the same length as positions.");
         for (int i = 0; i < positions.Length; i++)
-        {
-            var p = positions[i];
-            var v = velocities[i];
-            positions[i] = (p.X + v.X * dt, p.Y + v.Y * dt);
-        }
+            positions[i] = Drift(positions[i], velocities[i], dt);
     }
 
     /// <summary>
     /// One velocity-Verlet step for an N-body gravity system with softening.
-    /// Order per sub-step: compute a(x), v += 0.5*a*h, x += v*h, compute a(x), v += 0.5*a*h.
+    /// Computes a(x) once, then per sub-step: v += 0.5*a*h, x += v*h, compute a(x), v += 0.5*a*h.
     /// </summary>
     /// <typeparam name="N"> Number type. </typeparam>
     /// <param name="positions"> Positions (modified in place). </param>
@@ -100,9 +96,10 @@ public static class VelocityVerlet
 
         N h = timeDelta / N.CreateTruncating(subSteps);
 
+        // The accelerations at the end of a sub-step are the ones the next sub-step starts from.
+        NBodyGravity.ComputeAccelerations<N>(positions, masses, gravitationalConstant, softening, accelerations);
         for (int s = 0; s < subSteps; s++)
         {
-            NBodyGravity.ComputeAccelerations<N>(positions, masses, gravitationalConstant, softening, accelerations);
             HalfKick(velocities, accelerations, h);
             Drift(positions, velocities, h);
             NBodyGravity.ComputeAccelerations<N>(positions, masses, gravitationalConstant, softening, accelerations);

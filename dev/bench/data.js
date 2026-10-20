@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1791389211422,
+  "lastUpdate": 1792526736755,
   "repoUrl": "https://github.com/jirikostiha/sphysics",
   "entries": {
     "Benchmark.Net": [
@@ -148,6 +148,36 @@ window.BENCHMARK_DATA = {
             "value": 9422.148523457845,
             "unit": "ns",
             "range": "± 62.09143509043791"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "committer": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "distinct": true,
+          "id": "13e88735cce6f87137b856001ef88d1df28eac24",
+          "message": "feat: NBodyGravity, VelocityVerlet - 3D overloads\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-10-20T22:04:21+02:00",
+          "tree_id": "831270dca4cb683dcf5e7bff372bf24f33dd354d",
+          "url": "https://github.com/jirikostiha/sphysics/commit/13e88735cce6f87137b856001ef88d1df28eac24"
+        },
+        "date": 1792526736442,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "SPhysics.GravitationalForceBenchmark.Outside",
+            "value": 14024.671882042518,
+            "unit": "ns",
+            "range": "± 8.269549024885613"
           }
         ]
       }

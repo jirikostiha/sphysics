@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1792528861885,
+  "lastUpdate": 1792530027330,
   "repoUrl": "https://github.com/jirikostiha/sphysics",
   "entries": {
     "Benchmark.Net": [
@@ -208,6 +208,36 @@ window.BENCHMARK_DATA = {
             "value": 13132.344784327915,
             "unit": "ns",
             "range": "± 36.467362452830706"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "committer": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "distinct": true,
+          "id": "74669305fec1a03b2c87cf81099a525eaf39d906",
+          "message": "refactor: ThermalRadiation, RocheLimit - reuse the sphere area and shared formulas\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-10-20T22:58:34+02:00",
+          "tree_id": "f744197f359157dfdbe48e7028b1f3fd129e5a00",
+          "url": "https://github.com/jirikostiha/sphysics/commit/74669305fec1a03b2c87cf81099a525eaf39d906"
+        },
+        "date": 1792530027049,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "SPhysics.GravitationalForceBenchmark.Outside",
+            "value": 14023.275192260742,
+            "unit": "ns",
+            "range": "± 4.208726106691661"
           }
         ]
       }

@@ -19,4 +19,20 @@ public class CenterOfMassTests
         Assert.Equal(2.5, x, 10);
         Assert.Equal(4.0, y, 10);
     }
+
+    [Fact]
+    public void Eval3DSumsWeightedPositionsOfAllPoints()
+    {
+        var points = new (double x, double y, double z, double m)[]
+        {
+            (1.0, 1.0, -2.0, 1.0),
+            (3.0, 5.0, 2.0, 3.0)
+        };
+
+        var (x, y, z) = CenterOfMass.Eval(points);
+
+        Assert.Equal(2.5, x, 10);
+        Assert.Equal(4.0, y, 10);
+        Assert.Equal(1.0, z, 10);
+    }
 }

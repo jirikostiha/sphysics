@@ -28,4 +28,25 @@ public static class CenterOfMass
 
         return (x / totalMass, y / totalMass);
     }
+
+    public static (N x, N y, N z) Eval<N>((N x, N y, N z, N m)[] points)
+        where N : INumberBase<N>
+    {
+        N totalMass = N.Zero;
+        N x = N.Zero;
+        N y = N.Zero;
+        N z = N.Zero;
+
+        for (int i = 0; i < points.Length; i++)
+        {
+            var (px, py, pz, m) = points[i];
+
+            totalMass += m;
+            x += px * m;
+            y += py * m;
+            z += pz * m;
+        }
+
+        return (x / totalMass, y / totalMass, z / totalMass);
+    }
 }

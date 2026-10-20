@@ -1,6 +1,8 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
+using SMath.Geometry3D;
+
 namespace SPhysics;
 
 /// <summary>
@@ -36,7 +38,7 @@ public static class ThermalRadiation
     public static N TemperatureFromPower<N>(N power, N area, N emissivity, N stefanBoltzmannConstant)
         where N : IRootFunctions<N>
         =>
-        N.Sqrt(N.Sqrt(power / (emissivity * stefanBoltzmannConstant * area)));
+        FourthRoot(power / (emissivity * stefanBoltzmannConstant * area));
 
     /// <summary>
     /// Irradiance (flux density) at a distance from an isotropic source, E = P / (4 pi d^2).
@@ -45,7 +47,7 @@ public static class ThermalRadiation
     public static N Irradiance<N>(N power, N distance)
         where N : IFloatingPointConstants<N>
         =>
-        power / (N.CreateTruncating(4) * N.Pi * distance * distance);
+        power / Sphere.Surface.Area.FromRadius(distance);
 
     /// <summary>
     /// Equilibrium temperature of a fast rotating spherical body under the given irradiance.
@@ -59,5 +61,11 @@ public static class ThermalRadiation
     public static N EquilibriumTemperature<N>(N irradiance, N albedo, N stefanBoltzmannConstant)
         where N : IRootFunctions<N>
         =>
-        N.Sqrt(N.Sqrt((N.One - albedo) * irradiance / (N.CreateTruncating(4) * stefanBoltzmannConstant)));
+        FourthRoot((N.One - albedo) * irradiance / (N.CreateTruncating(4) * stefanBoltzmannConstant));
+
+    // inverse of the fourth power of the temperature, two square roots are cheaper and more exact than Pow(x, 0.25)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static N FourthRoot<N>(N value)
+        where N : IRootFunctions<N>
+        => N.Sqrt(N.Sqrt(value));
 }

@@ -26,6 +26,7 @@ public static class RocheLimit
     /// <summary>
     /// Roche limit of a rigid spherical satellite from the masses, r * cbrt(2 * M / m).
     /// </summary>
+    /// <remarks> The same law as <see cref="Rigid{N}"/>: the mass ratio and the satellite radius stand for the density ratio and the primary radius. </remarks>
     /// <param name="satelliteRadius"> Radius of the satellite. </param>
     /// <param name="primaryMass"> Mass of the primary body. </param>
     /// <param name="satelliteMass"> Mass of the satellite. </param>
@@ -33,7 +34,7 @@ public static class RocheLimit
     public static N RigidFromMasses<N>(N satelliteRadius, N primaryMass, N satelliteMass)
         where N : IRootFunctions<N>
         =>
-        satelliteRadius * N.Cbrt(N.CreateTruncating(2) * primaryMass / satelliteMass);
+        Rigid(satelliteRadius, primaryMass, satelliteMass);
 
     /// <summary>
     /// Roche limit of a fluid satellite that deforms under the tides, approximately 2.44 * R * cbrt(rhoM / rhom).

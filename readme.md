@@ -108,21 +108,30 @@ var (fx, fy) = GravitationalForce.Eval<double>(bodies, index: 0, gravitationCons
 
 ## Performance
 
-`NBodyGravity` evaluates all pairs, O(n^2), in one kernel vectorized across the pairs: one `Vector<T>` evaluates
-8 float or 4 double pairs at once with AVX2. The overloads over tuples copy the components into pooled spans first;
-`NBodyGravity.Soa` takes them in separate spans (structure of arrays) and skips the copies.
+`NBodyGravity` evaluates all pairs, O(n^2), in one of two kernels:
+
+- **Vectorized** across the pairs: one `Vector<T>` evaluates 8 float or 4 double pairs at once with AVX2.
+  The overloads over tuples copy the components into pooled spans first; `NBodyGravity.Soa` takes them in separate
+  spans (structure of arrays) and skips the copies.
+- **Scalar**, `NBodyGravity.Scalar`: pair by pair on the tuples, no copies.
+
 Time of one evaluation, float bodies, a gravitational constant per body
 ([NBodyGravityBenchmark](src/quality/SPhysics.Benchmarks/NBodyGravityBenchmark.cs), x64 with AVX2):
 
-| Overloads | 2D, 64 bodies | 2D, 512 | 2D, 3000 | 3D, 64 | 3D, 512 | 3D, 3000 |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Tuples | 4.5 µs | 0.13 ms | 4.1 ms | 5.5 µs | 0.18 ms | 5.5 ms |
-| `NBodyGravity.Soa` | 4.5 µs | 0.13 ms | 4.0 ms | 5.5 µs | 0.17 ms | 5.3 ms |
+| Overloads | 4 bodies | 16 | 64 | 512 | 3000 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `NBodyGravity.Scalar`, 2D | 55 ns | 0.72 µs | 11.9 µs | 0.76 ms | 26.0 ms |
+| `NBodyGravity`, 2D | 123 ns | 0.78 µs | 4.6 µs | 0.12 ms | 3.6 ms |
+| `NBodyGravity.Soa`, 2D | 87 ns | 0.74 µs | 4.2 µs | 0.12 ms | 3.5 ms |
+| `NBodyGravity.Scalar`, 3D | 71 ns | 0.98 µs | 16.2 µs | 1.04 ms | 35.4 ms |
+| `NBodyGravity`, 3D | 169 ns | 0.94 µs | 5.9 µs | 0.17 ms | 5.0 ms |
+| `NBodyGravity.Soa`, 3D | 103 ns | 0.84 µs | 5.6 µs | 0.17 ms | 5.0 ms |
 
-- For thousands of bodies this is about 6x faster than the scalar kernels of version 0.4.0-dev; below 16 bodies the
-  copies make the tuple overloads about 0.1 µs slower per call.
-- The pulls on a body are summed in several lanes, so the rounding depends on the vector width: results are
-  reproducible on one machine, not across machines with different vector widths.
+- The scalar kernel is faster below about 16 bodies; from there the vectorized one wins, 7x for thousands of bodies.
+  The caller picks the kernel for its body count.
+- The kernels differ in rounding. The vectorized one sums the pulls on a body in several lanes, so its rounding
+  depends on the vector width: reproducible on one machine, not across machines with different vector widths.
+  The scalar one is reproducible everywhere.
 - `VelocityVerlet.Soa` advances the structure of arrays, bitwise identical to the tuple steps.
 
 ## Contributing

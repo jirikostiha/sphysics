@@ -57,4 +57,28 @@ public class VelocityVerletTests
         Assert.Throws<ArgumentOutOfRangeException>(() =>
             VelocityVerlet.StepGravity<double>(new (double, double, double)[2], new (double, double, double)[2], new (double, double, double)[2], [1.0, 1.0], 1.0, 0.0, 1.0, subSteps: 0));
     }
+
+    [Fact]
+    public void SoaVerletStepsAreBitwiseIdenticalToTheTupleSteps()
+    {
+        var random = new Random(9);
+        int n = 37;
+        float Value() => (float)((random.NextDouble() * 200) - 100);
+        (float X, float Y, float Z)[] Vectors() => Enumerable.Range(0, n).Select(_ => (Value(), Value(), Value())).ToArray();
+
+        var positions = Vectors();
+        var velocities = Vectors();
+        var accelerations = Vectors();
+        var vx = velocities.Select(v => v.X).ToArray();
+        var px = positions.Select(p => p.X).ToArray();
+
+        VelocityVerlet.HalfKick<float>(velocities, accelerations, 0.37f);
+        VelocityVerlet.Drift<float>(positions, velocities, 0.37f);
+        VelocityVerlet.Soa.HalfKick<float>(vx, accelerations.Select(a => a.X).ToArray(), 0.37f);
+        VelocityVerlet.Soa.Drift<float>(px, vx, 0.37f);
+
+        Assert.Equal(velocities.Select(v => BitConverter.SingleToInt32Bits(v.X)), vx.Select(BitConverter.SingleToInt32Bits));
+        Assert.Equal(positions.Select(p => BitConverter.SingleToInt32Bits(p.X)), px.Select(BitConverter.SingleToInt32Bits));
+        Assert.Throws<ArgumentException>(() => VelocityVerlet.Soa.Drift<float>(px, new float[n - 1], 1f));
+    }
 }

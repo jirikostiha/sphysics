@@ -9,7 +9,7 @@ namespace SPhysics;
 /// <remarks>
 /// <a href="https://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet">wikipedia</a>
 /// </remarks>
-public static class VelocityVerlet
+public static partial class VelocityVerlet
 {
     /// <summary>
     /// Half-kick: v += 0.5 * a * dt for a single body.

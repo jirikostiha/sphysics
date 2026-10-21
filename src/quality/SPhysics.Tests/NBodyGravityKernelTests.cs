@@ -2,7 +2,7 @@ using Xunit;
 
 namespace SPhysics.Tests;
 
-public class NBodyGravitySoaTests
+public class NBodyGravityKernelTests
 {
     private const int Runs = 400;
 
@@ -32,6 +32,47 @@ public class NBodyGravitySoaTests
             NBodyGravity.Soa.ComputeAccelerations<double>(x, y, z, masses, 0.7, 0.3, ax, ay, az);
             AssertClose(DirectSum(x, y, z, masses, shared, 0.3), ax, ay, az);
         }
+    }
+
+    [Fact]
+    public void ScalarMatchesTheDirectSumUpToRounding()
+    {
+        var random = new Random(11);
+        for (int run = 0; run < Runs; run++)
+        {
+            int n = random.Next(0, 40);
+            var (x, y, z) = (Values(random, n), Values(random, n), Values(random, n));
+            var masses = Values(random, n).Select(Math.Abs).ToArray();
+            var constants = Values(random, n).Select(v => Math.Abs(v) / 50).ToArray();
+            var shared = Enumerable.Repeat(0.7, n).ToArray();
+            var zeros = new double[n];
+            var planar = new (double X, double Y)[n];
+            var spatial = new (double X, double Y, double Z)[n];
+
+            NBodyGravity.Scalar.ComputeAccelerations<double>(x.Zip(y).ToArray(), masses, constants, 0.3, planar);
+            AssertClose(DirectSum(x, y, zeros, masses, constants, 0.3), planar.Select(a => a.X).ToArray(), planar.Select(a => a.Y).ToArray(), zeros);
+
+            NBodyGravity.Scalar.ComputeAccelerations<double>(x.Zip(y).ToArray(), masses, 0.7, 0.3, planar);
+            AssertClose(DirectSum(x, y, zeros, masses, shared, 0.3), planar.Select(a => a.X).ToArray(), planar.Select(a => a.Y).ToArray(), zeros);
+
+            NBodyGravity.Scalar.ComputeAccelerations<double>(Spatial(x, y, z), masses, constants, 0.3, spatial);
+            AssertClose(DirectSum(x, y, z, masses, constants, 0.3), spatial.Select(a => a.X).ToArray(), spatial.Select(a => a.Y).ToArray(), spatial.Select(a => a.Z).ToArray());
+
+            NBodyGravity.Scalar.ComputeAccelerations<double>(Spatial(x, y, z), masses, 0.7, 0.3, spatial);
+            AssertClose(DirectSum(x, y, z, masses, shared, 0.3), spatial.Select(a => a.X).ToArray(), spatial.Select(a => a.Y).ToArray(), spatial.Select(a => a.Z).ToArray());
+        }
+    }
+
+    [Fact]
+    public void ScalarRejectsSpansOfDifferentLengths()
+    {
+        var two = new (double X, double Y)[2];
+        var twoSpatial = new (double X, double Y, double Z)[2];
+
+        Assert.Throws<ArgumentException>(() => NBodyGravity.Scalar.ComputeAccelerations<double>(two, [1.0], 1.0, 0.0, new (double X, double Y)[2]));
+        Assert.Throws<ArgumentException>(() => NBodyGravity.Scalar.ComputeAccelerations<double>(two, [1.0, 1.0], [1.0], 0.0, new (double X, double Y)[2]));
+        Assert.Throws<ArgumentException>(() => NBodyGravity.Scalar.ComputeAccelerations<double>(twoSpatial, [1.0, 1.0], 1.0, 0.0, new (double X, double Y, double Z)[3]));
+        Assert.Throws<ArgumentException>(() => NBodyGravity.Scalar.ComputeAccelerations<double>(twoSpatial, [1.0, 1.0], [1.0, 1.0, 1.0], 0.0, new (double X, double Y, double Z)[2]));
     }
 
     [Fact]

@@ -139,8 +139,7 @@ public static partial class NBodyGravity
                 N rx = x[j] - xi;
                 N ry = y[j] - yi;
                 N rz = spatial ? z[j] - zi : N.Zero;
-                N invR = N.One / N.Sqrt(rx * rx + ry * ry + rz * rz + soft2);
-                N invR3 = invR * invR * invR;
+                N invR3 = InverseCube(rx * rx + ry * ry + rz * rz + soft2);
 
                 N kI = gI * masses[j] * invR3;
                 sx += rx * kI;

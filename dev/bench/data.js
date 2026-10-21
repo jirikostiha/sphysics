@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1792531736600,
+  "lastUpdate": 1792544227332,
   "repoUrl": "https://github.com/jirikostiha/sphysics",
   "entries": {
     "Benchmark.Net": [
@@ -268,6 +268,36 @@ window.BENCHMARK_DATA = {
             "value": 15924.16923828125,
             "unit": "ns",
             "range": "± 21.66667744380403"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "committer": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "distinct": true,
+          "id": "25dc4757c8de167df8124e65ea8317f2e6ceea5c",
+          "message": "product: bump to version 0.4.0-dev",
+          "timestamp": "2026-10-21T02:55:53+02:00",
+          "tree_id": "36c2b2658dee6d4991e4f29eda5bb284eb39f082",
+          "url": "https://github.com/jirikostiha/sphysics/commit/25dc4757c8de167df8124e65ea8317f2e6ceea5c"
+        },
+        "date": 1792544226804,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "SPhysics.GravitationalForceBenchmark.Outside",
+            "value": 14029.420916748048,
+            "unit": "ns",
+            "range": "± 9.034147492365566"
           }
         ]
       }

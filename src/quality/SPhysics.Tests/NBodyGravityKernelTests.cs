@@ -46,20 +46,22 @@ public class NBodyGravityKernelTests
             var constants = Values(random, n).Select(v => Math.Abs(v) / 50).ToArray();
             var shared = Enumerable.Repeat(0.7, n).ToArray();
             var zeros = new double[n];
+            var planarPositions = x.Zip(y).ToArray();
+            var spatialPositions = Spatial(x, y, z);
             var planar = new (double X, double Y)[n];
             var spatial = new (double X, double Y, double Z)[n];
 
-            NBodyGravity.Scalar.ComputeAccelerations<double>(x.Zip(y).ToArray(), masses, constants, 0.3, planar);
-            AssertClose(DirectSum(x, y, zeros, masses, constants, 0.3), planar.Select(a => a.X).ToArray(), planar.Select(a => a.Y).ToArray(), zeros);
+            NBodyGravity.Scalar.ComputeAccelerations<double>(planarPositions, masses, constants, 0.3, planar);
+            AssertClose(DirectSum(x, y, zeros, masses, constants, 0.3), planar.Select(a => (a.X, a.Y, 0.0)).ToArray());
 
-            NBodyGravity.Scalar.ComputeAccelerations<double>(x.Zip(y).ToArray(), masses, 0.7, 0.3, planar);
-            AssertClose(DirectSum(x, y, zeros, masses, shared, 0.3), planar.Select(a => a.X).ToArray(), planar.Select(a => a.Y).ToArray(), zeros);
+            NBodyGravity.Scalar.ComputeAccelerations<double>(planarPositions, masses, 0.7, 0.3, planar);
+            AssertClose(DirectSum(x, y, zeros, masses, shared, 0.3), planar.Select(a => (a.X, a.Y, 0.0)).ToArray());
 
-            NBodyGravity.Scalar.ComputeAccelerations<double>(Spatial(x, y, z), masses, constants, 0.3, spatial);
-            AssertClose(DirectSum(x, y, z, masses, constants, 0.3), spatial.Select(a => a.X).ToArray(), spatial.Select(a => a.Y).ToArray(), spatial.Select(a => a.Z).ToArray());
+            NBodyGravity.Scalar.ComputeAccelerations<double>(spatialPositions, masses, constants, 0.3, spatial);
+            AssertClose(DirectSum(x, y, z, masses, constants, 0.3), spatial);
 
-            NBodyGravity.Scalar.ComputeAccelerations<double>(Spatial(x, y, z), masses, 0.7, 0.3, spatial);
-            AssertClose(DirectSum(x, y, z, masses, shared, 0.3), spatial.Select(a => a.X).ToArray(), spatial.Select(a => a.Y).ToArray(), spatial.Select(a => a.Z).ToArray());
+            NBodyGravity.Scalar.ComputeAccelerations<double>(spatialPositions, masses, 0.7, 0.3, spatial);
+            AssertClose(DirectSum(x, y, z, masses, shared, 0.3), spatial);
         }
     }
 
@@ -164,6 +166,9 @@ public class NBodyGravityKernelTests
 
         return accelerations;
     }
+
+    private static void AssertClose((double X, double Y, double Z)[] expected, (double X, double Y, double Z)[] actual)
+        => AssertClose(expected, actual.Select(a => a.X).ToArray(), actual.Select(a => a.Y).ToArray(), actual.Select(a => a.Z).ToArray());
 
     // the pulls on a body may cancel out, so the rounding is measured against the largest acceleration
     private static void AssertClose((double X, double Y, double Z)[] expected, double[] ax, double[] ay, double[] az)

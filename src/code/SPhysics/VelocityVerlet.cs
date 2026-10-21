@@ -18,8 +18,7 @@ public static class VelocityVerlet
     public static (N X, N Y) HalfKick<N>((N X, N Y) velocity, (N X, N Y) acceleration, N dt)
         where N : INumberBase<N>
     {
-        N half = N.One / (N.One + N.One);
-        N h = half * dt;
+        N h = HalfStep(dt);
         return (velocity.X + acceleration.X * h, velocity.Y + acceleration.Y * h);
     }
 
@@ -41,8 +40,7 @@ public static class VelocityVerlet
     {
         if (accelerations.Length != velocities.Length)
             throw new ArgumentException("accelerations must have the same length as velocities.");
-        N half = N.One / (N.One + N.One);
-        N h = half * dt;
+        N h = HalfStep(dt);
         for (int i = 0; i < velocities.Length; i++)
         {
             var v = velocities[i];
@@ -114,8 +112,7 @@ public static class VelocityVerlet
     public static (N X, N Y, N Z) HalfKick<N>((N X, N Y, N Z) velocity, (N X, N Y, N Z) acceleration, N dt)
         where N : INumberBase<N>
     {
-        N half = N.One / (N.One + N.One);
-        N h = half * dt;
+        N h = HalfStep(dt);
         return (velocity.X + acceleration.X * h, velocity.Y + acceleration.Y * h, velocity.Z + acceleration.Z * h);
     }
 
@@ -137,8 +134,7 @@ public static class VelocityVerlet
     {
         if (accelerations.Length != velocities.Length)
             throw new ArgumentException("accelerations must have the same length as velocities.");
-        N half = N.One / (N.One + N.One);
-        N h = half * dt;
+        N h = HalfStep(dt);
         for (int i = 0; i < velocities.Length; i++)
         {
             var v = velocities[i];
@@ -202,4 +198,9 @@ public static class VelocityVerlet
             HalfKick(velocities, accelerations, h);
         }
     }
+
+    // dt / 2 as 0.5 * dt, the one rounding every half-kick shares
+    private static N HalfStep<N>(N dt)
+        where N : INumberBase<N>
+        => N.One / (N.One + N.One) * dt;
 }

@@ -29,8 +29,9 @@ public static class EccentricAnomaly
         N reduced = N.Ieee754Remainder(meanAnomaly, N.Tau);
         N turns = meanAnomaly - reduced;
 
-        // Danby's starting guess keeps Newton's method convergent for every 0 <= e < 1
-        N anomaly = reduced + N.CreateTruncating(0.85) * eccentricity * N.CopySign(N.One, N.Sin(reduced));
+        // Danby's starting guess keeps Newton's method convergent for every 0 <= e < 1,
+        // the sign of sin(M) is the sign of M on [-pi, pi]
+        N anomaly = reduced + N.CreateTruncating(0.85) * eccentricity * N.CopySign(N.One, reduced);
         for (int i = 0; i < MaxIterations; i++)
         {
             (N sin, N cos) = N.SinCos(anomaly);

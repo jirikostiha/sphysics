@@ -106,6 +106,25 @@ Span<(double X, double Y, double Mass)> bodies = stackalloc (double, double, dou
 var (fx, fy) = GravitationalForce.Eval<double>(bodies, index: 0, gravitationConst: G);
 ```
 
+## Performance
+
+`NBodyGravity` evaluates all pairs, O(n^2), in one kernel vectorized across the pairs: one `Vector<T>` evaluates
+8 float or 4 double pairs at once with AVX2. The overloads over tuples copy the components into pooled spans first;
+`NBodyGravity.Soa` takes them in separate spans (structure of arrays) and skips the copies.
+Time of one evaluation, float bodies, a gravitational constant per body
+([NBodyGravityBenchmark](src/quality/SPhysics.Benchmarks/NBodyGravityBenchmark.cs), x64 with AVX2):
+
+| Overloads | 2D, 64 bodies | 2D, 512 | 2D, 3000 | 3D, 64 | 3D, 512 | 3D, 3000 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Tuples | 4.5 µs | 0.13 ms | 4.1 ms | 5.5 µs | 0.18 ms | 5.5 ms |
+| `NBodyGravity.Soa` | 4.5 µs | 0.13 ms | 4.0 ms | 5.5 µs | 0.17 ms | 5.3 ms |
+
+- For thousands of bodies this is about 6x faster than the scalar kernels of version 0.4.0-dev; below 16 bodies the
+  copies make the tuple overloads about 0.1 µs slower per call.
+- The pulls on a body are summed in several lanes, so the rounding depends on the vector width: results are
+  reproducible on one machine, not across machines with different vector widths.
+- `VelocityVerlet.Soa` advances the structure of arrays, bitwise identical to the tuple steps.
+
 ## Contributing
 
 Ideas, bug reports and pull requests are welcome. Open an

@@ -2,7 +2,7 @@ using BenchmarkDotNet.Attributes;
 
 namespace SPhysics;
 
-/// <summary> One evaluation of all accelerations, float bodies with a gravitational constant per body. </summary>
+/// <summary> One evaluation of all accelerations by each kernel, float bodies with a gravitational constant per body. </summary>
 [MemoryDiagnoser]
 public class NBodyGravityBenchmark
 {
@@ -39,12 +39,20 @@ public class NBodyGravityBenchmark
     }
 
     [Benchmark]
+    public void Scalar2D()
+        => NBodyGravity.Scalar.ComputeAccelerations<float>(_planar, _masses, _constants, 0.1f, _planarAccelerations);
+
+    [Benchmark]
     public void Tuple2D()
         => NBodyGravity.ComputeAccelerations<float>(_planar, _masses, _constants, 0.1f, _planarAccelerations);
 
     [Benchmark]
     public void Soa2D()
         => NBodyGravity.Soa.ComputeAccelerations<float>(_x, _y, _masses, _constants, 0.1f, _ax, _ay);
+
+    [Benchmark]
+    public void Scalar3D()
+        => NBodyGravity.Scalar.ComputeAccelerations<float>(_spatial, _masses, _constants, 0.1f, _spatialAccelerations);
 
     [Benchmark]
     public void Tuple3D()

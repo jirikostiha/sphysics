@@ -8,7 +8,7 @@ namespace SPhysics;
 /// <remarks>
 /// <a href="https://en.wikipedia.org/wiki/N-body_simulation">wikipedia</a>
 /// </remarks>
-public static class NBodyGravity
+public static partial class NBodyGravity
 {
     /// <summary>
     /// Computes gravitational accelerations for all bodies pairwise (O(n^2)).

@@ -37,7 +37,7 @@ public static class OrbitalStateVectors
         where N : IFloatingPointIeee754<N>
     {
         (N sin, N cos) = N.SinCos(eccentricAnomaly);
-        N speed = N.Sqrt(gravitationalConstant * mass / semiMajorAxis) / (N.One - eccentricity * cos);
+        N speed = OrbitalVelocity.Circular(mass, semiMajorAxis, gravitationalConstant) / (N.One - eccentricity * cos);
         return (-speed * sin, speed * MinorAxisRatio(eccentricity) * cos);
     }
 

@@ -35,6 +35,30 @@ public class NBodyGravitySoaTests
     }
 
     [Fact]
+    public void TupleOverloadsRunTheSoaKernel()
+    {
+        var random = new Random(3);
+        for (int run = 0; run < Runs; run++)
+        {
+            int n = random.Next(0, 40);
+            var (x, y, z) = (Values(random, n), Values(random, n), Values(random, n));
+            var masses = Values(random, n).Select(Math.Abs).ToArray();
+            var constants = Values(random, n).Select(v => Math.Abs(v) / 50).ToArray();
+            var (ax, ay, az) = (new double[n], new double[n], new double[n]);
+            var planar = new (double X, double Y)[n];
+            var spatial = new (double X, double Y, double Z)[n];
+
+            NBodyGravity.ComputeAccelerations<double>(x.Zip(y).ToArray(), masses, constants, 0.3, planar);
+            NBodyGravity.Soa.ComputeAccelerations<double>(x, y, masses, constants, 0.3, ax, ay);
+            Assert.Equal(ax.Zip(ay), planar);
+
+            NBodyGravity.ComputeAccelerations<double>(Spatial(x, y, z), masses, 0.7, 0.3, spatial);
+            NBodyGravity.Soa.ComputeAccelerations<double>(x, y, z, masses, 0.7, 0.3, ax, ay, az);
+            Assert.Equal(Spatial(ax, ay, az), spatial);
+        }
+    }
+
+    [Fact]
     public void SoaWithEqualConstantsPerBodyMatchesTheSharedConstant()
     {
         var random = new Random(7);

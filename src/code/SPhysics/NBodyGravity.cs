@@ -1,4 +1,6 @@
+using System.Buffers;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
@@ -7,6 +9,10 @@ namespace SPhysics;
 /// </summary>
 /// <remarks>
 /// <a href="https://en.wikipedia.org/wiki/N-body_simulation">wikipedia</a>
+/// <para>
+/// The overloads over tuples copy the components into separate spans and run the vectorized kernel of <see cref="Soa"/>;
+/// the copies cost O(n) against the O(n^2) pairs.
+/// </para>
 /// </remarks>
 public static partial class NBodyGravity
 {
@@ -34,39 +40,7 @@ public static partial class NBodyGravity
         if (masses.Length != n || gravitationalConstants.Length != n || accelerations.Length != n)
             throw new ArgumentException("masses, gravitationalConstants, and accelerations must have the same length as positions.");
 
-        N soft2 = softening * softening;
-
-        for (int i = 0; i < n; i++)
-            accelerations[i] = (N.Zero, N.Zero);
-
-        for (int i = 0; i < n; i++)
-        {
-            var pi = positions[i];
-            N gI = gravitationalConstants[i];
-            N mI = masses[i];
-            var (aix, aiy) = accelerations[i];
-
-            for (int j = i + 1; j < n; j++)
-            {
-                var pj = positions[j];
-                N rx = pj.X - pi.X;
-                N ry = pj.Y - pi.Y;
-                N d2 = rx * rx + ry * ry + soft2;
-                N invR = N.One / N.Sqrt(d2);
-                N invR3 = invR * invR * invR;
-
-                N kI = gI * masses[j] * invR3;
-                aix += rx * kI;
-                aiy += ry * kI;
-
-                N kJ = gravitationalConstants[j] * mI * invR3;
-                ref var aj = ref accelerations[j];
-                aj.X -= rx * kJ;
-                aj.Y -= ry * kJ;
-            }
-
-            accelerations[i] = (aix, aiy);
-        }
+        Planar(positions, masses, gravitationalConstants, N.Zero, softening, accelerations, perBody: true);
     }
 
     /// <summary>
@@ -91,38 +65,7 @@ public static partial class NBodyGravity
         if (masses.Length != n || accelerations.Length != n)
             throw new ArgumentException("masses and accelerations must have the same length as positions.");
 
-        N soft2 = softening * softening;
-
-        for (int i = 0; i < n; i++)
-            accelerations[i] = (N.Zero, N.Zero);
-
-        for (int i = 0; i < n; i++)
-        {
-            var pi = positions[i];
-            N mI = masses[i];
-            var (aix, aiy) = accelerations[i];
-
-            for (int j = i + 1; j < n; j++)
-            {
-                var pj = positions[j];
-                N rx = pj.X - pi.X;
-                N ry = pj.Y - pi.Y;
-                N d2 = rx * rx + ry * ry + soft2;
-                N invR = N.One / N.Sqrt(d2);
-                N invR3 = invR * invR * invR;
-
-                N kI = gravitationalConstant * masses[j] * invR3;
-                aix += rx * kI;
-                aiy += ry * kI;
-
-                N kJ = gravitationalConstant * mI * invR3;
-                ref var aj = ref accelerations[j];
-                aj.X -= rx * kJ;
-                aj.Y -= ry * kJ;
-            }
-
-            accelerations[i] = (aix, aiy);
-        }
+        Planar(positions, masses, default, gravitationalConstant, softening, accelerations, perBody: false);
     }
 
     /// <summary>
@@ -149,42 +92,7 @@ public static partial class NBodyGravity
         if (masses.Length != n || gravitationalConstants.Length != n || accelerations.Length != n)
             throw new ArgumentException("masses, gravitationalConstants, and accelerations must have the same length as positions.");
 
-        N soft2 = softening * softening;
-
-        for (int i = 0; i < n; i++)
-            accelerations[i] = (N.Zero, N.Zero, N.Zero);
-
-        for (int i = 0; i < n; i++)
-        {
-            var pi = positions[i];
-            N gI = gravitationalConstants[i];
-            N mI = masses[i];
-            var (aix, aiy, aiz) = accelerations[i];
-
-            for (int j = i + 1; j < n; j++)
-            {
-                var pj = positions[j];
-                N rx = pj.X - pi.X;
-                N ry = pj.Y - pi.Y;
-                N rz = pj.Z - pi.Z;
-                N d2 = rx * rx + ry * ry + rz * rz + soft2;
-                N invR = N.One / N.Sqrt(d2);
-                N invR3 = invR * invR * invR;
-
-                N kI = gI * masses[j] * invR3;
-                aix += rx * kI;
-                aiy += ry * kI;
-                aiz += rz * kI;
-
-                N kJ = gravitationalConstants[j] * mI * invR3;
-                ref var aj = ref accelerations[j];
-                aj.X -= rx * kJ;
-                aj.Y -= ry * kJ;
-                aj.Z -= rz * kJ;
-            }
-
-            accelerations[i] = (aix, aiy, aiz);
-        }
+        Spatial(positions, masses, gravitationalConstants, N.Zero, softening, accelerations, perBody: true);
     }
 
     /// <summary>
@@ -209,40 +117,74 @@ public static partial class NBodyGravity
         if (masses.Length != n || accelerations.Length != n)
             throw new ArgumentException("masses and accelerations must have the same length as positions.");
 
-        N soft2 = softening * softening;
+        Spatial(positions, masses, default, gravitationalConstant, softening, accelerations, perBody: false);
+    }
 
-        for (int i = 0; i < n; i++)
-            accelerations[i] = (N.Zero, N.Zero, N.Zero);
-
-        for (int i = 0; i < n; i++)
+    // the components are copied into one pooled buffer, x, y, then the accelerations
+    private static void Planar<N>(
+        ReadOnlySpan<(N X, N Y)> positions,
+        ReadOnlySpan<N> masses,
+        ReadOnlySpan<N> gravitationalConstants,
+        N gravitationalConstant,
+        N softening,
+        Span<(N X, N Y)> accelerations,
+        bool perBody)
+        where N : IRootFunctions<N>
+    {
+        int n = positions.Length;
+        N[] buffer = ArrayPool<N>.Shared.Rent(4 * n);
+        try
         {
-            var pi = positions[i];
-            N mI = masses[i];
-            var (aix, aiy, aiz) = accelerations[i];
+            var x = buffer.AsSpan(0, n);
+            var y = buffer.AsSpan(n, n);
+            var ax = buffer.AsSpan(2 * n, n);
+            var ay = buffer.AsSpan(3 * n, n);
+            for (int i = 0; i < n; i++)
+                (x[i], y[i]) = positions[i];
 
-            for (int j = i + 1; j < n; j++)
-            {
-                var pj = positions[j];
-                N rx = pj.X - pi.X;
-                N ry = pj.Y - pi.Y;
-                N rz = pj.Z - pi.Z;
-                N d2 = rx * rx + ry * ry + rz * rz + soft2;
-                N invR = N.One / N.Sqrt(d2);
-                N invR3 = invR * invR * invR;
+            Kernel<N>(x, y, default, masses, gravitationalConstants, gravitationalConstant, softening, ax, ay, default, perBody, spatial: false);
 
-                N kI = gravitationalConstant * masses[j] * invR3;
-                aix += rx * kI;
-                aiy += ry * kI;
-                aiz += rz * kI;
+            for (int i = 0; i < n; i++)
+                accelerations[i] = (ax[i], ay[i]);
+        }
+        finally
+        {
+            ArrayPool<N>.Shared.Return(buffer, RuntimeHelpers.IsReferenceOrContainsReferences<N>());
+        }
+    }
 
-                N kJ = gravitationalConstant * mI * invR3;
-                ref var aj = ref accelerations[j];
-                aj.X -= rx * kJ;
-                aj.Y -= ry * kJ;
-                aj.Z -= rz * kJ;
-            }
+    // the components are copied into one pooled buffer, x, y, z, then the accelerations
+    private static void Spatial<N>(
+        ReadOnlySpan<(N X, N Y, N Z)> positions,
+        ReadOnlySpan<N> masses,
+        ReadOnlySpan<N> gravitationalConstants,
+        N gravitationalConstant,
+        N softening,
+        Span<(N X, N Y, N Z)> accelerations,
+        bool perBody)
+        where N : IRootFunctions<N>
+    {
+        int n = positions.Length;
+        N[] buffer = ArrayPool<N>.Shared.Rent(6 * n);
+        try
+        {
+            var x = buffer.AsSpan(0, n);
+            var y = buffer.AsSpan(n, n);
+            var z = buffer.AsSpan(2 * n, n);
+            var ax = buffer.AsSpan(3 * n, n);
+            var ay = buffer.AsSpan(4 * n, n);
+            var az = buffer.AsSpan(5 * n, n);
+            for (int i = 0; i < n; i++)
+                (x[i], y[i], z[i]) = positions[i];
 
-            accelerations[i] = (aix, aiy, aiz);
+            Kernel<N>(x, y, z, masses, gravitationalConstants, gravitationalConstant, softening, ax, ay, az, perBody, spatial: true);
+
+            for (int i = 0; i < n; i++)
+                accelerations[i] = (ax[i], ay[i], az[i]);
+        }
+        finally
+        {
+            ArrayPool<N>.Shared.Return(buffer, RuntimeHelpers.IsReferenceOrContainsReferences<N>());
         }
     }
 }

@@ -14,6 +14,7 @@ public static partial class NBodyGravity
     /// The sum of the pulls on a body is split into the lanes, so the rounding depends on the vector width of the
     /// machine: the results are reproducible on one machine, not across machines with different vector widths.
     /// A number type without hardware vectors runs the same kernel in scalar code.
+    /// The kernels over tuples copy the components into spans and run this kernel.
     /// </remarks>
     public static class Soa
     {

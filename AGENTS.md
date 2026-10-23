@@ -1,6 +1,17 @@
 # Agent Instructions
 
-- This project can only contain static classes and no instance classes. No exceptions.
+## Rules — always apply
+
+| File | Scope |
+|------|-------|
+| `.ai/rules/sphysics.rule.md` | static classes only |
+
+## Skills
+
+Repository skills live in `.ai/skills/<name>/SKILL.md` (Agent Skills format) and load by their
+`description`; once loaded, they bind.
+
+- `verify` — verify a change at the NuGet package boundary with a sample app.
 
 <!-- ai-kit:begin - generated, do not edit inside this block -->
 ## Where to look

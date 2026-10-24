@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1792577732132,
+  "lastUpdate": 1792836194517,
   "repoUrl": "https://github.com/jirikostiha/sphysics",
   "entries": {
     "Benchmark.Net": [
@@ -1168,6 +1168,36 @@ window.BENCHMARK_DATA = {
             "value": 3680613.65625,
             "unit": "ns",
             "range": "± 68313.33822061247"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "committer": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "distinct": true,
+          "id": "9d8833443c7ad198ac06fb833e8ace34b94d6df5",
+          "message": "feat: Pressure - central pressure of a uniform sphere\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-10-24T11:09:51+02:00",
+          "tree_id": "1f9bf51abd78cdba5225c3bca3f805e9267820bf",
+          "url": "https://github.com/jirikostiha/sphysics/commit/9d8833443c7ad198ac06fb833e8ace34b94d6df5"
+        },
+        "date": 1792836193938,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "SPhysics.GravitationalForceBenchmark.Outside",
+            "value": 14006.856639607748,
+            "unit": "ns",
+            "range": "± 35.41672819292663"
           }
         ]
       }

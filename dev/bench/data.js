@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1792836194517,
+  "lastUpdate": 1792838201877,
   "repoUrl": "https://github.com/jirikostiha/sphysics",
   "entries": {
     "Benchmark.Net": [
@@ -1198,6 +1198,36 @@ window.BENCHMARK_DATA = {
             "value": 14006.856639607748,
             "unit": "ns",
             "range": "± 35.41672819292663"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "committer": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "distinct": true,
+          "id": "edc24b67136031becc3b0389b73de9a602fcf1f1",
+          "message": "docs: compact XML doc comments and fix typos\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-10-24T12:25:39+02:00",
+          "tree_id": "483606cf0ad06c5b51f8c689ce2467be57aad94e",
+          "url": "https://github.com/jirikostiha/sphysics/commit/edc24b67136031becc3b0389b73de9a602fcf1f1"
+        },
+        "date": 1792838201307,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "SPhysics.GravitationalForceBenchmark.Outside",
+            "value": 14027.030199323382,
+            "unit": "ns",
+            "range": "± 8.060172708545366"
           }
         ]
       }

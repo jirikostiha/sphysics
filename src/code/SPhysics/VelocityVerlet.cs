@@ -3,17 +3,11 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// Velocity Verlet integration primitives.
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet">wikipedia</a>
-/// </remarks>
+/// <summary>Velocity Verlet integration primitives.</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet">wikipedia</a></remarks>
 public static partial class VelocityVerlet
 {
-    /// <summary>
-    /// Half-kick: v += 0.5 * a * dt for a single body.
-    /// </summary>
+    /// <summary>Half-kick: v += 0.5 * a * dt for a single body.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static (N X, N Y) HalfKick<N>((N X, N Y) velocity, (N X, N Y) acceleration, N dt)
         where N : INumberBase<N>
@@ -22,9 +16,7 @@ public static partial class VelocityVerlet
         return (velocity.X + acceleration.X * h, velocity.Y + acceleration.Y * h);
     }
 
-    /// <summary>
-    /// Drift: x += v * dt for a single body.
-    /// </summary>
+    /// <summary>Drift: x += v * dt for a single body.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static (N X, N Y) Drift<N>((N X, N Y) position, (N X, N Y) velocity, N dt)
         where N : INumberBase<N>
@@ -32,9 +24,7 @@ public static partial class VelocityVerlet
         return (position.X + velocity.X * dt, position.Y + velocity.Y * dt);
     }
 
-    /// <summary>
-    /// Half-kick applied to every element: v[i] += 0.5 * a[i] * dt.
-    /// </summary>
+    /// <summary>Half-kick applied to every element: v[i] += 0.5 * a[i] * dt.</summary>
     public static void HalfKick<N>(Span<(N X, N Y)> velocities, ReadOnlySpan<(N X, N Y)> accelerations, N dt)
         where N : INumberBase<N>
     {
@@ -49,9 +39,7 @@ public static partial class VelocityVerlet
         }
     }
 
-    /// <summary>
-    /// Drift applied to every element: x[i] += v[i] * dt.
-    /// </summary>
+    /// <summary>Drift applied to every element: x[i] += v[i] * dt.</summary>
     public static void Drift<N>(Span<(N X, N Y)> positions, ReadOnlySpan<(N X, N Y)> velocities, N dt)
         where N : INumberBase<N>
     {
@@ -105,9 +93,7 @@ public static partial class VelocityVerlet
         }
     }
 
-    /// <summary>
-    /// Half-kick: v += 0.5 * a * dt for a single body in 3D.
-    /// </summary>
+    /// <summary>Half-kick: v += 0.5 * a * dt for a single body in 3D.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static (N X, N Y, N Z) HalfKick<N>((N X, N Y, N Z) velocity, (N X, N Y, N Z) acceleration, N dt)
         where N : INumberBase<N>
@@ -116,9 +102,7 @@ public static partial class VelocityVerlet
         return (velocity.X + acceleration.X * h, velocity.Y + acceleration.Y * h, velocity.Z + acceleration.Z * h);
     }
 
-    /// <summary>
-    /// Drift: x += v * dt for a single body in 3D.
-    /// </summary>
+    /// <summary>Drift: x += v * dt for a single body in 3D.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static (N X, N Y, N Z) Drift<N>((N X, N Y, N Z) position, (N X, N Y, N Z) velocity, N dt)
         where N : INumberBase<N>
@@ -126,9 +110,7 @@ public static partial class VelocityVerlet
         return (position.X + velocity.X * dt, position.Y + velocity.Y * dt, position.Z + velocity.Z * dt);
     }
 
-    /// <summary>
-    /// Half-kick applied to every element in 3D: v[i] += 0.5 * a[i] * dt.
-    /// </summary>
+    /// <summary>Half-kick applied to every element in 3D: v[i] += 0.5 * a[i] * dt.</summary>
     public static void HalfKick<N>(Span<(N X, N Y, N Z)> velocities, ReadOnlySpan<(N X, N Y, N Z)> accelerations, N dt)
         where N : INumberBase<N>
     {
@@ -143,9 +125,7 @@ public static partial class VelocityVerlet
         }
     }
 
-    /// <summary>
-    /// Drift applied to every element in 3D: x[i] += v[i] * dt.
-    /// </summary>
+    /// <summary>Drift applied to every element in 3D: x[i] += v[i] * dt.</summary>
     public static void Drift<N>(Span<(N X, N Y, N Z)> positions, ReadOnlySpan<(N X, N Y, N Z)> velocities, N dt)
         where N : INumberBase<N>
     {

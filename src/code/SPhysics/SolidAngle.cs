@@ -3,12 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// Solid angle quantity, a dimensionless ratio of an area to the square of a length measured in steradians.
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Solid_angle">wikipedia</a>
-/// </remarks>
+/// <summary>Solid angle quantity, a dimensionless ratio of an area to the square of a length measured in steradians.</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Solid_angle">wikipedia</a></remarks>
 public static class SolidAngle
 {
     public const string Name = "solid angle";

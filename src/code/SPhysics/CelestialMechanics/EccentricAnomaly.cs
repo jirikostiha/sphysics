@@ -2,19 +2,13 @@ using System.Numerics;
 
 namespace SPhysics.CelestialMechanics;
 
-/// <summary>
-/// Eccentric anomaly, the angle that places a body on its elliptic orbit seen from the center of the ellipse.
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Eccentric_anomaly">wikipedia</a>
-/// </remarks>
+/// <summary>Eccentric anomaly, the angle that places a body on its elliptic orbit seen from the center of the ellipse.</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Eccentric_anomaly">wikipedia</a></remarks>
 public static class EccentricAnomaly
 {
     private const int MaxIterations = 32;
 
-    /// <summary>
-    /// Eccentric anomaly from the mean anomaly, the solution of Kepler's equation M = E - e * sin(E).
-    /// </summary>
+    /// <summary>Eccentric anomaly from the mean anomaly, the solution of Kepler's equation M = E - e * sin(E).</summary>
     /// <remarks>
     /// <a href="https://en.wikipedia.org/wiki/Kepler%27s_equation">wikipedia</a>
     /// The inverse of <see cref="MeanAnomaly.Eval{N}"/>, solved by Newton's method to the full precision of <typeparamref name="N"/>.

@@ -2,12 +2,8 @@
 
 namespace SPhysics;
 
-/// <summary>
-/// Center of mass or balance point.
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Center_of_mass">wikipedia</a>
-/// </remarks>
+/// <summary>Center of mass or balance point.</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Center_of_mass">wikipedia</a></remarks>
 public static class CenterOfMass
 {
     public static (N x, N y) Eval<N>((N x, N y, N m)[] points)

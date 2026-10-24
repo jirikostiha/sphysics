@@ -2,9 +2,7 @@
 
 namespace SPhysics;
 
-/// <summary>
-/// Drag force
-/// </summary>
+/// <summary>Drag force</summary>
 /// <remarks>
 /// <a href="https://en.wikipedia.org/wiki/Drag_(physics)">wikipedia</a>
 /// <a href="https://en.wikipedia.org/wiki/Drag_equation">wikipedia</a>

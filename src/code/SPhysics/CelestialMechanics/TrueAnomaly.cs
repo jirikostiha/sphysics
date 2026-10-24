@@ -7,14 +7,10 @@ namespace SPhysics.CelestialMechanics;
 /// True anomaly
 ///   is the angle between the direction of periapsis and the current position of the body.
 /// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/True_anomaly">wikipedia</a>
-/// </remarks>
+/// <remarks><a href="https://en.wikipedia.org/wiki/True_anomaly">wikipedia</a></remarks>
 public static class TrueAnomaly
 {
-    /// <summary>
-    /// True anomaly from the eccentric anomaly.
-    /// </summary>
+    /// <summary>True anomaly from the eccentric anomaly.</summary>
     /// <remarks>
     /// Half angle form evaluated with Atan2, which keeps the result in the correct
     /// quadrant over the whole orbit, unlike tan(v/2) = sqrt((1+e)/(1-e)) * tan(E/2).

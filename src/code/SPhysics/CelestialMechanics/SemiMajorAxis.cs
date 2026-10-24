@@ -3,12 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics.CelestialMechanics;
 
-/// <summary>
-/// Semi-major axis of an orbit.
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Semi-major_and_semi-minor_axes">wikipedia</a>
-/// </remarks>
+/// <summary>Semi-major axis of an orbit.</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Semi-major_and_semi-minor_axes">wikipedia</a></remarks>
 public static class SemiMajorAxis
 {
     /// <summary>

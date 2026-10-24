@@ -3,12 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// Pressure quantity
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Pressure">wikipedia</a>
-/// </remarks>
+/// <summary>Pressure quantity</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Pressure">wikipedia</a></remarks>
 public static class Pressure
 {
     public const string Name = "pressure";
@@ -22,9 +18,7 @@ public static class Pressure
         =>
         force / area;
 
-    /// <summary>
-    /// Pressure at the center of a self-gravitating sphere of uniform density, P = 3 G M^2 / (8 pi R^4).
-    /// </summary>
+    /// <summary>Pressure at the center of a self-gravitating sphere of uniform density, P = 3 G M^2 / (8 pi R^4).</summary>
     /// <remarks>
     /// Follows from the hydrostatic equilibrium dP/dr = -G m(r) rho / r^2 integrated from the surface, where
     /// m(r) = 4/3 pi rho r^3, giving P = 2/3 pi G rho^2 R^2, the same value.

@@ -3,9 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// Distance
-/// </summary>
+/// <summary>Distance</summary>
 public static class Distance
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

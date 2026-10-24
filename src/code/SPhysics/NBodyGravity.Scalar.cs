@@ -5,9 +5,7 @@ namespace SPhysics;
 
 public static partial class NBodyGravity
 {
-    /// <summary>
-    /// Gravitational accelerations of bodies in tuples, evaluated pair by pair in scalar code, without copies.
-    /// </summary>
+    /// <summary>Gravitational accelerations of bodies in tuples, evaluated pair by pair in scalar code, without copies.</summary>
     /// <remarks>
     /// Faster than the vectorized overloads of <see cref="NBodyGravity"/> for a few bodies, where copying the
     /// components costs more than the vectors save; slower for many bodies. The results differ from them in rounding.
@@ -15,9 +13,7 @@ public static partial class NBodyGravity
     /// </remarks>
     public static class Scalar
     {
-        /// <summary>
-        /// Computes gravitational accelerations for all bodies in 2D pairwise (O(n^2)), a gravitational constant per body.
-        /// </summary>
+        /// <summary>Computes gravitational accelerations for all bodies in 2D pairwise (O(n^2)), a gravitational constant per body.</summary>
         /// <typeparam name="N"> Number type. </typeparam>
         /// <param name="positions"> Body positions. </param>
         /// <param name="masses"> Body masses (length must equal <paramref name="positions"/>). </param>
@@ -37,9 +33,7 @@ public static partial class NBodyGravity
             PlanarScalar(positions, masses, gravitationalConstants, N.Zero, softening, accelerations, perBody: true);
         }
 
-        /// <summary>
-        /// Computes gravitational accelerations for all bodies in 2D pairwise (O(n^2)), one gravitational constant shared by every body.
-        /// </summary>
+        /// <summary>Computes gravitational accelerations for all bodies in 2D pairwise (O(n^2)), one gravitational constant shared by every body.</summary>
         /// <typeparam name="N"> Number type. </typeparam>
         /// <param name="positions"> Body positions. </param>
         /// <param name="masses"> Body masses (length must equal <paramref name="positions"/>). </param>
@@ -59,9 +53,7 @@ public static partial class NBodyGravity
             PlanarScalar(positions, masses, default, gravitationalConstant, softening, accelerations, perBody: false);
         }
 
-        /// <summary>
-        /// Computes gravitational accelerations for all bodies in 3D pairwise (O(n^2)), a gravitational constant per body.
-        /// </summary>
+        /// <summary>Computes gravitational accelerations for all bodies in 3D pairwise (O(n^2)), a gravitational constant per body.</summary>
         /// <typeparam name="N"> Number type. </typeparam>
         /// <param name="positions"> Body positions. </param>
         /// <param name="masses"> Body masses (length must equal <paramref name="positions"/>). </param>
@@ -81,9 +73,7 @@ public static partial class NBodyGravity
             SpatialScalar(positions, masses, gravitationalConstants, N.Zero, softening, accelerations, perBody: true);
         }
 
-        /// <summary>
-        /// Computes gravitational accelerations for all bodies in 3D pairwise (O(n^2)), one gravitational constant shared by every body.
-        /// </summary>
+        /// <summary>Computes gravitational accelerations for all bodies in 3D pairwise (O(n^2)), one gravitational constant shared by every body.</summary>
         /// <typeparam name="N"> Number type. </typeparam>
         /// <param name="positions"> Body positions. </param>
         /// <param name="masses"> Body masses (length must equal <paramref name="positions"/>). </param>

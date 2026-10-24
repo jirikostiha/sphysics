@@ -3,17 +3,11 @@
 using System;
 using System.Numerics;
 
-/// <summary>
-/// Mean anomaly
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Mean_anomaly">wikipedia</a>
-/// </remarks>
+/// <summary>Mean anomaly</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Mean_anomaly">wikipedia</a></remarks>
 public static class MeanAnomaly
 {
-    /// <summary>
-    /// From the eccentric anomaly
-    /// </summary>
+    /// <summary>From the eccentric anomaly</summary>
     public static N Eval<N>(N eccentricAnomaly, N eccentricity)
         where N : ITrigonometricFunctions<N>
         =>

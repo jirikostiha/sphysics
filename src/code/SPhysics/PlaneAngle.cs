@@ -3,12 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// Plane angle quantity, a dimensionless ratio of lengths measured in radians.
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Angle">wikipedia</a>
-/// </remarks>
+/// <summary>Plane angle quantity, a dimensionless ratio of lengths measured in radians.</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Angle">wikipedia</a></remarks>
 public static class PlaneAngle
 {
     public const string Name = "plane angle";

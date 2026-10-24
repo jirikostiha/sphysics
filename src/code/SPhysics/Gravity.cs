@@ -1,11 +1,7 @@
 ﻿namespace SPhysics;
 
-/// <summary>
-/// Gravity quantity
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Gravity">wikipedia</a>
-/// </remarks>
+/// <summary>Gravity quantity</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Gravity">wikipedia</a></remarks>
 public static class Gravity
 {
     public const string Name = "gravity";

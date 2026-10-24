@@ -3,12 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// Angular momentum
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Angular_momentum">wikipedia</a>
-/// </remarks>
+/// <summary>Angular momentum</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Angular_momentum">wikipedia</a></remarks>
 public static class AngularMomentum
 {
     //scalar

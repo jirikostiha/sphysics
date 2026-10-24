@@ -3,12 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// Power quantity
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Power_(physics)">wikipedia</a>
-/// </remarks>
+/// <summary>Power quantity</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Power_(physics)">wikipedia</a></remarks>
 public static class Power
 {
     public const string Name = "power";

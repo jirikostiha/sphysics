@@ -3,12 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// Impulse quantity.
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Impulse_(physics)">wikipedia</a>
-/// </remarks>
+/// <summary>Impulse quantity.</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Impulse_(physics)">wikipedia</a></remarks>
 public static class Impulse
 {
     public const string Name = "Impulse";

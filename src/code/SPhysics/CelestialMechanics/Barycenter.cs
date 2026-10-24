@@ -6,14 +6,10 @@ namespace SPhysics.CelestialMechanics;
 /// Barycenter
 ///   is the center of mass of two or more bodies that orbit one another and is the point about which the bodies orbit.
 /// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Barycenter">wikipedia</a>
-/// </remarks>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Barycenter">wikipedia</a></remarks>
 public static class Barycenter
 {
-    /// <summary>
-    /// Barycenter of two bodies.
-    /// </summary>
+    /// <summary>Barycenter of two bodies.</summary>
     /// <param name="mass1"> mass of body 1 </param>
     /// <param name="mass2"> mass of body 2 </param>
     /// <param name="distance"> the distance between the centers of the two bodies </param>

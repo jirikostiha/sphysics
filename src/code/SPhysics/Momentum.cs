@@ -3,12 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// Momentum quantity.
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Momentum">wikipedia</a>
-/// </remarks>
+/// <summary>Momentum quantity.</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Momentum">wikipedia</a></remarks>
 public static class Momentum
 {
     public const string Name = "Momentum";

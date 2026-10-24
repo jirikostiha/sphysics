@@ -2,17 +2,11 @@
 
 namespace SPhysics.CelestialMechanics;
 
-/// <summary>
-/// Orbital period
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Orbital_period">wikipedia</a>
-/// </remarks>
+/// <summary>Orbital period</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Orbital_period">wikipedia</a></remarks>
 public static class OrbitalPeriod
 {
-    /// <summary>
-    /// Small body orbiting a central body
-    /// </summary>
+    /// <summary>Small body orbiting a central body</summary>
     public static N Eval<N>(N mass, N semiMajorAxis, N gravitationalConstant)
         where N : ITrigonometricFunctions<N>, IRootFunctions<N>
         =>

@@ -3,12 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// Jerk quantity, the rate of change of acceleration.
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Jerk_(physics)">wikipedia</a>
-/// </remarks>
+/// <summary>Jerk quantity, the rate of change of acceleration.</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Jerk_(physics)">wikipedia</a></remarks>
 public static class Jerk
 {
     public const string Name = "jerk";

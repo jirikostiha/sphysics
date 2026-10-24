@@ -2,12 +2,8 @@
 
 namespace SPhysics.CelestialMechanics;
 
-/// <summary>
-/// Mean motion
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Mean_motion">wikipedia</a>
-/// </remarks>
+/// <summary>Mean motion</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Mean_motion">wikipedia</a></remarks>
 public static class MeanMotion
 {
     public static N Eval<N>(N mass1, N mass2, N semiMajorAxis, N gravitationalConstant)

@@ -3,12 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// Frequency quantity.
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Frequency">wikipedia</a>
-/// </remarks>
+/// <summary>Frequency quantity.</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Frequency">wikipedia</a></remarks>
 public static class Frequency
 {
     public const string Name = "frequency";

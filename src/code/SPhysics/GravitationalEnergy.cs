@@ -3,9 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// Gravitational potential energy
-/// </summary>
+/// <summary>Gravitational potential energy</summary>
 /// <remarks>
 /// <a href="https://en.wikipedia.org/wiki/Gravitational_energy">wikipedia</a>
 /// <a href="https://www.calculatorsoup.com/calculators/physics/gravitational-potential.php">calculator</a>
@@ -13,9 +11,7 @@ namespace SPhysics;
 /// </remarks>
 public static class GravitationalEnergy
 {
-    /// <summary>
-    /// Evaluate gravitational energy of two bodies.
-    /// </summary>
+    /// <summary>Evaluate gravitational energy of two bodies.</summary>
     /// <typeparam name="N"> Number type </typeparam>
     /// <param name="mass1"> Mass of point 1 </param>
     /// <param name="mass2"> Mass of point 2 </param>
@@ -26,9 +22,7 @@ public static class GravitationalEnergy
         =>
         N.CreateTruncating(-6.67430e-11) * mass1 * mass2 / distance;
 
-    /// <summary>
-    /// Evaluate gravitational energy of two bodies.
-    /// </summary>
+    /// <summary>Evaluate gravitational energy of two bodies.</summary>
     /// <typeparam name="N"> Number type </typeparam>
     /// <param name="mass1"> Mass of point 1 </param>
     /// <param name="mass2"> Mass of point 2 </param>
@@ -45,9 +39,7 @@ public static class GravitationalEnergy
     /// its own gravity holds. Its magnitude is the gravitational binding energy, the work needed to
     /// disperse the sphere to infinity.
     /// </summary>
-    /// <remarks>
-    /// <a href="https://en.wikipedia.org/wiki/Gravitational_binding_energy">wikipedia</a>
-    /// </remarks>
+    /// <remarks><a href="https://en.wikipedia.org/wiki/Gravitational_binding_energy">wikipedia</a></remarks>
     /// <typeparam name="N"> Number type </typeparam>
     /// <param name="mass"> Mass of the sphere. </param>
     /// <param name="radius"> Radius of the sphere. </param>
@@ -58,9 +50,7 @@ public static class GravitationalEnergy
         =>
         -(N.CreateChecked(3) / N.CreateChecked(5)) * gravitationConst * mass * mass / radius;
 
-    /// <summary>
-    /// Total gravitational energy of the system.
-    /// </summary>
+    /// <summary>Total gravitational energy of the system.</summary>
     /// <typeparam name="N"> Number type </typeparam>
     /// <param name="points"> All points </param>
     /// /// <param name="gravitationConst"> constant in real world G = 6.67430e-11; // m^3 kg^-1 s^-2 </param>

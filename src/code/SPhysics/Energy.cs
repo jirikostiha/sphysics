@@ -1,11 +1,7 @@
 ﻿namespace SPhysics;
 
-/// <summary>
-/// Energy quantity
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Energy">wikipedia</a>
-/// </remarks>
+/// <summary>Energy quantity</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Energy">wikipedia</a></remarks>
 public static class Energy
 {
     public const string Name = "energy";

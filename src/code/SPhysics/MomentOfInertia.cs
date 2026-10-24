@@ -2,9 +2,7 @@
 
 namespace SPhysics;
 
-/// <summary>
-/// Moment of inertia quantity.
-/// </summary>
+/// <summary>Moment of inertia quantity.</summary>
 /// <remarks>
 /// <a href="https://en.wikipedia.org/wiki/Moment_of_inertia">wikipedia</a>
 /// <a href="https://mathworld.wolfram.com/MomentofInertia.html">wolfram</a>

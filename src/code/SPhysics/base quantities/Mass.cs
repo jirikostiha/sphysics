@@ -3,12 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// Mass quantity.
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Mass">wikipedia</a>
-/// </remarks>
+/// <summary>Mass quantity.</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Mass">wikipedia</a></remarks>
 public static class Mass
 {
     public const string Name = "mass";
@@ -22,12 +18,8 @@ public static class Mass
         =>
         volume * density;
 
-    /// <summary>
-    /// Mass
-    /// </summary>
-    /// <remarks>
-    /// <a href="https://math-physics-calc.com/gravitational-force-calculator">calculator</a>
-    /// </remarks>
+    /// <summary>Mass</summary>
+    /// <remarks><a href="https://math-physics-calc.com/gravitational-force-calculator">calculator</a></remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N FromGravitation<N>(N force, N distance, N mass2, N gravitationConst)
         where N : IMultiplyOperators<N, N, N>, IDivisionOperators<N, N, N>

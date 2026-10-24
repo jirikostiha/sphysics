@@ -3,12 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// Force quantity.
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Force">wikipedia</a>
-/// </remarks>
+/// <summary>Force quantity.</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Force">wikipedia</a></remarks>
 public static class Force
 {
     public const string Name = "force";

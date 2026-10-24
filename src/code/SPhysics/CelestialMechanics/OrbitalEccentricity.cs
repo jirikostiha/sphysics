@@ -2,12 +2,8 @@
 
 namespace SPhysics.CelestialMechanics;
 
-/// <summary>
-/// Orbital eccentricity
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Orbital_eccentricity">wikipedia</a>
-/// </remarks>
+/// <summary>Orbital eccentricity</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Orbital_eccentricity">wikipedia</a></remarks>
 public static class OrbitalEccentricity
 {
     public static N Eval<N>(N reducedMass, N totalOrbitalEnergy, N angularMomentum, N inverseSquare)

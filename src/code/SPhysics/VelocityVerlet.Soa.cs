@@ -15,17 +15,13 @@ public static partial class VelocityVerlet
     /// </remarks>
     public static class Soa
     {
-        /// <summary>
-        /// Half-kick of one component: v[i] += 0.5 * a[i] * dt.
-        /// </summary>
+        /// <summary>Half-kick of one component: v[i] += 0.5 * a[i] * dt.</summary>
         /// <exception cref="ArgumentException"> The spans differ in length. </exception>
         public static void HalfKick<N>(Span<N> velocities, ReadOnlySpan<N> accelerations, N dt)
             where N : INumberBase<N>
             => AddScaled(velocities, accelerations, HalfStep(dt));
 
-        /// <summary>
-        /// Drift of one component: x[i] += v[i] * dt.
-        /// </summary>
+        /// <summary>Drift of one component: x[i] += v[i] * dt.</summary>
         /// <exception cref="ArgumentException"> The spans differ in length. </exception>
         public static void Drift<N>(Span<N> positions, ReadOnlySpan<N> velocities, N dt)
             where N : INumberBase<N>

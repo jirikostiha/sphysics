@@ -3,12 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// Angular velocity.
-/// </summary>
-/// <remarks>
-/// <a href="">wikipedia</a>
-/// </remarks>
+/// <summary>Angular velocity.</summary>
+/// <remarks><a href="">wikipedia</a></remarks>
 public static class AngularVelocity
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

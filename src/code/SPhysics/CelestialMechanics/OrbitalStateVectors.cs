@@ -2,9 +2,7 @@ using System.Numerics;
 
 namespace SPhysics.CelestialMechanics;
 
-/// <summary>
-/// Orbital state vectors, the position and velocity of a small body on an elliptic orbit around a central body.
-/// </summary>
+/// <summary>Orbital state vectors, the position and velocity of a small body on an elliptic orbit around a central body.</summary>
 /// <remarks>
 /// <a href="https://en.wikipedia.org/wiki/Orbital_state_vectors">wikipedia</a>
 /// <a href="https://en.wikipedia.org/wiki/Perifocal_coordinate_system">wikipedia</a>
@@ -12,9 +10,7 @@ namespace SPhysics.CelestialMechanics;
 /// </remarks>
 public static class OrbitalStateVectors
 {
-    /// <summary>
-    /// Perifocal position on the orbit, (a * (cos(E) - e), b * sin(E)).
-    /// </summary>
+    /// <summary>Perifocal position on the orbit, (a * (cos(E) - e), b * sin(E)).</summary>
     /// <param name="semiMajorAxis"> Semi-major axis of the orbit. </param>
     /// <param name="eccentricity"> Orbital eccentricity, 0 &lt;= e &lt; 1. </param>
     /// <param name="eccentricAnomaly"> Eccentric anomaly in radians, see <see cref="EccentricAnomaly.FromMeanAnomaly{N}"/>. </param>
@@ -25,9 +21,7 @@ public static class OrbitalStateVectors
         return (semiMajorAxis * (cos - eccentricity), semiMajorAxis * MinorAxisRatio(eccentricity) * sin);
     }
 
-    /// <summary>
-    /// Perifocal velocity on the orbit, sqrt(G * M / a) / (1 - e * cos(E)) * (-sin(E), sqrt(1 - e^2) * cos(E)).
-    /// </summary>
+    /// <summary>Perifocal velocity on the orbit, sqrt(G * M / a) / (1 - e * cos(E)) * (-sin(E), sqrt(1 - e^2) * cos(E)).</summary>
     /// <param name="semiMajorAxis"> Semi-major axis of the orbit. </param>
     /// <param name="eccentricity"> Orbital eccentricity, 0 &lt;= e &lt; 1. </param>
     /// <param name="eccentricAnomaly"> Eccentric anomaly in radians, see <see cref="EccentricAnomaly.FromMeanAnomaly{N}"/>. </param>
@@ -41,9 +35,7 @@ public static class OrbitalStateVectors
         return (-speed * sin, speed * MinorAxisRatio(eccentricity) * cos);
     }
 
-    /// <summary>
-    /// Rotates a perifocal vector into the reference frame by the orientation elements of the orbit, R_z(Omega) * R_x(i) * R_z(omega).
-    /// </summary>
+    /// <summary>Rotates a perifocal vector into the reference frame by the orientation elements of the orbit, R_z(Omega) * R_x(i) * R_z(omega).</summary>
     /// <param name="perifocal"> Perifocal position or velocity. </param>
     /// <param name="longitudeOfAscendingNode"> Longitude of the ascending node in radians. </param>
     /// <param name="inclination"> Inclination in radians. </param>

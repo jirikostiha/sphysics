@@ -5,20 +5,14 @@ using SMath.Geometry3D;
 
 namespace SPhysics;
 
-/// <summary>
-/// Thermal radiation of a grey body, the Stefan-Boltzmann law.
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Stefan%E2%80%93Boltzmann_law">wikipedia</a>
-/// </remarks>
+/// <summary>Thermal radiation of a grey body, the Stefan-Boltzmann law.</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Stefan%E2%80%93Boltzmann_law">wikipedia</a></remarks>
 public static class ThermalRadiation
 {
     /// <summary> Stefan-Boltzmann constant in real world, W m^-2 K^-4. </summary>
     public const double StefanBoltzmannConstant = 5.670374419e-8;
 
-    /// <summary>
-    /// Power radiated by a surface, P = emissivity * sigma * A * T^4.
-    /// </summary>
+    /// <summary>Power radiated by a surface, P = emissivity * sigma * A * T^4.</summary>
     /// <param name="area"> Radiating surface area. </param>
     /// <param name="temperature"> Absolute temperature of the surface. </param>
     /// <param name="emissivity"> Emissivity, 1 for a black body. </param>
@@ -31,18 +25,14 @@ public static class ThermalRadiation
         return emissivity * stefanBoltzmannConstant * area * (squared * squared);
     }
 
-    /// <summary>
-    /// Temperature of a surface that radiates the given power, the inverse of <see cref="Power{N}"/>.
-    /// </summary>
+    /// <summary>Temperature of a surface that radiates the given power, the inverse of <see cref="Power{N}"/>.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N TemperatureFromPower<N>(N power, N area, N emissivity, N stefanBoltzmannConstant)
         where N : IRootFunctions<N>
         =>
         FourthRoot(power / (emissivity * stefanBoltzmannConstant * area));
 
-    /// <summary>
-    /// Irradiance (flux density) at a distance from an isotropic source, E = P / (4 pi d^2).
-    /// </summary>
+    /// <summary>Irradiance (flux density) at a distance from an isotropic source, E = P / (4 pi d^2).</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N Irradiance<N>(N power, N distance)
         where N : IFloatingPointConstants<N>
@@ -54,9 +44,7 @@ public static class ThermalRadiation
     /// It absorbs over its cross section and re-radiates as a black body over its whole surface, four times larger:
     /// T = ((1 - albedo) * E / (4 * sigma))^(1/4).
     /// </summary>
-    /// <remarks>
-    /// <a href="https://en.wikipedia.org/wiki/Planetary_equilibrium_temperature">wikipedia</a>
-    /// </remarks>
+    /// <remarks><a href="https://en.wikipedia.org/wiki/Planetary_equilibrium_temperature">wikipedia</a></remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N EquilibriumTemperature<N>(N irradiance, N albedo, N stefanBoltzmannConstant)
         where N : IRootFunctions<N>

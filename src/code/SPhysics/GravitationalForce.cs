@@ -3,17 +3,11 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// Attraction force
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Gravity">wikipedia</a>
-/// </remarks>
+/// <summary>Attraction force</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Gravity">wikipedia</a></remarks>
 public static class GravitationalForce
 {
-    /// <summary>
-    /// Evaluate gravitational force of two bodies above surfaces.
-    /// </summary>
+    /// <summary>Evaluate gravitational force of two bodies above surfaces.</summary>
     /// <typeparam name="N"> Number type </typeparam>
     /// <param name="mass1"> Mass of point 1 </param>
     /// <param name="mass2"> Mass of point 2 </param>
@@ -24,9 +18,7 @@ public static class GravitationalForce
         =>
         N.CreateTruncating(-6.67430e-11) * mass1 * mass2 / (distance * distance);
 
-    /// <summary>
-    /// Evaluate gravitational force of two bodies above surfaces.
-    /// </summary>
+    /// <summary>Evaluate gravitational force of two bodies above surfaces.</summary>
     /// <typeparam name="N"> Number type </typeparam>
     /// <param name="mass1"> Mass of point 1 </param>
     /// <param name="mass2"> Mass of point 2 </param>
@@ -63,9 +55,7 @@ public static class GravitationalForce
     //            : Inside(distance, Density.Average(Ball.Volume(radius2), mass2), gravitationConst); // je spravne?
 
 
-    /// <summary>
-    /// Evaluate gravitational force to target point defined by index in collection of other points.
-    /// </summary>
+    /// <summary>Evaluate gravitational force to target point defined by index in collection of other points.</summary>
     /// <typeparam name="N"> Number type </typeparam>
     /// <param name="points"> All points. </param>
     /// <param name="index"> Target point index. </param>
@@ -101,9 +91,7 @@ public static class GravitationalForce
         return (Fx, Fy); // Return the total gravitational force components
     }
 
-    /// <summary>
-    /// Evaluate gravitational force to target point from other points.
-    /// </summary>
+    /// <summary>Evaluate gravitational force to target point from other points.</summary>
     /// <typeparam name="N"> Number type </typeparam>
     /// <param name="targetPoint"> Target point </param>
     /// <param name="points"> All points </param>

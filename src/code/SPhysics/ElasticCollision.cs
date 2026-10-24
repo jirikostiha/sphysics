@@ -3,12 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// Elastic collision math for circular bodies in 2D and spherical bodies in 3D.
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Elastic_collision">wikipedia</a>
-/// </remarks>
+/// <summary>Elastic collision math for circular bodies in 2D and spherical bodies in 3D.</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Elastic_collision">wikipedia</a></remarks>
 public static class ElasticCollision
 {
     /// <summary>

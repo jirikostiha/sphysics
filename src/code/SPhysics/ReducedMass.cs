@@ -8,9 +8,7 @@ namespace SPhysics;
 /// The inertia of the relative motion of two bodies: the two-body problem reduces to one body of
 /// this mass, and the kinetic energy of the relative motion is <c>1/2 * mu * v^2</c>.
 /// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Reduced_mass">wikipedia</a>
-/// </remarks>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Reduced_mass">wikipedia</a></remarks>
 public static class ReducedMass
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

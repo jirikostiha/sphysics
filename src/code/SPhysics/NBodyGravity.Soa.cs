@@ -18,9 +18,7 @@ public static partial class NBodyGravity
     /// </remarks>
     public static class Soa
     {
-        /// <summary>
-        /// Computes gravitational accelerations for all bodies in 2D pairwise (O(n^2)), a gravitational constant per body.
-        /// </summary>
+        /// <summary>Computes gravitational accelerations for all bodies in 2D pairwise (O(n^2)), a gravitational constant per body.</summary>
         /// <typeparam name="N"> Number type. </typeparam>
         /// <param name="x"> X components of the positions. </param>
         /// <param name="y"> Y components of the positions. </param>
@@ -37,9 +35,7 @@ public static partial class NBodyGravity
             where N : IRootFunctions<N>
             => Kernel(x, y, default, masses, gravitationalConstants, N.Zero, softening, accelerationsX, accelerationsY, default, perBody: true, spatial: false);
 
-        /// <summary>
-        /// Computes gravitational accelerations for all bodies in 2D pairwise (O(n^2)), one gravitational constant shared by every body.
-        /// </summary>
+        /// <summary>Computes gravitational accelerations for all bodies in 2D pairwise (O(n^2)), one gravitational constant shared by every body.</summary>
         /// <typeparam name="N"> Number type. </typeparam>
         /// <param name="x"> X components of the positions. </param>
         /// <param name="y"> Y components of the positions. </param>
@@ -56,9 +52,7 @@ public static partial class NBodyGravity
             where N : IRootFunctions<N>
             => Kernel(x, y, default, masses, default, gravitationalConstant, softening, accelerationsX, accelerationsY, default, perBody: false, spatial: false);
 
-        /// <summary>
-        /// Computes gravitational accelerations for all bodies in 3D pairwise (O(n^2)), a gravitational constant per body.
-        /// </summary>
+        /// <summary>Computes gravitational accelerations for all bodies in 3D pairwise (O(n^2)), a gravitational constant per body.</summary>
         /// <typeparam name="N"> Number type. </typeparam>
         /// <param name="x"> X components of the positions. </param>
         /// <param name="y"> Y components of the positions. </param>
@@ -77,9 +71,7 @@ public static partial class NBodyGravity
             where N : IRootFunctions<N>
             => Kernel(x, y, z, masses, gravitationalConstants, N.Zero, softening, accelerationsX, accelerationsY, accelerationsZ, perBody: true, spatial: true);
 
-        /// <summary>
-        /// Computes gravitational accelerations for all bodies in 3D pairwise (O(n^2)), one gravitational constant shared by every body.
-        /// </summary>
+        /// <summary>Computes gravitational accelerations for all bodies in 3D pairwise (O(n^2)), one gravitational constant shared by every body.</summary>
         /// <typeparam name="N"> Number type. </typeparam>
         /// <param name="x"> X components of the positions. </param>
         /// <param name="y"> Y components of the positions. </param>

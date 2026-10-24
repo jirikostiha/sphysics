@@ -4,9 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// N-body gravitational acceleration with Plummer-style softening.
-/// </summary>
+/// <summary>N-body gravitational acceleration with Plummer-style softening.</summary>
 /// <remarks>
 /// <a href="https://en.wikipedia.org/wiki/N-body_simulation">wikipedia</a>
 /// <para>

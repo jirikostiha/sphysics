@@ -1,11 +1,7 @@
 ﻿namespace SPhysics;
 
-/// <summary>
-/// Length quantity.
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Length">wikipedia</a>
-/// </remarks>
+/// <summary>Length quantity.</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Length">wikipedia</a></remarks>
 public static class Length
 {
     public const string Name = "length";

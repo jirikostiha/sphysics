@@ -3,12 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// Acceleration quantity
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Acceleration">wikipedia</a>
-/// </remarks>
+/// <summary>Acceleration quantity</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Acceleration">wikipedia</a></remarks>
 public static class Acceleration
 {
     public const string Name = "acceleration";

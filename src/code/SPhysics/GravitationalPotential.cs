@@ -3,12 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace SPhysics;
 
-/// <summary>
-/// Gravitational potential
-/// </summary>
-/// <remarks>
-/// <a href="https://en.wikipedia.org/wiki/Gravitational_potential">wikipedia</a>
-/// </remarks>
+/// <summary>Gravitational potential</summary>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Gravitational_potential">wikipedia</a></remarks>
 public static class GravitationalPotential
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

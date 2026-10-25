@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1792838201877,
+  "lastUpdate": 1792932780640,
   "repoUrl": "https://github.com/jirikostiha/sphysics",
   "entries": {
     "Benchmark.Net": [
@@ -1228,6 +1228,36 @@ window.BENCHMARK_DATA = {
             "value": 14027.030199323382,
             "unit": "ns",
             "range": "± 8.060172708545366"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "committer": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "distinct": true,
+          "id": "32771ab1a054db1d4362c28e212131eb9f99b716",
+          "message": "docs: LICENSE - forbid AI training\n\nAdd a clause that forbids training AI models on the source, and reserve\nthe text and data mining right under Article 4(3) of Directive 2019/790.\nPack LICENSE and reference it as PackageLicenseFile, because NuGet\notherwise reports the license as plain MIT.\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-10-25T13:37:01+01:00",
+          "tree_id": "00751e3461584e4b62e6de03138a255763006d5b",
+          "url": "https://github.com/jirikostiha/sphysics/commit/32771ab1a054db1d4362c28e212131eb9f99b716"
+        },
+        "date": 1792932780176,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "SPhysics.GravitationalForceBenchmark.Outside",
+            "value": 14022.919103349957,
+            "unit": "ns",
+            "range": "± 5.746271027249236"
           }
         ]
       }

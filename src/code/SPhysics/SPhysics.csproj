@@ -13,7 +13,7 @@
     <Description>Physics library based on .NET generic math.</Description>
     <PackageTags>physics; generic-physics; mechanics; gravitation; csharp</PackageTags>
     <PackageProjectUrl>https://jirikostiha.github.io/sphysics/</PackageProjectUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <SignAssembly>true</SignAssembly>
@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <None Include="..\..\..\readme.md" Link="readme.md" Pack="true" PackagePath="readme.md" />
+    <None Include="..\..\..\LICENSE" Link="LICENSE" Pack="true" PackagePath="\" />
     <None Update="icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 

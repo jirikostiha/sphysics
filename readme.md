@@ -42,7 +42,7 @@ giving call sites like `GravitationalForce.Outside(m1, m2, r)` or
 | Area | Types |
 | --- | --- |
 | Base quantities | `Length`, `Mass`, `Time`, `ElectricCurrent`, `Temperature`, `AmountOfSubstance`, `LuminousIntensity` |
-| Mechanics | `Velocity`, `Acceleration`, `Jerk`, `Momentum`, `AngularMomentum`, `AngularVelocity`, `Impulse`, `Force`, `FrictionForce`, `DragForce`, `DragCoefficient`, `MomentOfInertia`, `CenterOfMass`, `CenterOfGravity`, `ReducedMass`, `VelocityVerlet`, `ElasticCollision` |
+| Mechanics | `Velocity`, `Acceleration`, `Jerk`, `Momentum`, `AngularMomentum`, `AngularVelocity`, `Impulse`, `Force`, `FrictionForce`, `DragForce`, `DragCoefficient`, `MomentOfInertia`, `CenterOfMass`, `CenterOfGravity`, `ReducedMass`, `VelocityVerlet`, `ElasticCollision`, `Bounce` |
 | Energy & Power | `Energy`, `KineticEnergy`, `PotentialEnergy`, `GravitationalEnergy`, `Power`, `ThermalRadiation` |
 | Gravitation | `Gravity`, `GravitationalForce`, `GravitationalIntensity`, `GravitationalPotential`, `NBodyGravity` |
 | Celestial mechanics | `Barycenter`, `EscapeVelocity`, `MeanAnomaly`, `MeanMotion`, `OrbitalEccentricity`, `OrbitalPeriod`, `SemiMajorAxis`, `TrueAnomaly`, `OrbitalVelocity`, `HillSphere`, `RocheLimit`, `EccentricAnomaly`, `OrbitalStateVectors`, `MeanLongitude` |
@@ -104,6 +104,20 @@ Span<(double X, double Y, double Mass)> bodies = stackalloc (double, double, dou
 };
 
 var (fx, fy) = GravitationalForce.Eval<double>(bodies, index: 0, gravitationConst: G);
+```
+
+A ball bouncing off a floor. `restitution` and `restingSpeed` are both plain numbers, so name them
+to keep them from being swapped unnoticed:
+
+```cs
+using SPhysics;
+
+const double g = 9.81, dt = 0.001;
+(double X, double Y) position = (0, 0.4), velocity = (1, -3);
+
+// 0.8 of the normal speed comes back; an approach slower than the pull of one step stays on the floor
+(position, velocity) = Bounce.OffPlane(position, velocity, radius: 0.5,
+    point: (0.0, 0.0), normal: (0.0, 1.0), restitution: 0.8, restingSpeed: 2 * g * dt) ?? (position, velocity);
 ```
 
 ## Performance

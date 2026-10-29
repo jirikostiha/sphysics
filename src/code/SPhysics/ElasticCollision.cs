@@ -81,34 +81,7 @@ public static class ElasticCollision
         (N X, N Y) position, (N X, N Y) velocity, N radius,
         (N X, N Y) obstaclePosition)
         where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
-    {
-        N dx = obstaclePosition.X - position.X;
-        N dy = obstaclePosition.Y - position.Y;
-        N distance = N.Sqrt(dx * dx + dy * dy);
-
-        if (distance >= radius || distance <= N.Zero)
-            return null;
-
-        N nx = dx / distance;
-        N ny = dy / distance;
-
-        // Position correction (separation): only the body moves, obstacle is infinite mass.
-        N overlap = radius - distance;
-        var posOut = (position.X - nx * overlap, position.Y - ny * overlap);
-
-        // n points from the body to the obstacle, so v . n < 0 means the body is
-        // already moving away from it; in that case keep the velocity.
-        N vDotN = velocity.X * nx + velocity.Y * ny;
-        if (vDotN < N.Zero)
-            return (posOut, velocity);
-
-        // Reflection: v' = v - 2 * (v . n) * n
-        N two = N.One + N.One;
-        N vx = velocity.X - two * vDotN * nx;
-        N vy = velocity.Y - two * vDotN * ny;
-
-        return (posOut, (vx, vy));
-    }
+        => Bounce.OffBall(position, velocity, radius, obstaclePosition, N.Zero, N.One, N.Zero);
 
     /// <summary>
     /// Resolves an elastic collision between two spherical bodies in 3D.
@@ -185,33 +158,7 @@ public static class ElasticCollision
         (N X, N Y, N Z) position, (N X, N Y, N Z) velocity, N radius,
         (N X, N Y, N Z) obstaclePosition)
         where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
-    {
-        N dx = obstaclePosition.X - position.X;
-        N dy = obstaclePosition.Y - position.Y;
-        N dz = obstaclePosition.Z - position.Z;
-        N distance = N.Sqrt(dx * dx + dy * dy + dz * dz);
-
-        if (distance >= radius || distance <= N.Zero)
-            return null;
-
-        N nx = dx / distance;
-        N ny = dy / distance;
-        N nz = dz / distance;
-
-        // Position correction (separation): only the body moves, obstacle is infinite mass.
-        N overlap = radius - distance;
-        var posOut = (position.X - nx * overlap, position.Y - ny * overlap, position.Z - nz * overlap);
-
-        // n points from the body to the obstacle, so v . n < 0 means the body is
-        // already moving away from it; in that case keep the velocity.
-        N vDotN = velocity.X * nx + velocity.Y * ny + velocity.Z * nz;
-        if (vDotN < N.Zero)
-            return (posOut, velocity);
-
-        // Reflection: v' = v - 2 * (v . n) * n
-        N twoVDotN = (N.One + N.One) * vDotN;
-        return (posOut, (velocity.X - twoVDotN * nx, velocity.Y - twoVDotN * ny, velocity.Z - twoVDotN * nz));
-    }
+        => Bounce.OffBall(position, velocity, radius, obstaclePosition, N.Zero, N.One, N.Zero);
 
     /// <summary>
     /// Post-collision velocities for a 1D head-on elastic collision (no position correction).

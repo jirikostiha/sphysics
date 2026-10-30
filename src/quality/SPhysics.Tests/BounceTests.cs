@@ -331,6 +331,71 @@ public class BounceTests
     }
 
     [Fact]
+    public void OffTriangleBouncesOffALeg()
+    {
+        var result = Bounce.OffTriangle((1.0, -0.5), (0.5, 2.0), 1.0, (0.0, 0.0), (4.0, 0.0), (0.0, 4.0), 1.0, 0.0);
+
+        Assert.NotNull(result);
+        AssertClose((1.0, -1.0), result.Value.Position);
+        AssertClose((0.5, -2.0), result.Value.Velocity);
+    }
+
+    [Fact]
+    public void OffTriangleBouncesOffASlantedEdge()
+    {
+        var result = Bounce.OffTriangle((3.0, 2.0), (-1.0, -1.0), 1.0, (0.0, 0.0), (4.0, 0.0), (0.0, 4.0), 1.0, 0.0);
+
+        Assert.NotNull(result);
+        AssertClose((2.5 + Math.Sqrt(0.5), 1.5 + Math.Sqrt(0.5)), result.Value.Position);
+        AssertClose((1.0, 1.0), result.Value.Velocity);
+    }
+
+    [Fact]
+    public void OffTriangleBouncesOffAVertex()
+    {
+        var result = Bounce.OffTriangle((-0.5, -0.5), (1.0, 1.0), 1.0, (0.0, 0.0), (4.0, 0.0), (0.0, 4.0), 1.0, 0.0);
+
+        Assert.NotNull(result);
+        AssertClose((-Math.Sqrt(0.5), -Math.Sqrt(0.5)), result.Value.Position);
+        AssertClose((-1.0, -1.0), result.Value.Velocity);
+    }
+
+    [Fact]
+    public void OffTriangleLetsACentreInsideLeaveThroughTheNearestEdge()
+    {
+        var result = Bounce.OffTriangle((1.0, 0.5), (0.0, 1.0), 1.0, (0.0, 0.0), (4.0, 0.0), (0.0, 4.0), 1.0, 0.0);
+
+        Assert.NotNull(result);
+        AssertClose((1.0, -1.0), result.Value.Position);
+        AssertClose((0.0, -1.0), result.Value.Velocity);
+    }
+
+    [Fact]
+    public void OffTriangleDoesNotDependOnTheOrderOfTheVertices()
+    {
+        var counterClockwise = Bounce.OffTriangle((1.0, 0.5), (0.3, 1.0), 1.0, (0.0, 0.0), (4.0, 0.0), (0.0, 4.0), 0.7, 0.0);
+        var clockwise = Bounce.OffTriangle((1.0, 0.5), (0.3, 1.0), 1.0, (0.0, 4.0), (4.0, 0.0), (0.0, 0.0), 0.7, 0.0);
+
+        Assert.NotNull(counterClockwise);
+        Assert.NotNull(clockwise);
+        AssertClose(counterClockwise.Value.Position, clockwise.Value.Position);
+        AssertClose(counterClockwise.Value.Velocity, clockwise.Value.Velocity);
+    }
+
+    [Fact]
+    public void OffTriangleIgnoresABodyThatDoesNotTouchIt()
+    {
+        Assert.Null(Bounce.OffTriangle((1.0, 5.0), (0.0, -1.0), 1.0, (0.0, 0.0), (4.0, 0.0), (0.0, 4.0), 1.0, 0.0));
+    }
+
+    [Fact]
+    public void OffTriangleRejectsVerticesOnOneLine()
+    {
+        Assert.Throws<ArgumentException>(() =>
+            Bounce.OffTriangle((1.0, 1.0), (0.0, 0.0), 1.0, (0.0, 0.0), (1.0, 1.0), (2.0, 2.0), 1.0, 0.0));
+    }
+
+    [Fact]
     public void SinglePrecisionGivesTheSameBounce()
     {
         var result = Bounce.OffBox((-0.5f, 0.0f), (3.0f, 0.5f), 1.0f, (0.0f, -1.0f), (4.0f, 1.0f), 1.0f, 0f);

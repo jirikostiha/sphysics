@@ -90,12 +90,8 @@ public static class Bounce
         (N X, N Y) start, (N X, N Y) end, N restitution, N restingSpeed)
         where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
     {
-        N ax = end.X - start.X;
-        N ay = end.Y - start.Y;
-        N t = SegmentParameter((position.X - start.X) * ax + (position.Y - start.Y) * ay, ax * ax + ay * ay);
-
         // the segment touches the body at its nearest point, which acts as a point obstacle
-        return OffBall(position, velocity, radius, (start.X + ax * t, start.Y + ay * t), N.Zero, restitution, restingSpeed);
+        return OffBall(position, velocity, radius, NearestOnSegment(position, start, end), N.Zero, restitution, restingSpeed);
     }
 
     /// <summary> Bounces a body off a line segment in space, a rod of no thickness. </summary>
@@ -113,15 +109,8 @@ public static class Bounce
         (N X, N Y, N Z) start, (N X, N Y, N Z) end, N restitution, N restingSpeed)
         where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
     {
-        N ax = end.X - start.X;
-        N ay = end.Y - start.Y;
-        N az = end.Z - start.Z;
-        N t = SegmentParameter(
-            (position.X - start.X) * ax + (position.Y - start.Y) * ay + (position.Z - start.Z) * az,
-            ax * ax + ay * ay + az * az);
-
         // the segment touches the body at its nearest point, which acts as a point obstacle
-        return OffBall(position, velocity, radius, (start.X + ax * t, start.Y + ay * t, start.Z + az * t), N.Zero, restitution, restingSpeed);
+        return OffBall(position, velocity, radius, NearestOnSegment(position, start, end), N.Zero, restitution, restingSpeed);
     }
 
     /// <summary> Bounces a body off a half-plane: the line through <paramref name="point"/> is its edge and everything behind it is solid. </summary>
@@ -247,6 +236,131 @@ public static class Bounce
         return y.Depth < x.Depth
             ? Respond(position, velocity, (N.Zero, y.Sign, N.Zero), y.Depth + radius, restitution, restingSpeed)
             : Respond(position, velocity, (x.Sign, N.Zero, N.Zero), x.Depth + radius, restitution, restingSpeed);
+    }
+
+    /// <summary> Bounces a body off the outside of a triangle, given by its vertices in any order. </summary>
+    /// <remarks> A body whose centre got inside leaves through the nearest edge. </remarks>
+    /// <typeparam name="N"> Number type. </typeparam>
+    /// <param name="position"> Body position. </param>
+    /// <param name="velocity"> Body velocity. </param>
+    /// <param name="radius"> Body radius. </param>
+    /// <param name="a"> One vertex of the triangle. </param>
+    /// <param name="b"> The second vertex. </param>
+    /// <param name="c"> The third vertex. </param>
+    /// <param name="restitution"> Coefficient of restitution, zero or more. </param>
+    /// <param name="restingSpeed"> Approach speed, zero or more, below which the body does not bounce but stays on the surface. </param>
+    /// <exception cref="ArgumentException"> The vertices lie on one line. </exception>
+    public static ((N X, N Y) Position, (N X, N Y) Velocity)? OffTriangle<N>(
+        (N X, N Y) position, (N X, N Y) velocity, N radius,
+        (N X, N Y) a, (N X, N Y) b, (N X, N Y) c, N restitution, N restingSpeed)
+        where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
+    {
+        ThrowIfInvalidSurface(restitution, restingSpeed);
+        N area = Cross(a, b, c);
+        if (!(N.Abs(area) > N.Zero))
+            throw new ArgumentException("The vertices must not lie on one line.", nameof(c));
+
+        // seen from inside, the centre is on the same side of every edge; the orientation of the triangle tells which
+        N orientation = area > N.Zero ? N.One : -N.One;
+        N sideAB = Cross(a, b, position) * orientation;
+        N sideBC = Cross(b, c, position) * orientation;
+        N sideCA = Cross(c, a, position) * orientation;
+        if (sideAB < N.Zero || sideBC < N.Zero || sideCA < N.Zero)
+        {
+            // outside, the nearest point of the edges acts as a point obstacle; that covers the vertices too
+            var nearest = NearestOnSegment(position, a, b);
+            var other = NearestOnSegment(position, b, c);
+            if (DistanceSquared(position, other) < DistanceSquared(position, nearest))
+                nearest = other;
+
+            other = NearestOnSegment(position, c, a);
+            if (DistanceSquared(position, other) < DistanceSquared(position, nearest))
+                nearest = other;
+
+            return OffBall(position, velocity, radius, nearest, N.Zero, restitution, restingSpeed);
+        }
+
+        // the centre leaves through the nearest edge; of equally near edges the earlier one
+        var edge = (a, b);
+        N depth = sideAB / Length(a, b);
+        N next = sideBC / Length(b, c);
+        if (next < depth)
+        {
+            depth = next;
+            edge = (b, c);
+        }
+
+        next = sideCA / Length(c, a);
+        if (next < depth)
+        {
+            depth = next;
+            edge = (c, a);
+        }
+
+        N length = Length(edge.Item1, edge.Item2);
+        var outward = ((edge.Item2.Y - edge.Item1.Y) * orientation / length, (edge.Item1.X - edge.Item2.X) * orientation / length);
+        return Respond(position, velocity, outward, depth + radius, restitution, restingSpeed);
+    }
+
+    /// <summary> Bounces a body off the outside of a flat triangle in space, given by its vertices in any order. </summary>
+    /// <remarks> A body whose centre lies on the triangle leaves on the side it came from. </remarks>
+    /// <typeparam name="N"> Number type. </typeparam>
+    /// <param name="position"> Body position. </param>
+    /// <param name="velocity"> Body velocity. </param>
+    /// <param name="radius"> Body radius. </param>
+    /// <param name="a"> One vertex of the triangle. </param>
+    /// <param name="b"> The second vertex. </param>
+    /// <param name="c"> The third vertex. </param>
+    /// <param name="restitution"> Coefficient of restitution, zero or more. </param>
+    /// <param name="restingSpeed"> Approach speed, zero or more, below which the body does not bounce but stays on the surface. </param>
+    /// <exception cref="ArgumentException"> The vertices lie on one line. </exception>
+    public static ((N X, N Y, N Z) Position, (N X, N Y, N Z) Velocity)? OffTriangle<N>(
+        (N X, N Y, N Z) position, (N X, N Y, N Z) velocity, N radius,
+        (N X, N Y, N Z) a, (N X, N Y, N Z) b, (N X, N Y, N Z) c, N restitution, N restingSpeed)
+        where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
+    {
+        ThrowIfInvalidSurface(restitution, restingSpeed);
+        var normal = Cross(Subtract(b, a), Subtract(c, a));
+        N normalSquared = Dot(normal, normal);
+        if (!(normalSquared > N.Zero))
+            throw new ArgumentException("The vertices must not lie on one line.", nameof(c));
+
+        // the centre is over the triangle when it is on the inner side of all three edges
+        var offset = Subtract(position, a);
+        bool over = Dot(Cross(Subtract(b, a), offset), normal) >= N.Zero
+            && Dot(Cross(Subtract(c, b), Subtract(position, b)), normal) >= N.Zero
+            && Dot(Cross(Subtract(a, c), Subtract(position, c)), normal) >= N.Zero;
+        if (!over)
+        {
+            // beside it, the nearest point of the edges acts as a point obstacle; that covers the vertices too
+            var nearest = NearestOnSegment(position, a, b);
+            var other = NearestOnSegment(position, b, c);
+            if (DistanceSquared(position, other) < DistanceSquared(position, nearest))
+                nearest = other;
+
+            other = NearestOnSegment(position, c, a);
+            if (DistanceSquared(position, other) < DistanceSquared(position, nearest))
+                nearest = other;
+
+            return OffBall(position, velocity, radius, nearest, N.Zero, restitution, restingSpeed);
+        }
+
+        N along = Dot(offset, normal);
+        if (along != N.Zero)
+        {
+            // above or below, the foot of the perpendicular acts as a point obstacle
+            N share = along / normalSquared;
+            var foot = (position.X - normal.X * share, position.Y - normal.Y * share, position.Z - normal.Z * share);
+            return OffBall(position, velocity, radius, foot, N.Zero, restitution, restingSpeed);
+        }
+
+        // on the triangle itself, the body leaves on the side it came from
+        N length = N.Sqrt(normalSquared);
+        var unit = (normal.X / length, normal.Y / length, normal.Z / length);
+        if (Dot(velocity, unit) > N.Zero)
+            unit = (-unit.Item1, -unit.Item2, -unit.Item3);
+
+        return Respond(position, velocity, unit, radius, restitution, restingSpeed);
     }
 
     /// <summary> Keeps a body inside an axis-aligned rectangle spanned by two opposite corners, given in any order. </summary>
@@ -443,6 +557,57 @@ public static class Bounce
     private static N SegmentParameter<N>(N projection, N lengthSquared)
         where N : INumberBase<N>, IComparisonOperators<N, N, bool>
         => lengthSquared > N.Zero ? Clamp(projection / lengthSquared, N.Zero, N.One) : N.Zero;
+
+    // The point of a segment nearest to a point; the start for a segment of no length.
+    private static (N X, N Y) NearestOnSegment<N>((N X, N Y) point, (N X, N Y) start, (N X, N Y) end)
+        where N : INumberBase<N>, IComparisonOperators<N, N, bool>
+    {
+        N ax = end.X - start.X;
+        N ay = end.Y - start.Y;
+        N t = SegmentParameter((point.X - start.X) * ax + (point.Y - start.Y) * ay, ax * ax + ay * ay);
+        return (start.X + ax * t, start.Y + ay * t);
+    }
+
+    // The point of a segment in space nearest to a point; the start for a segment of no length.
+    private static (N X, N Y, N Z) NearestOnSegment<N>((N X, N Y, N Z) point, (N X, N Y, N Z) start, (N X, N Y, N Z) end)
+        where N : INumberBase<N>, IComparisonOperators<N, N, bool>
+    {
+        var axis = Subtract(end, start);
+        N t = SegmentParameter(Dot(Subtract(point, start), axis), Dot(axis, axis));
+        return (start.X + axis.X * t, start.Y + axis.Y * t, start.Z + axis.Z * t);
+    }
+
+    // Twice the signed area of the triangle of three points: positive when they run counter-clockwise.
+    private static N Cross<N>((N X, N Y) a, (N X, N Y) b, (N X, N Y) c)
+        where N : INumberBase<N>
+        => (b.X - a.X) * (c.Y - a.Y) - (b.Y - a.Y) * (c.X - a.X);
+
+    private static (N X, N Y, N Z) Cross<N>((N X, N Y, N Z) u, (N X, N Y, N Z) v)
+        where N : INumberBase<N>
+        => (u.Y * v.Z - u.Z * v.Y, u.Z * v.X - u.X * v.Z, u.X * v.Y - u.Y * v.X);
+
+    private static N Dot<N>((N X, N Y, N Z) u, (N X, N Y, N Z) v)
+        where N : INumberBase<N>
+        => u.X * v.X + u.Y * v.Y + u.Z * v.Z;
+
+    private static (N X, N Y, N Z) Subtract<N>((N X, N Y, N Z) u, (N X, N Y, N Z) v)
+        where N : INumberBase<N>
+        => (u.X - v.X, u.Y - v.Y, u.Z - v.Z);
+
+    private static N DistanceSquared<N>((N X, N Y) a, (N X, N Y) b)
+        where N : INumberBase<N>
+        => (a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y);
+
+    private static N DistanceSquared<N>((N X, N Y, N Z) a, (N X, N Y, N Z) b)
+        where N : INumberBase<N>
+    {
+        var d = Subtract(a, b);
+        return Dot(d, d);
+    }
+
+    private static N Length<N>((N X, N Y) a, (N X, N Y) b)
+        where N : IRootFunctions<N>
+        => N.Sqrt(DistanceSquared(a, b));
 
     private static N NormalLength<N>(N length, string paramName)
         where N : INumberBase<N>, IComparisonOperators<N, N, bool>

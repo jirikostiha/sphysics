@@ -100,6 +100,60 @@ public class Bounce3DTests
     }
 
     [Fact]
+    public void OffTriangleInThePlaneMatchesThe2DResult()
+    {
+        var planar = Bounce.OffTriangle((3.0, 2.0), (-1.0, -1.0), 1.0, (0.0, 0.0), (4.0, 0.0), (0.0, 4.0), 0.7, 0.0);
+        var spatial = Bounce.OffTriangle(
+            (3.0, 2.0, 0.0), (-1.0, -1.0, 0.0), 1.0, (0.0, 0.0, 0.0), (4.0, 0.0, 0.0), (0.0, 4.0, 0.0), 0.7, 0.0);
+
+        AssertMatches(planar, spatial);
+    }
+
+    [Fact]
+    public void OffTriangleBouncesOffItsFace()
+    {
+        var result = Bounce.OffTriangle(
+            (1.0, 1.0, 0.5), (0.5, 0.0, -2.0), 1.0, (0.0, 0.0, 0.0), (4.0, 0.0, 0.0), (0.0, 4.0, 0.0), 1.0, 0.0);
+
+        Assert.NotNull(result);
+        AssertClose((1.0, 1.0, 1.0), result.Value.Position);
+        AssertClose((0.5, 0.0, 2.0), result.Value.Velocity);
+    }
+
+    [Fact]
+    public void OffTriangleBouncesOffAnEdgeBesideIt()
+    {
+        var result = Bounce.OffTriangle(
+            (1.0, -0.5, 0.2), (0.0, 2.0, 0.0), 1.0, (0.0, 0.0, 0.0), (4.0, 0.0, 0.0), (0.0, 4.0, 0.0), 1.0, 0.0);
+
+        // the nearest point is (1, 0, 0), at the distance d from the centre
+        var d = Math.Sqrt(0.29);
+        Assert.NotNull(result);
+        AssertClose((1.0, -0.5 / d, 0.2 / d), result.Value.Position);
+        AssertClose((0.0, 2.0 - 1.0 / 0.29, 0.4 / 0.29), result.Value.Velocity);
+    }
+
+    [Theory]
+    [InlineData(-1.0, 1.0)]
+    [InlineData(1.0, -1.0)]
+    public void OffTriangleLetsACentreOnItLeaveOnTheSideItCameFrom(double velocityZ, double expectedSide)
+    {
+        var result = Bounce.OffTriangle(
+            (1.0, 1.0, 0.0), (0.0, 0.0, velocityZ), 1.0, (0.0, 0.0, 0.0), (4.0, 0.0, 0.0), (0.0, 4.0, 0.0), 1.0, 0.0);
+
+        Assert.NotNull(result);
+        AssertClose((1.0, 1.0, expectedSide), result.Value.Position);
+        AssertClose((0.0, 0.0, expectedSide), result.Value.Velocity);
+    }
+
+    [Fact]
+    public void OffTriangleRejectsVerticesOnOneLine()
+    {
+        Assert.Throws<ArgumentException>(() =>
+            Bounce.OffTriangle((1.0, 1.0, 0.0), (0.0, 0.0, 0.0), 1.0, (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), (2.0, 2.0, 2.0), 1.0, 0.0));
+    }
+
+    [Fact]
     public void OffPlaneRejectsANormalOfZeroLength()
     {
         Assert.Throws<ArgumentException>(() =>

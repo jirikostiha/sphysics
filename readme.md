@@ -43,6 +43,7 @@ giving call sites like `GravitationalForce.Outside(m1, m2, r)` or
 | --- | --- |
 | Base quantities | `Length`, `Mass`, `Time`, `ElectricCurrent`, `Temperature`, `AmountOfSubstance`, `LuminousIntensity` |
 | Mechanics | `Velocity`, `Acceleration`, `Jerk`, `Momentum`, `AngularMomentum`, `AngularVelocity`, `Impulse`, `Force`, `FrictionForce`, `DragForce`, `DragCoefficient`, `MomentOfInertia`, `CenterOfMass`, `CenterOfGravity`, `ReducedMass`, `VelocityVerlet`, `ElasticCollision`, `Bounce` |
+| Bodies | members of the SMath shapes: `Circle.Region`, `Rectangle.Region`, `Triangle.Region`, `Sphere.Region`, `Cuboid.Region` |
 | Energy & Power | `Energy`, `KineticEnergy`, `PotentialEnergy`, `GravitationalEnergy`, `Power`, `ThermalRadiation` |
 | Gravitation | `Gravity`, `GravitationalForce`, `GravitationalIntensity`, `GravitationalPotential`, `NBodyGravity` |
 | Celestial mechanics | `Barycenter`, `EscapeVelocity`, `MeanAnomaly`, `MeanMotion`, `OrbitalEccentricity`, `OrbitalPeriod`, `SemiMajorAxis`, `TrueAnomaly`, `OrbitalVelocity`, `HillSphere`, `RocheLimit`, `EccentricAnomaly`, `OrbitalStateVectors`, `MeanLongitude` |
@@ -104,6 +105,18 @@ Span<(double X, double Y, double Mass)> bodies = stackalloc (double, double, dou
 };
 
 var (fx, fy) = GravitationalForce.Eval<double>(bodies, index: 0, gravitationConst: G);
+```
+
+A body is the SMath shape it is made of: its geometry comes from SMath, its physics from SPhysics,
+under the same name:
+
+```cs
+using SMath.Geometry3D;
+using SPhysics;
+
+var volume = Sphere.Region.Volume.FromRadius(0.5);                  // SMath
+var mass = Sphere.Region.Mass.FromDensity(7_870.0, 0.5);            // SPhysics
+var inertia = Sphere.Region.MomentOfInertia.FromMass(mass, 0.5);    // SPhysics
 ```
 
 A ball bouncing off a floor. `restitution` and `restingSpeed` are both plain numbers, so name them

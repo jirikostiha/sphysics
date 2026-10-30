@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1793371799012,
+  "lastUpdate": 1793378468036,
   "repoUrl": "https://github.com/jirikostiha/sphysics",
   "entries": {
     "Benchmark.Net": [
@@ -1870,6 +1870,210 @@ window.BENCHMARK_DATA = {
             "value": 3617963.4080528845,
             "unit": "ns",
             "range": "± 2090.1508121108373"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "committer": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "distinct": true,
+          "id": "356de520323c43037a0d536ef1563e05f6d3ffe9",
+          "message": "refactor: MomentOfInertia.TwoPoints - reuse ReducedMass\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-10-30T17:23:58+01:00",
+          "tree_id": "6d8c09e8c506d38c46055e6348005c44a35c1ff0",
+          "url": "https://github.com/jirikostiha/sphysics/commit/356de520323c43037a0d536ef1563e05f6d3ffe9"
+        },
+        "date": 1793378467533,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Scalar2D(Bodies: 4)",
+            "value": 28.27926492318511,
+            "unit": "ns",
+            "range": "± 0.5856421870041477"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Tuple2D(Bodies: 4)",
+            "value": 63.538594110214966,
+            "unit": "ns",
+            "range": "± 3.7071927084148575"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Soa2D(Bodies: 4)",
+            "value": 38.00402111981226,
+            "unit": "ns",
+            "range": "± 0.82485250241722"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Scalar3D(Bodies: 4)",
+            "value": 34.251456048753525,
+            "unit": "ns",
+            "range": "± 0.9768472964692685"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Tuple3D(Bodies: 4)",
+            "value": 74.1926786507879,
+            "unit": "ns",
+            "range": "± 3.660284786769588"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Soa3D(Bodies: 4)",
+            "value": 47.94888620412172,
+            "unit": "ns",
+            "range": "± 2.3318949064278933"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Scalar2D(Bodies: 16)",
+            "value": 337.6063171055006,
+            "unit": "ns",
+            "range": "± 5.812354096968216"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Tuple2D(Bodies: 16)",
+            "value": 440.1393723487854,
+            "unit": "ns",
+            "range": "± 14.621748050060088"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Soa2D(Bodies: 16)",
+            "value": 414.9173038800557,
+            "unit": "ns",
+            "range": "± 7.659051798986981"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Scalar3D(Bodies: 16)",
+            "value": 457.3430558840434,
+            "unit": "ns",
+            "range": "± 1.454261381913045"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Tuple3D(Bodies: 16)",
+            "value": 521.83405801985,
+            "unit": "ns",
+            "range": "± 10.778306505428283"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Soa3D(Bodies: 16)",
+            "value": 479.5503743978647,
+            "unit": "ns",
+            "range": "± 3.6301889283009436"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Scalar2D(Bodies: 64)",
+            "value": 5733.134012075571,
+            "unit": "ns",
+            "range": "± 17.2810912836011"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Tuple2D(Bodies: 64)",
+            "value": 2740.6836839155717,
+            "unit": "ns",
+            "range": "± 102.58122408707278"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Soa2D(Bodies: 64)",
+            "value": 2562.242338725499,
+            "unit": "ns",
+            "range": "± 17.820035304647117"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Scalar3D(Bodies: 64)",
+            "value": 7332.555098942348,
+            "unit": "ns",
+            "range": "± 48.1308093324467"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Tuple3D(Bodies: 64)",
+            "value": 3092.4874730791366,
+            "unit": "ns",
+            "range": "± 4.5340291319555535"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Soa3D(Bodies: 64)",
+            "value": 3057.2043577829995,
+            "unit": "ns",
+            "range": "± 120.2633769653905"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Scalar2D(Bodies: 512)",
+            "value": 357633.2518869174,
+            "unit": "ns",
+            "range": "± 15789.575434917228"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Tuple2D(Bodies: 512)",
+            "value": 63869.22366333008,
+            "unit": "ns",
+            "range": "± 161.4811241269897"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Soa2D(Bodies: 512)",
+            "value": 63745.1371383667,
+            "unit": "ns",
+            "range": "± 628.1270489809167"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Scalar3D(Bodies: 512)",
+            "value": 468833.55592105264,
+            "unit": "ns",
+            "range": "± 15839.872692904943"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Tuple3D(Bodies: 512)",
+            "value": 80917.12986246745,
+            "unit": "ns",
+            "range": "± 2406.4798857450965"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Soa3D(Bodies: 512)",
+            "value": 78202.42744954427,
+            "unit": "ns",
+            "range": "± 1635.791475068457"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Scalar2D(Bodies: 3000)",
+            "value": 11759123.831129808,
+            "unit": "ns",
+            "range": "± 12907.032934425495"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Tuple2D(Bodies: 3000)",
+            "value": 1769356.4643229167,
+            "unit": "ns",
+            "range": "± 31703.252119817906"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Soa2D(Bodies: 3000)",
+            "value": 1760819.9833233173,
+            "unit": "ns",
+            "range": "± 14136.513901185212"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Scalar3D(Bodies: 3000)",
+            "value": 15704289.227163462,
+            "unit": "ns",
+            "range": "± 225666.03562879018"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Tuple3D(Bodies: 3000)",
+            "value": 2219433.896484375,
+            "unit": "ns",
+            "range": "± 73397.7400301526"
+          },
+          {
+            "name": "SPhysics.NBodyGravityBenchmark.Soa3D(Bodies: 3000)",
+            "value": 2188906.9852764425,
+            "unit": "ns",
+            "range": "± 8866.408084776253"
           }
         ]
       }

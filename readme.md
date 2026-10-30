@@ -42,7 +42,7 @@ giving call sites like `GravitationalForce.Outside(m1, m2, r)` or
 | Area | Types |
 | --- | --- |
 | Base quantities | `Length`, `Mass`, `Time`, `ElectricCurrent`, `Temperature`, `AmountOfSubstance`, `LuminousIntensity` |
-| Mechanics | `Velocity`, `Acceleration`, `Jerk`, `Momentum`, `AngularMomentum`, `AngularVelocity`, `Impulse`, `Force`, `FrictionForce`, `DragForce`, `DragCoefficient`, `MomentOfInertia`, `CenterOfMass`, `CenterOfGravity`, `ReducedMass`, `VelocityVerlet`, `ElasticCollision`, `Bounce` |
+| Mechanics | `Velocity`, `Acceleration`, `Jerk`, `Momentum`, `AngularMomentum`, `AngularVelocity`, `Impulse`, `Force`, `FrictionForce`, `DragForce`, `MomentOfInertia`, `CenterOfMass`, `CenterOfGravity`, `ReducedMass`, `VelocityVerlet`, `ElasticCollision`, `Bounce` |
 | Bodies | members of the SMath shapes: `Circle.Region`, `Rectangle.Region`, `Triangle.Region`, `Sphere.Region`, `Cuboid.Region` |
 | Energy & Power | `Energy`, `KineticEnergy`, `PotentialEnergy`, `GravitationalEnergy`, `Power`, `ThermalRadiation` |
 | Gravitation | `Gravity`, `GravitationalForce`, `GravitationalIntensity`, `GravitationalPotential`, `NBodyGravity` |

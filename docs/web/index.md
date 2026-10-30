@@ -35,7 +35,7 @@ dotnet add package SPhysics
 | Area | Types & Capabilities |
 | :--- | :--- |
 | **Base Quantities** | `Length`, `Mass`, `Time`, `ElectricCurrent`, `Temperature`, `AmountOfSubstance`, `LuminousIntensity` |
-| **Mechanics** | `Velocity`, `Acceleration`, `Jerk`, `Momentum`, `AngularMomentum`, `AngularVelocity`, `Impulse`, `Force`, `FrictionForce`, `DragForce`, `DragCoefficient`, `MomentOfInertia`, `CenterOfMass`, `CenterOfGravity`, `VelocityVerlet`, `ElasticCollision` |
+| **Mechanics** | `Velocity`, `Acceleration`, `Jerk`, `Momentum`, `AngularMomentum`, `AngularVelocity`, `Impulse`, `Force`, `FrictionForce`, `DragForce`, `MomentOfInertia`, `CenterOfMass`, `CenterOfGravity`, `VelocityVerlet`, `ElasticCollision` |
 | **Bodies** | members of the SMath shapes: `Circle.Region`, `Rectangle.Region`, `Triangle.Region`, `Sphere.Region`, `Cuboid.Region` |
 | **Energy & Power** | `Energy`, `KineticEnergy`, `PotentialEnergy`, `GravitationalEnergy`, `Power`, `ThermalRadiation` |
 | **Gravitation** | `Gravity`, `GravitationalForce`, `GravitationalIntensity`, `GravitationalPotential`, `NBodyGravity` |

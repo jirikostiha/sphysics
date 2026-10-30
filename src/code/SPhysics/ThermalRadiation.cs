@@ -39,18 +39,6 @@ public static class ThermalRadiation
         =>
         power / Sphere.Surface.Area.FromRadius(distance);
 
-    /// <summary>
-    /// Equilibrium temperature of a fast rotating spherical body under the given irradiance.
-    /// It absorbs over its cross section and re-radiates as a black body over its whole surface, four times larger:
-    /// T = ((1 - albedo) * E / (4 * sigma))^(1/4).
-    /// </summary>
-    /// <remarks><a href="https://en.wikipedia.org/wiki/Planetary_equilibrium_temperature">wikipedia</a></remarks>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static N EquilibriumTemperature<N>(N irradiance, N albedo, N stefanBoltzmannConstant)
-        where N : IRootFunctions<N>
-        =>
-        FourthRoot((N.One - albedo) * irradiance / (N.CreateTruncating(4) * stefanBoltzmannConstant));
-
     // inverse of the fourth power of the temperature, two square roots are cheaper and more exact than Pow(x, 0.25)
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static N FourthRoot<N>(N value)

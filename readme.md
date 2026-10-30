@@ -56,7 +56,7 @@ giving call sites like `GravitationalForce.Outside(m1, m2, r)` or
 ```
 
 Replace `X.X.X` with the current version from [NuGet](https://www.nuget.org/packages/SPhysics).
-The package targets `net8.0` and runs on any newer runtime.
+The package targets `net10.0`.
 
 ## Usage
 

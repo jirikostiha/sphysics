@@ -4,7 +4,7 @@
 
 | File | Scope |
 |------|-------|
-| `.ai/rules/sphysics.rule.md` | static classes only |
+| `.ai/rules/sphysics.rule.md` | static classes only; formulas of a body extend its SMath shape |
 
 ## Skills
 

@@ -2,3 +2,10 @@
 
 # S4136: Method overloads should be grouped together
 dotnet_diagnostic.S4136.severity = none
+
+[code/SPhysics/Bodies/*.cs]
+
+# CA1822: Mark members as static
+# The formulas of a body are instance members of an empty readonly struct, reached through a static extension
+# property of its SMath shape, Sphere.Region.Mass.FromDensity(...) (SPH-01). Static members could not be called so.
+dotnet_diagnostic.CA1822.severity = none

@@ -10,4 +10,11 @@ public static class PotentialEnergy
         where N : IMultiplyOperators<N, N, N>
         =>
         mass * g * height;
+
+    /// <summary> Elastic potential energy of a linear spring stretched or compressed by the displacement, <c>1/2 * k * x^2</c>. </summary>
+    /// <remarks><a href="https://en.wikipedia.org/wiki/Elastic_energy">wikipedia</a></remarks>
+    public static N Elastic<N>(N springConstant, N displacement)
+        where N : INumberBase<N>
+        =>
+        springConstant * (displacement * displacement) / N.CreateChecked(2);
 }

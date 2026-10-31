@@ -42,9 +42,9 @@ giving call sites like `GravitationalForce.Outside(m1, m2, r)` or
 | Area | Types |
 | --- | --- |
 | Base quantities | `Length`, `Mass`, `Time`, `ElectricCurrent`, `Temperature`, `AmountOfSubstance`, `LuminousIntensity` |
-| Mechanics | `Velocity`, `Acceleration`, `Jerk`, `Momentum`, `AngularMomentum`, `AngularVelocity`, `Impulse`, `Force`, `FrictionForce`, `DragForce`, `MomentOfInertia`, `CenterOfMass`, `CenterOfGravity`, `ReducedMass`, `VelocityVerlet`, `ElasticCollision`, `Bounce` |
+| Mechanics | `Velocity`, `Acceleration`, `Jerk`, `Momentum`, `AngularMomentum`, `AngularVelocity`, `AngularAcceleration`, `Torque`, `Impulse`, `Force`, `FrictionForce`, `DragForce`, `MomentOfInertia`, `CenterOfMass`, `CenterOfGravity`, `ReducedMass`, `VelocityVerlet`, `ElasticCollision`, `Bounce` |
 | Bodies | members of the SMath shapes: `Circle.Region`, `Ellipse.Region`, `Rectangle.Region`, `Square.Region`, `Triangle.Region`, `Sphere.Region`, `SphericalShell.Region`, `Ellipsoid.Region`, `Cuboid.Region`, `Cube.Region`, `Cylinder.Region`, `Cone.Region`, `Torus.Region` |
-| Energy & Power | `Energy`, `KineticEnergy`, `PotentialEnergy`, `GravitationalEnergy`, `Power`, `ThermalRadiation` |
+| Energy & Power | `Energy`, `Work`, `KineticEnergy`, `PotentialEnergy`, `GravitationalEnergy`, `Power`, `ThermalRadiation` |
 | Gravitation | `Gravity`, `GravitationalForce`, `GravitationalIntensity`, `GravitationalPotential`, `NBodyGravity` |
 | Celestial mechanics | `Barycenter`, `EscapeVelocity`, `MeanAnomaly`, `MeanMotion`, `OrbitalEccentricity`, `OrbitalPeriod`, `SemiMajorAxis`, `TrueAnomaly`, `OrbitalVelocity`, `HillSphere`, `RocheLimit`, `EccentricAnomaly`, `OrbitalStateVectors`, `MeanLongitude` |
 | Other | `Density`, `Distance`, `PlaneAngle`, `SolidAngle`, `Frequency`, `Pressure`, `AbsorbedDose` |

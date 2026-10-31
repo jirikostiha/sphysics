@@ -24,4 +24,11 @@ public static class Power
         where N : IMultiplyOperators<N, N, N>
         =>
         force * velocity;
+
+    /// <summary> Power delivered by a torque acting on a body rotating at the given angular velocity. </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static N FromTorque<N>(N torque, N angularVelocity)
+        where N : IMultiplyOperators<N, N, N>
+        =>
+        torque * angularVelocity;
 }

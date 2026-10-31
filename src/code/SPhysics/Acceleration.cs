@@ -24,4 +24,12 @@ public static class Acceleration
         where N : IDivisionOperators<N, N, N>
         =>
         force / mass;
+
+    /// <summary> Centripetal acceleration of a body moving at the speed on a circle of the radius, <c>v^2 / r</c>. </summary>
+    /// <remarks><a href="https://en.wikipedia.org/wiki/Centripetal_force">wikipedia</a></remarks>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static N Centripetal<N>(N velocity, N radius)
+        where N : IMultiplyOperators<N, N, N>, IDivisionOperators<N, N, N>
+        =>
+        velocity * velocity / radius;
 }

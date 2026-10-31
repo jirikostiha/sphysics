@@ -20,6 +20,19 @@ public static class MomentOfInertia
         =>
         angularMomentum / angularVelocity;
 
+    /// <summary>
+    /// Moment of inertia about an axis parallel to one through the centre of mass, the parallel axis (Steiner) theorem,
+    /// <c>I = I_cm + m * d^2</c>.
+    /// </summary>
+    /// <remarks><a href="https://en.wikipedia.org/wiki/Parallel_axis_theorem">wikipedia</a></remarks>
+    /// <param name="centerOfMassMoment"> Moment of inertia about the axis through the centre of mass. </param>
+    /// <param name="mass"> Mass of the body. </param>
+    /// <param name="distance"> Distance between the two parallel axes. </param>
+    public static N ParallelAxis<N>(N centerOfMassMoment, N mass, N distance)
+        where N : IMultiplyOperators<N, N, N>, IAdditionOperators<N, N, N>
+        =>
+        centerOfMassMoment + mass * (distance * distance);
+
     #region objects
 
     /// <summary> Point mass at a distance from the axis of rotation.. </summary>

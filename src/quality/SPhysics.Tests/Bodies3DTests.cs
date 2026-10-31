@@ -48,6 +48,25 @@ public class Bodies3DTests
     }
 
     [Fact]
+    public void CubeMassIsTheDensityTimesTheVolume()
+    {
+        Assert.Equal(16.0, Cube.Region.Mass.FromDensity(2.0, 2.0), Precision);
+    }
+
+    [Fact]
+    public void CubeHasASixthOfTheMassTimesTheSquaredEdge()
+    {
+        Assert.Equal(6.0, Cube.Region.MomentOfInertia.FromMass(9.0, 2.0), Precision);
+    }
+
+    [Fact]
+    public void CubeMomentFromTheDensityTakesTheMassOfTheCube()
+    {
+        // 16 * 4 / 6
+        Assert.Equal(32.0 / 3.0, Cube.Region.MomentOfInertia.FromDensity(2.0, 2.0), Precision);
+    }
+
+    [Fact]
     public void CentralPressureMatchesTheIntegratedHydrostaticEquation()
     {
         const double g = 6.67430e-11;

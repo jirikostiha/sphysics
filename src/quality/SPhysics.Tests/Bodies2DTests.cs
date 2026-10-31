@@ -62,6 +62,53 @@ public class Bodies2DTests
     }
 
     [Fact]
+    public void SquarePlateMassIsTheDensityTimesTheArea()
+    {
+        Assert.Equal(18.0, Square.Region.Mass.FromDensity(2.0, 3.0), Precision);
+    }
+
+    [Fact]
+    public void SquarePlateHasASixthOfTheMassTimesTheSquaredEdge()
+    {
+        Assert.Equal(15.0, Square.Region.MomentOfInertia.FromMass(10.0, 3.0), Precision);
+    }
+
+    [Fact]
+    public void SquarePlateMomentFromTheDensityTakesTheMassOfThePlate()
+    {
+        // 18 * 9 / 6
+        Assert.Equal(27.0, Square.Region.MomentOfInertia.FromDensity(2.0, 3.0), Precision);
+    }
+
+    [Fact]
+    public void EllipsePlateMassIsTheDensityTimesTheArea()
+    {
+        Assert.Equal(12.0 * Math.PI, Ellipse.Region.Mass.FromDensity(2.0, 3.0, 2.0), Precision);
+    }
+
+    [Fact]
+    public void EllipsePlateHasTheMassTimesTheSquaredSemiAxesOverFour()
+    {
+        Assert.Equal(13.0, Ellipse.Region.MomentOfInertia.FromMass(4.0, 3.0, 2.0), Precision);
+    }
+
+    [Fact]
+    public void EllipsePlateWithEqualSemiAxesIsADisc()
+    {
+        Assert.Equal(Circle.Region.MomentOfInertia.FromMass(2.0, 3.0), Ellipse.Region.MomentOfInertia.FromMass(2.0, 3.0, 3.0), Precision);
+    }
+
+    [Fact]
+    public void EllipsePlateMomentMatchesTheIntegralOfTheSquaredDistance()
+    {
+        const double a = 3.0, b = 1.25;
+        var (area, polar) = InertiaIntegral.OfEllipse(a, b);
+
+        Assert.Equal(area, Ellipse.Region.Mass.FromDensity(1.0, a, b), area * 1e-6);
+        Assert.Equal(polar, Ellipse.Region.MomentOfInertia.FromDensity(1.0, a, b), polar * 1e-6);
+    }
+
+    [Fact]
     public void SinglePrecisionGivesTheSameMoment()
     {
         Assert.Equal(9.0f, Circle.Region.MomentOfInertia.FromMass(2.0f, 3.0f));

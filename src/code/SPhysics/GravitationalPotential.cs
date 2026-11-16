@@ -28,6 +28,4 @@ public static class GravitationalPotential
         where N : IRootFunctions<N>
         =>
         -gravitationalConstant * mass / N.Sqrt(distanceSquared + (softening * softening));
-
-    //todo inside
 }

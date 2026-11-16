@@ -25,6 +25,4 @@ public static class GravitationalIntensity
         where N : IUnaryNegationOperators<N, N>, IMultiplyOperators<N, N, N>, IDivisionOperators<N, N, N>
         =>
         -gravitationalConstant * mass / (radius * radius);
-
-    //todo inside
 }

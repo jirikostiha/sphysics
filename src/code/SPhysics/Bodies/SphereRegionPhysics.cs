@@ -21,6 +21,12 @@ public static class SphereRegionPhysics
         /// <inheritdoc cref="GravitationalEnergyFormulas"/>
         public static GravitationalEnergyFormulas GravitationalEnergy => default;
 
+        /// <inheritdoc cref="GravitationalIntensityFormulas"/>
+        public static GravitationalIntensityFormulas GravitationalIntensity => default;
+
+        /// <inheritdoc cref="GravitationalPotentialFormulas"/>
+        public static GravitationalPotentialFormulas GravitationalPotential => default;
+
         /// <inheritdoc cref="DragCoefficients"/>
         public static DragCoefficients DragCoefficient => default;
 
@@ -99,6 +105,53 @@ public static class SphereRegionPhysics
             where N : INumberBase<N>
             =>
             -(N.CreateChecked(3) / N.CreateChecked(5)) * gravitationalConstant * mass * mass / radius;
+    }
+
+    /// <summary> Gravitational field of a ball, inside it and around it. </summary>
+    /// <remarks>
+    /// By the shell theorem the ball attracts from outside as a point of its mass at its centre, and from inside only by
+    /// the mass nearer to the centre, <c>m * (r / R)^3</c>.
+    /// <a href="https://en.wikipedia.org/wiki/Shell_theorem">wikipedia</a>
+    /// </remarks>
+    public readonly struct GravitationalIntensityFormulas
+    {
+        /// <summary>
+        /// Intensity at <paramref name="distance"/> from the centre, pointing to it: <c>-G * m * r / R^3</c> inside,
+        /// <c>-G * m / r^2</c> outside; both give <c>-G * m / R^2</c> on the surface.
+        /// </summary>
+        /// <param name="mass"> Mass of the ball. </param>
+        /// <param name="radius"> Radius of the ball. </param>
+        /// <param name="distance"> Distance from the centre of the ball. </param>
+        /// <param name="gravitationalConstant"> Gravitational constant, in the real world <see cref="GravitationalConstant.Value"/>. </param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public N FromMass<N>(N mass, N radius, N distance, N gravitationalConstant)
+            where N : INumber<N>
+            =>
+            distance < radius
+                ? -gravitationalConstant * mass * distance / (radius * radius * radius)
+                : SPhysics.GravitationalIntensity.Scalar(mass, distance, gravitationalConstant);
+    }
+
+    /// <summary> Gravitational potential of a ball, inside it and around it. </summary>
+    /// <remarks><a href="https://en.wikipedia.org/wiki/Gravitational_potential">wikipedia</a></remarks>
+    public readonly struct GravitationalPotentialFormulas
+    {
+        /// <summary>
+        /// Potential at <paramref name="distance"/> from the centre: <c>-G * m * (3 R^2 - r^2) / (2 R^3)</c> inside,
+        /// <c>-G * m / r</c> outside; both give <c>-G * m / R</c> on the surface, and the centre lies 1.5 times deeper.
+        /// </summary>
+        /// <param name="mass"> Mass of the ball. </param>
+        /// <param name="radius"> Radius of the ball. </param>
+        /// <param name="distance"> Distance from the centre of the ball. </param>
+        /// <param name="gravitationalConstant"> Gravitational constant, in the real world <see cref="GravitationalConstant.Value"/>. </param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public N FromMass<N>(N mass, N radius, N distance, N gravitationalConstant)
+            where N : INumber<N>
+            =>
+            distance < radius
+                ? -gravitationalConstant * mass * ((N.CreateTruncating(3) * radius * radius) - (distance * distance))
+                    / (N.CreateTruncating(2) * radius * radius * radius)
+                : SPhysics.GravitationalPotential.Eval(mass, distance, gravitationalConstant);
     }
 
     /// <summary> Drag coefficients of a ball in real world, the input of <see cref="DragForce.InFluid{N}"/>. </summary>

@@ -28,8 +28,7 @@ public static partial class VelocityVerlet
     public static void HalfKick<N>(Span<(N X, N Y)> velocities, ReadOnlySpan<(N X, N Y)> accelerations, N dt)
         where N : INumberBase<N>
     {
-        if (accelerations.Length != velocities.Length)
-            throw new ArgumentException("accelerations must have the same length as velocities.");
+        SystemSpans.RequireLengths(velocities.Length, accelerations.Length);
         N h = HalfStep(dt);
         for (int i = 0; i < velocities.Length; i++)
         {
@@ -43,8 +42,7 @@ public static partial class VelocityVerlet
     public static void Drift<N>(Span<(N X, N Y)> positions, ReadOnlySpan<(N X, N Y)> velocities, N dt)
         where N : INumberBase<N>
     {
-        if (velocities.Length != positions.Length)
-            throw new ArgumentException("velocities must have the same length as positions.");
+        SystemSpans.RequireLengths(positions.Length, velocities.Length);
         for (int i = 0; i < positions.Length; i++)
             positions[i] = Drift(positions[i], velocities[i], dt);
     }
@@ -114,8 +112,7 @@ public static partial class VelocityVerlet
     public static void HalfKick<N>(Span<(N X, N Y, N Z)> velocities, ReadOnlySpan<(N X, N Y, N Z)> accelerations, N dt)
         where N : INumberBase<N>
     {
-        if (accelerations.Length != velocities.Length)
-            throw new ArgumentException("accelerations must have the same length as velocities.");
+        SystemSpans.RequireLengths(velocities.Length, accelerations.Length);
         N h = HalfStep(dt);
         for (int i = 0; i < velocities.Length; i++)
         {
@@ -129,8 +126,7 @@ public static partial class VelocityVerlet
     public static void Drift<N>(Span<(N X, N Y, N Z)> positions, ReadOnlySpan<(N X, N Y, N Z)> velocities, N dt)
         where N : INumberBase<N>
     {
-        if (velocities.Length != positions.Length)
-            throw new ArgumentException("velocities must have the same length as positions.");
+        SystemSpans.RequireLengths(positions.Length, velocities.Length);
         for (int i = 0; i < positions.Length; i++)
             positions[i] = Drift(positions[i], velocities[i], dt);
     }

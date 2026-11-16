@@ -29,7 +29,7 @@ public static partial class NBodyGravity
             Span<(N X, N Y)> accelerations)
             where N : IRootFunctions<N>
         {
-            RequireLengths(positions.Length, masses.Length, gravitationalConstants.Length, accelerations.Length);
+            SystemSpans.RequireLengths(positions.Length, masses.Length, gravitationalConstants.Length, accelerations.Length);
             PlanarScalar(positions, masses, gravitationalConstants, N.Zero, softening, accelerations, perBody: true);
         }
 
@@ -49,7 +49,7 @@ public static partial class NBodyGravity
             Span<(N X, N Y)> accelerations)
             where N : IRootFunctions<N>
         {
-            RequireLengths(positions.Length, masses.Length, accelerations.Length);
+            SystemSpans.RequireLengths(positions.Length, masses.Length, accelerations.Length);
             PlanarScalar(positions, masses, default, gravitationalConstant, softening, accelerations, perBody: false);
         }
 
@@ -69,7 +69,7 @@ public static partial class NBodyGravity
             Span<(N X, N Y, N Z)> accelerations)
             where N : IRootFunctions<N>
         {
-            RequireLengths(positions.Length, masses.Length, gravitationalConstants.Length, accelerations.Length);
+            SystemSpans.RequireLengths(positions.Length, masses.Length, gravitationalConstants.Length, accelerations.Length);
             SpatialScalar(positions, masses, gravitationalConstants, N.Zero, softening, accelerations, perBody: true);
         }
 
@@ -89,7 +89,7 @@ public static partial class NBodyGravity
             Span<(N X, N Y, N Z)> accelerations)
             where N : IRootFunctions<N>
         {
-            RequireLengths(positions.Length, masses.Length, accelerations.Length);
+            SystemSpans.RequireLengths(positions.Length, masses.Length, accelerations.Length);
             SpatialScalar(positions, masses, default, gravitationalConstant, softening, accelerations, perBody: false);
         }
     }

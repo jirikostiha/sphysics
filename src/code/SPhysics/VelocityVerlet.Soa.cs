@@ -31,8 +31,7 @@ public static partial class VelocityVerlet
         private static void AddScaled<N>(Span<N> target, ReadOnlySpan<N> source, N factor)
             where N : INumberBase<N>
         {
-            if (source.Length != target.Length)
-                throw new ArgumentException("Both spans must have the same length.");
+            SystemSpans.RequireLengths(target.Length, source.Length);
 
             int i = 0;
             if (Vector.IsHardwareAccelerated && Vector<N>.IsSupported)

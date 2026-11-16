@@ -34,7 +34,7 @@ public static partial class NBodyGravity
         Span<(N X, N Y)> accelerations)
         where N : IRootFunctions<N>
     {
-        RequireLengths(positions.Length, masses.Length, gravitationalConstants.Length, accelerations.Length);
+        SystemSpans.RequireLengths(positions.Length, masses.Length, gravitationalConstants.Length, accelerations.Length);
         Planar(positions, masses, gravitationalConstants, N.Zero, softening, accelerations, perBody: true);
     }
 
@@ -56,7 +56,7 @@ public static partial class NBodyGravity
         Span<(N X, N Y)> accelerations)
         where N : IRootFunctions<N>
     {
-        RequireLengths(positions.Length, masses.Length, accelerations.Length);
+        SystemSpans.RequireLengths(positions.Length, masses.Length, accelerations.Length);
         Planar(positions, masses, default, gravitationalConstant, softening, accelerations, perBody: false);
     }
 
@@ -80,7 +80,7 @@ public static partial class NBodyGravity
         Span<(N X, N Y, N Z)> accelerations)
         where N : IRootFunctions<N>
     {
-        RequireLengths(positions.Length, masses.Length, gravitationalConstants.Length, accelerations.Length);
+        SystemSpans.RequireLengths(positions.Length, masses.Length, gravitationalConstants.Length, accelerations.Length);
         Spatial(positions, masses, gravitationalConstants, N.Zero, softening, accelerations, perBody: true);
     }
 
@@ -102,20 +102,8 @@ public static partial class NBodyGravity
         Span<(N X, N Y, N Z)> accelerations)
         where N : IRootFunctions<N>
     {
-        RequireLengths(positions.Length, masses.Length, accelerations.Length);
+        SystemSpans.RequireLengths(positions.Length, masses.Length, accelerations.Length);
         Spatial(positions, masses, default, gravitationalConstant, softening, accelerations, perBody: false);
-    }
-
-    private static void RequireLengths(int positions, int masses, int gravitationalConstants, int accelerations)
-    {
-        if (masses != positions || gravitationalConstants != positions || accelerations != positions)
-            throw new ArgumentException("masses, gravitationalConstants, and accelerations must have the same length as positions.");
-    }
-
-    private static void RequireLengths(int positions, int masses, int accelerations)
-    {
-        if (masses != positions || accelerations != positions)
-            throw new ArgumentException("masses and accelerations must have the same length as positions.");
     }
 
     // the components are copied into one pooled buffer, x, y, then the accelerations

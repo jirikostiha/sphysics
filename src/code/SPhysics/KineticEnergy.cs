@@ -17,6 +17,20 @@ public static class KineticEnergy
         =>
         N.CreateTruncating(0.5) * mass * (velocity * velocity);
 
+    /// <summary> Kinetic energy of a body moving at a velocity in a plane, <c>m * |v|^2 / 2</c>, without a square root. </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static N Linear<N>(N mass, (N X, N Y) velocity)
+        where N : INumberBase<N>
+        =>
+        N.CreateTruncating(0.5) * mass * GeometricVector2.DotProduct.FromCartesian(velocity, velocity);
+
+    /// <summary> Kinetic energy of a body moving at a velocity in space, <c>m * |v|^2 / 2</c>, without a square root. </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static N Linear<N>(N mass, (N X, N Y, N Z) velocity)
+        where N : INumberBase<N>
+        =>
+        N.CreateTruncating(0.5) * mass * GeometricVector3.DotProduct.FromCartesian(velocity, velocity);
+
     /// <summary>Kinetic energy of spinning motion.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N Spinning<N>(N momentOfInertia, N angularVelocity)
@@ -39,13 +53,13 @@ public static class KineticEnergy
     {
         SystemSpans.RequireLengths(velocities.Length, masses.Length);
 
-        N doubled = N.Zero;
+        N total = N.Zero;
         for (int i = 0; i < velocities.Length; i++)
         {
-            doubled += masses[i] * GeometricVector2.DotProduct.FromCartesian(velocities[i], velocities[i]);
+            total += Linear(masses[i], velocities[i]);
         }
 
-        return N.CreateTruncating(0.5) * doubled;
+        return total;
     }
 
     /// <summary> Total kinetic energy of linear motion of bodies in space, <c>sum(m * |v|^2 / 2)</c>. </summary>
@@ -56,12 +70,12 @@ public static class KineticEnergy
     {
         SystemSpans.RequireLengths(velocities.Length, masses.Length);
 
-        N doubled = N.Zero;
+        N total = N.Zero;
         for (int i = 0; i < velocities.Length; i++)
         {
-            doubled += masses[i] * GeometricVector3.DotProduct.FromCartesian(velocities[i], velocities[i]);
+            total += Linear(masses[i], velocities[i]);
         }
 
-        return N.CreateTruncating(0.5) * doubled;
+        return total;
     }
 }

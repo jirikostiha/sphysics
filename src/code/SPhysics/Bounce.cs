@@ -492,7 +492,7 @@ public static class Bounce
             return (pushed, velocity);
 
         // v' = v - (1 + e) * (v . n) * n, with e = 0 for a slow approach so that a body resting on the surface stays there
-        N change = (N.One + Restitution(approach, restitution, restingSpeed)) * approach;
+        N change = Restitution.NormalVelocityChange(EffectiveRestitution(approach, restitution, restingSpeed), approach);
         return (pushed, (velocity.X - change * normal.X, velocity.Y - change * normal.Y));
     }
 
@@ -508,13 +508,13 @@ public static class Bounce
             return (pushed, velocity);
 
         // v' = v - (1 + e) * (v . n) * n, with e = 0 for a slow approach so that a body resting on the surface stays there
-        N change = (N.One + Restitution(approach, restitution, restingSpeed)) * approach;
+        N change = Restitution.NormalVelocityChange(EffectiveRestitution(approach, restitution, restingSpeed), approach);
         return (pushed, (velocity.X - change * normal.X, velocity.Y - change * normal.Y, velocity.Z - change * normal.Z));
     }
 
     // The restitution for an approach at the (negative) normal velocity: none at all when the approach is slower than the resting speed.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static N Restitution<N>(N approach, N restitution, N restingSpeed)
+    private static N EffectiveRestitution<N>(N approach, N restitution, N restingSpeed)
         where N : INumberBase<N>, IComparisonOperators<N, N, bool>
         => -approach < restingSpeed ? N.Zero : restitution;
 
@@ -534,13 +534,13 @@ public static class Bounce
         if (position < low)
         {
             touched = true;
-            return (low, velocity < N.Zero ? -Restitution(velocity, restitution, restingSpeed) * velocity : velocity);
+            return (low, velocity < N.Zero ? -EffectiveRestitution(velocity, restitution, restingSpeed) * velocity : velocity);
         }
 
         if (position > high)
         {
             touched = true;
-            return (high, velocity > N.Zero ? -Restitution(-velocity, restitution, restingSpeed) * velocity : velocity);
+            return (high, velocity > N.Zero ? -EffectiveRestitution(-velocity, restitution, restingSpeed) * velocity : velocity);
         }
 
         return (position, velocity);

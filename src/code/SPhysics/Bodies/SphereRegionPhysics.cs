@@ -12,6 +12,9 @@ public static class SphereRegionPhysics
         /// <inheritdoc cref="MassFormulas"/>
         public static MassFormulas Mass => default;
 
+        /// <inheritdoc cref="RadiusFormulas"/>
+        public static RadiusFormulas Radius => default;
+
         /// <inheritdoc cref="MomentOfInertiaFormulas"/>
         public static MomentOfInertiaFormulas MomentOfInertia => default;
 
@@ -42,6 +45,16 @@ public static class SphereRegionPhysics
         public N FromDensity<N>(N density, N radius)
             where N : IFloatingPointConstants<N>
             => Mass.FromVolume(Sphere.Region.Volume.FromRadius(radius), density);
+    }
+
+    /// <summary> Radius of a solid ball. </summary>
+    public readonly struct RadiusFormulas
+    {
+        /// <summary> Radius of a ball of the mass and the density; the inverse of <see cref="MassFormulas.FromDensity{N}"/>. </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public N FromMass<N>(N mass, N density)
+            where N : IRootFunctions<N>
+            => Sphere.Radius.FromVolume(Volume.FromMass(mass, density));
     }
 
     /// <summary> Moment of inertia of a solid ball about any axis through its centre. </summary>

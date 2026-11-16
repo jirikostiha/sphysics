@@ -37,6 +37,22 @@ public static class Velocity
         =>
         momentum / mass;
 
+    /// <summary> Velocity in a plane of a body of the given mass carrying the given momentum, <c>p / m</c>. </summary>
+    /// <remarks> Momentum is conserved, so a body that ejects a momentum recoils with the velocity of its negation. </remarks>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static (N X, N Y) FromMomentum<N>((N X, N Y) momentum, N mass)
+        where N : IDivisionOperators<N, N, N>
+        =>
+        (momentum.X / mass, momentum.Y / mass);
+
+    /// <summary> Velocity in space of a body of the given mass carrying the given momentum, <c>p / m</c>. </summary>
+    /// <remarks> Momentum is conserved, so a body that ejects a momentum recoils with the velocity of its negation. </remarks>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static (N X, N Y, N Z) FromMomentum<N>((N X, N Y, N Z) momentum, N mass)
+        where N : IDivisionOperators<N, N, N>
+        =>
+        (momentum.X / mass, momentum.Y / mass, momentum.Z / mass);
+
     /// <summary> Speed of a body of the given mass carrying the given kinetic energy, <c>sqrt(2 * E / m)</c>. </summary>
     /// <remarks> The inverse of <see cref="KineticEnergy.Linear{N}"/>; a negative energy has no real speed and gives NaN. </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

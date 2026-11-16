@@ -198,5 +198,5 @@ public static class ElasticCollision
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static N Impulse<N>(N velocityAlongNormal, N totalInverseMass)
         where N : INumberBase<N>
-        => -((N.One + N.One) * velocityAlongNormal) / totalInverseMass;
+        => -Restitution.NormalVelocityChange(N.One, velocityAlongNormal) / totalInverseMass;
 }

@@ -16,7 +16,7 @@ public static class GravitationalForce
     public static N Outside<N>(N mass1, N mass2, N distance)
         where N : INumberBase<N>
         =>
-        N.CreateTruncating(-6.67430e-11) * mass1 * mass2 / (distance * distance);
+        N.CreateTruncating(-GravitationalConstant.Value) * mass1 * mass2 / (distance * distance);
 
     /// <summary>Evaluate gravitational force of two bodies above surfaces.</summary>
     /// <typeparam name="N"> Number type </typeparam>
@@ -34,7 +34,7 @@ public static class GravitationalForce
     /// <param name="positions"> Positions of the bodies. </param>
     /// <param name="masses"> Masses of the bodies, as many as there are positions. </param>
     /// <param name="index"> Index of the body the force acts on. </param>
-    /// <param name="gravitationConst"> Gravitational constant, in the real world 6.67430e-11 m^3 kg^-1 s^-2. </param>
+    /// <param name="gravitationConst"> Gravitational constant, in the real world <see cref="GravitationalConstant.Value"/>. </param>
     /// <remarks> A body at the same place as the target, the target itself included, exerts no force. </remarks>
     public static (N Fx, N Fy) Eval<N>(ReadOnlySpan<(N X, N Y)> positions, ReadOnlySpan<N> masses, int index, N gravitationConst)
         where N : IRootFunctions<N>
@@ -49,7 +49,7 @@ public static class GravitationalForce
     /// <param name="targetMass"> Mass of the body the force acts on. </param>
     /// <param name="positions"> Positions of the attracting bodies. </param>
     /// <param name="masses"> Masses of the attracting bodies, as many as there are positions. </param>
-    /// <param name="gravitationConst"> Gravitational constant, in the real world 6.67430e-11 m^3 kg^-1 s^-2. </param>
+    /// <param name="gravitationConst"> Gravitational constant, in the real world <see cref="GravitationalConstant.Value"/>. </param>
     /// <remarks> A body at the same place as the target exerts no force, which leaves the target itself out if it is among them. </remarks>
     public static (N Fx, N Fy) Eval<N>((N X, N Y) target, N targetMass, ReadOnlySpan<(N X, N Y)> positions, ReadOnlySpan<N> masses, N gravitationConst)
         where N : IRootFunctions<N>

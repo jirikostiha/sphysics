@@ -45,7 +45,7 @@ giving call sites like `GravitationalForce.Outside(m1, m2, r)` or
 | Mechanics | `Velocity`, `Acceleration`, `Jerk`, `Momentum`, `AngularMomentum`, `AngularVelocity`, `AngularAcceleration`, `Torque`, `Impulse`, `Force`, `FrictionForce`, `DragForce`, `MomentOfInertia`, `RadiusOfGyration`, `CenterOfMass`, `CenterOfGravity`, `ReducedMass`, `VelocityVerlet`, `ElasticCollision`, `Bounce` |
 | Bodies | members of the SMath shapes: `Circle.Region`, `Ellipse.Region`, `Rectangle.Region`, `Square.Region`, `Triangle.Region`, `Sphere.Region`, `SphericalShell.Region`, `Ellipsoid.Region`, `Cuboid.Region`, `Cube.Region`, `Cylinder.Region`, `Cone.Region`, `Torus.Region` |
 | Energy & Power | `Energy`, `Work`, `KineticEnergy`, `PotentialEnergy`, `GravitationalEnergy`, `Power`, `ThermalRadiation` |
-| Gravitation | `Gravity`, `GravitationalForce`, `GravitationalIntensity`, `GravitationalPotential`, `NBodyGravity` |
+| Gravitation | `GravitationalConstant`, `Gravity`, `GravitationalForce`, `GravitationalIntensity`, `GravitationalPotential`, `NBodyGravity` |
 | Celestial mechanics | `Barycenter`, `EscapeVelocity`, `MeanAnomaly`, `MeanMotion`, `OrbitalEccentricity`, `OrbitalPeriod`, `SemiMajorAxis`, `TrueAnomaly`, `OrbitalVelocity`, `HillSphere`, `RocheLimit`, `EccentricAnomaly`, `OrbitalStateVectors`, `MeanLongitude` |
 | Other | `Density`, `Distance`, `PlaneAngle`, `SolidAngle`, `Frequency`, `Pressure`, `AbsorbedDose` |
 
@@ -66,7 +66,7 @@ Gravitation, with the numeric type inferred from the arguments:
 using SPhysics;
 using SPhysics.CelestialMechanics;
 
-const double G = 6.67430e-11;
+const double G = GravitationalConstant.Value;
 
 // Newton's law of universal gravitation between two point bodies
 var force = GravitationalForce.Outside(mass1: 5.972e24, mass2: 7.342e22, distance: 3.844e8);
@@ -95,7 +95,7 @@ N-body force accumulation into a stack allocated span:
 ```cs
 using SPhysics;
 
-const double G = 6.67430e-11;
+const double G = GravitationalConstant.Value;
 
 Span<(double X, double Y, double Mass)> bodies = stackalloc (double, double, double)[]
 {

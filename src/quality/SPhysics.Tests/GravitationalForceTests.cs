@@ -1,4 +1,4 @@
-using Xunit;
+﻿using Xunit;
 
 namespace SPhysics.Tests;
 
@@ -79,5 +79,11 @@ public class GravitationalForceTests
             Assert.Equal(masses[i] * accelerations[i].X, fx, 10);
             Assert.Equal(masses[i] * accelerations[i].Y, fy, 10);
         }
+    }
+
+    [Fact]
+    public void OutsideUsesTheGravitationalConstant()
+    {
+        Assert.Equal(GravitationalForce.Outside(2.0, 3.0, 4.0, GravitationalConstant.Value), GravitationalForce.Outside(2.0, 3.0, 4.0));
     }
 }

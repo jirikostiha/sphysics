@@ -1,4 +1,4 @@
-﻿namespace SPhysics;
+namespace SPhysics;
 
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -24,7 +24,7 @@ public static class GravitationalIntensity
     public static N Scalar<N>(N mass, N radius)
         where N : INumberBase<N>
         =>
-        N.CreateTruncating(-6.67430e-11) * mass / (radius * radius);
+        N.CreateTruncating(-GravitationalConstant.Value) * mass / (radius * radius);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N Scalar<N>(N mass, N radius, N gravitationConst)

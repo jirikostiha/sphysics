@@ -27,4 +27,40 @@ public static class KineticEnergy
         where N : INumberBase<N>
         =>
         (momentum * momentum) / (N.CreateTruncating(2) * mass);
+
+    /// <summary> Total kinetic energy of linear motion of bodies in a plane, <c>sum(m * |v|^2 / 2)</c>. </summary>
+    /// <param name="velocities"> Velocities of the bodies. </param>
+    /// <param name="masses"> Masses of the bodies, as many as there are velocities. </param>
+    public static N Total<N>(ReadOnlySpan<(N X, N Y)> velocities, ReadOnlySpan<N> masses)
+        where N : INumberBase<N>
+    {
+        SystemSpans.RequireLengths(velocities.Length, masses.Length);
+
+        N doubled = N.Zero;
+        for (int i = 0; i < velocities.Length; i++)
+        {
+            var (vx, vy) = velocities[i];
+            doubled += masses[i] * ((vx * vx) + (vy * vy));
+        }
+
+        return N.CreateTruncating(0.5) * doubled;
+    }
+
+    /// <summary> Total kinetic energy of linear motion of bodies in space, <c>sum(m * |v|^2 / 2)</c>. </summary>
+    /// <param name="velocities"> Velocities of the bodies. </param>
+    /// <param name="masses"> Masses of the bodies, as many as there are velocities. </param>
+    public static N Total<N>(ReadOnlySpan<(N X, N Y, N Z)> velocities, ReadOnlySpan<N> masses)
+        where N : INumberBase<N>
+    {
+        SystemSpans.RequireLengths(velocities.Length, masses.Length);
+
+        N doubled = N.Zero;
+        for (int i = 0; i < velocities.Length; i++)
+        {
+            var (vx, vy, vz) = velocities[i];
+            doubled += masses[i] * ((vx * vx) + (vy * vy) + (vz * vz));
+        }
+
+        return N.CreateTruncating(0.5) * doubled;
+    }
 }

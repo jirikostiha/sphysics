@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace SPhysics;
@@ -34,36 +34,75 @@ public static class GravitationalEnergy
         =>
         -gravitationConst * mass1 * mass2 / distance;
 
-    /// <summary>Total gravitational energy of the system.</summary>
-    /// <typeparam name="N"> Number type </typeparam>
-    /// <param name="points"> All points </param>
-    /// /// <param name="gravitationConst"> constant in real world G = 6.67430e-11; // m^3 kg^-1 s^-2 </param>
-    public static N Total<N>(Span<(N X, N Y, N Mass)> points, N gravitationConst)
-        where N : INumberBase<N>, IRootFunctions<N>
+    /// <summary>
+    /// Softened gravitational energy of two bodies, <c>-G * m1 * m2 / sqrt(r^2 + softening^2)</c>, the energy of the
+    /// accelerations <see cref="NBodyGravity"/> computes with the same softening.
+    /// </summary>
+    /// <param name="mass1"> Mass of body 1. </param>
+    /// <param name="mass2"> Mass of body 2. </param>
+    /// <param name="distanceSquared"> Squared distance of the bodies, so callers that already have it skip a square root. </param>
+    /// <param name="softening"> Softening length; the effective squared distance is r^2 + softening^2. </param>
+    /// <param name="gravitationConst"> Gravitational constant. </param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static N Softened<N>(N mass1, N mass2, N distanceSquared, N softening, N gravitationConst)
+        where N : IRootFunctions<N>
+        =>
+        mass1 * GravitationalPotential.Softened(mass2, distanceSquared, softening, gravitationConst);
+
+    /// <summary> Total softened gravitational energy of every pair of bodies in a plane (O(n^2)). </summary>
+    /// <remarks> Two bodies at the same place without softening hold no finite energy and are left out. </remarks>
+    /// <param name="positions"> Positions of the bodies. </param>
+    /// <param name="masses"> Masses of the bodies, as many as there are positions. </param>
+    /// <param name="gravitationConst"> Gravitational constant, in the real world 6.67430e-11 m^3 kg^-1 s^-2. </param>
+    /// <param name="softening"> Softening length, zero for the plain Newtonian energy. </param>
+    public static N Total<N>(ReadOnlySpan<(N X, N Y)> positions, ReadOnlySpan<N> masses, N gravitationConst, N softening)
+        where N : IRootFunctions<N>
     {
-        N totalEnergy = N.Zero;
+        SystemSpans.RequireLengths(positions.Length, masses.Length);
 
-        for (int i = 0; i < points.Length; i++)
+        N softeningSquared = softening * softening;
+        N total = N.Zero;
+        for (int i = 0; i < positions.Length; i++)
         {
-            var (x0, y0, m0) = points[i]; // Mass and position of the first body
-
-            for (int j = i + 1; j < points.Length; j++)
+            for (int j = i + 1; j < positions.Length; j++)
             {
-                var (x1, y1, m1) = points[j]; // Mass and position of the second body
-
-                N dx = x1 - x0; // X distance component
-                N dy = y1 - y0; // Y distance component
-                N r2 = dx * dx + dy * dy; // Squared distance between the two bodies
-
-                if (r2 == N.Zero) continue; // Skip if two bodies are at the same location (handle very close bodies)
-
-                // Calculate the gravitational potential energy between the two bodies
-                N energy = Eval(m0, m1, N.Sqrt(r2), gravitationConst);
-
-                totalEnergy += energy;
+                N dx = positions[j].X - positions[i].X;
+                N dy = positions[j].Y - positions[i].Y;
+                N r2 = (dx * dx) + (dy * dy);
+                if (r2 + softeningSquared != N.Zero)
+                    total += Softened(masses[i], masses[j], r2, softening, gravitationConst);
             }
         }
 
-        return totalEnergy; // Return the total gravitational potential energy of the system
+        return total;
+    }
+
+    /// <summary> Total softened gravitational energy of every pair of bodies in space (O(n^2)). </summary>
+    /// <remarks> Two bodies at the same place without softening hold no finite energy and are left out. </remarks>
+    /// <param name="positions"> Positions of the bodies. </param>
+    /// <param name="masses"> Masses of the bodies, as many as there are positions. </param>
+    /// <param name="gravitationConst"> Gravitational constant, in the real world 6.67430e-11 m^3 kg^-1 s^-2. </param>
+    /// <param name="softening"> Softening length, zero for the plain Newtonian energy. </param>
+    public static N Total<N>(ReadOnlySpan<(N X, N Y, N Z)> positions, ReadOnlySpan<N> masses, N gravitationConst, N softening)
+        where N : IRootFunctions<N>
+    {
+        SystemSpans.RequireLengths(positions.Length, masses.Length);
+
+        N softeningSquared = softening * softening;
+        N total = N.Zero;
+        for (int i = 0; i < positions.Length; i++)
+        {
+            for (int j = i + 1; j < positions.Length; j++)
+            {
+                N dx = positions[j].X - positions[i].X;
+                N dy = positions[j].Y - positions[i].Y;
+                N dz = positions[j].Z - positions[i].Z;
+                N r2 = (dx * dx) + (dy * dy) + (dz * dz);
+                if (r2 + softeningSquared != N.Zero)
+                    total += Softened(masses[i], masses[j], r2, softening, gravitationConst);
+            }
+        }
+
+        return total;
     }
 }

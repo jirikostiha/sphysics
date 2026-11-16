@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace SPhysics;
@@ -30,70 +30,46 @@ public static class GravitationalForce
         =>
         -gravitationConst * mass1 * mass2 / (distance * distance);
 
-    /// <summary>Evaluate gravitational force to target point defined by index in collection of other points.</summary>
-    /// <typeparam name="N"> Number type </typeparam>
-    /// <param name="points"> All points. </param>
-    /// <param name="index"> Target point index. </param>
-    /// <param name="gravitationConst"> constant in real world G = 6.67430e-11; // m^3 kg^-1 s^-2 </param>
-    public static (N Fx, N Fy) Eval<N>(Span<(N X, N Y, N Mass)> points, int index, N gravitationConst)
+    /// <summary> Gravitational force on the body at <paramref name="index"/> from all the other bodies in a plane. </summary>
+    /// <param name="positions"> Positions of the bodies. </param>
+    /// <param name="masses"> Masses of the bodies, as many as there are positions. </param>
+    /// <param name="index"> Index of the body the force acts on. </param>
+    /// <param name="gravitationConst"> Gravitational constant, in the real world 6.67430e-11 m^3 kg^-1 s^-2. </param>
+    /// <remarks> A body at the same place as the target, the target itself included, exerts no force. </remarks>
+    public static (N Fx, N Fy) Eval<N>(ReadOnlySpan<(N X, N Y)> positions, ReadOnlySpan<N> masses, int index, N gravitationConst)
         where N : IRootFunctions<N>
     {
-        N Fx = N.Zero, Fy = N.Zero;
+        SystemSpans.RequireLengths(positions.Length, masses.Length);
 
-        var (x0, y0, m0) = points[index];
-        N Gm0 = gravitationConst * m0; // Precompute constant G * m0 for optimization
-
-        for (int i = 0; i < points.Length; i++)
-        {
-            if (i == index) continue; // Skip the body itself (no self-gravity)
-
-            var (xi, yi, mi) = points[i];
-
-            N dx = xi - x0;
-            N dy = yi - y0;
-            N r2 = dx * dx + dy * dy;
-
-            if (r2 == N.Zero) continue; // Avoid division by zero (in case two bodies are at the same position)
-
-            N invR = N.One / N.Sqrt(r2);
-            N invR3 = invR * invR * invR;
-            N F_over_r = Gm0 * mi * invR3; // Force magnitude divided by the distance, so multiplying by dx/dy gives the components
-
-            Fx += F_over_r * dx; // Calculate the x-component of the force
-            Fy += F_over_r * dy; // Calculate the y-component of the force
-        }
-
-        return (Fx, Fy); // Return the total gravitational force components
+        return Eval(positions[index], masses[index], positions, masses, gravitationConst);
     }
 
-    /// <summary>Evaluate gravitational force to target point from other points.</summary>
-    /// <typeparam name="N"> Number type </typeparam>
-    /// <param name="targetPoint"> Target point </param>
-    /// <param name="points"> All points </param>
-    /// <param name="gravitationConst"> constant in real world G = 6.67430e-11; // m^3 kg^-1 s^-2 </param>
-    public static (N Fx, N Fy) Eval<N>((N X, N Y, N Mass) targetPoint, Span<(N X, N Y, N Mass)> points, N gravitationConst)
+    /// <summary> Gravitational force on a target body from the bodies in a plane. </summary>
+    /// <param name="target"> Position of the body the force acts on. </param>
+    /// <param name="targetMass"> Mass of the body the force acts on. </param>
+    /// <param name="positions"> Positions of the attracting bodies. </param>
+    /// <param name="masses"> Masses of the attracting bodies, as many as there are positions. </param>
+    /// <param name="gravitationConst"> Gravitational constant, in the real world 6.67430e-11 m^3 kg^-1 s^-2. </param>
+    /// <remarks> A body at the same place as the target exerts no force, which leaves the target itself out if it is among them. </remarks>
+    public static (N Fx, N Fy) Eval<N>((N X, N Y) target, N targetMass, ReadOnlySpan<(N X, N Y)> positions, ReadOnlySpan<N> masses, N gravitationConst)
         where N : IRootFunctions<N>
     {
+        SystemSpans.RequireLengths(positions.Length, masses.Length);
+
         N Fx = N.Zero, Fy = N.Zero;
+        N GmTarget = gravitationConst * targetMass; // Precompute constant G * mTarget for optimization
 
-        var (xTarget, yTarget, massTarget) = targetPoint;
-        N GmTarget = gravitationConst * massTarget; // Precompute constant G * mTarget for optimization
-
-        for (int i = 0; i < points.Length; i++)
+        for (int i = 0; i < positions.Length; i++)
         {
-            var (xOther, yOther, massOther) = points[i];
-
-            if (xTarget == xOther && yTarget == yOther) continue; // Skip the target point (no self-gravity)
-
-            N dx = xOther - xTarget;
-            N dy = yOther - yTarget;
+            N dx = positions[i].X - target.X;
+            N dy = positions[i].Y - target.Y;
             N r2 = dx * dx + dy * dy;
 
-            if (r2 == N.Zero) continue; // Avoid division by zero (in case two points are at the same position)
+            if (r2 == N.Zero) continue; // Avoid division by zero (the target itself, or a body at its place)
 
             N invR = N.One / N.Sqrt(r2);
             N invR3 = invR * invR * invR;
-            N F_over_r = GmTarget * massOther * invR3; // Force magnitude divided by the distance, so multiplying by dx/dy gives the components
+            N F_over_r = GmTarget * masses[i] * invR3; // Force magnitude divided by the distance, so multiplying by dx/dy gives the components
 
             Fx += F_over_r * dx; // Calculate the x-component of the force
             Fy += F_over_r * dy; // Calculate the y-component of the force

@@ -47,5 +47,52 @@ public static class MomentOfInertia
         =>
         ReducedMass.Eval(mass1, mass2) * (distance * distance);
 
+    /// <summary>
+    /// Point masses in a plane about the axis through <paramref name="origin"/> perpendicular to the plane,
+    /// <c>sum(m * |r - o|^2)</c>.
+    /// </summary>
+    /// <param name="positions"> Positions of the points. </param>
+    /// <param name="masses"> Masses of the points, as many as there are positions. </param>
+    /// <param name="origin"> Point the axis passes through. </param>
+    public static N Total<N>(ReadOnlySpan<(N X, N Y)> positions, ReadOnlySpan<N> masses, (N X, N Y) origin)
+        where N : INumberBase<N>
+    {
+        SystemSpans.RequireLengths(positions.Length, masses.Length);
+
+        N total = N.Zero;
+        for (int i = 0; i < positions.Length; i++)
+        {
+            N dx = positions[i].X - origin.X;
+            N dy = positions[i].Y - origin.Y;
+            total += masses[i] * ((dx * dx) + (dy * dy));
+        }
+
+        return total;
+    }
+
+    /// <summary>
+    /// Point masses in space about <paramref name="origin"/>, the polar moment <c>sum(m * |r - o|^2)</c>; it is half the
+    /// sum of the moments about three perpendicular axes through the point.
+    /// </summary>
+    /// <param name="positions"> Positions of the points. </param>
+    /// <param name="masses"> Masses of the points, as many as there are positions. </param>
+    /// <param name="origin"> Point the moment is taken about. </param>
+    public static N Total<N>(ReadOnlySpan<(N X, N Y, N Z)> positions, ReadOnlySpan<N> masses, (N X, N Y, N Z) origin)
+        where N : INumberBase<N>
+    {
+        SystemSpans.RequireLengths(positions.Length, masses.Length);
+
+        N total = N.Zero;
+        for (int i = 0; i < positions.Length; i++)
+        {
+            N dx = positions[i].X - origin.X;
+            N dy = positions[i].Y - origin.Y;
+            N dz = positions[i].Z - origin.Z;
+            total += masses[i] * ((dx * dx) + (dy * dy) + (dz * dz));
+        }
+
+        return total;
+    }
+
     #endregion
 }

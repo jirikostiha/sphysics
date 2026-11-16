@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1793468090754,
+  "lastUpdate": 1794841107040,
   "repoUrl": "https://github.com/jirikostiha/sphysics",
   "entries": {
     "Benchmark.Net": [
@@ -3296,6 +3296,36 @@ window.BENCHMARK_DATA = {
             "value": 3700079.8588867188,
             "unit": "ns",
             "range": "± 71769.21075081821"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "committer": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "distinct": true,
+          "id": "cf7cd941dffd0d1cc9fb692883f5f5a33336b4bf",
+          "message": "feat: impact and heat laws\n\n- Restitution: velocity change, impulse, shares\n- InelasticCollision: merge, energy loss\n- two-body center of mass\n- vector kinetic energy, recoil\n- Heat: Q = m c dT\n- Volume and ball radius\n- Bounce, ElasticCollision use Restitution\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-16T15:47:48+01:00",
+          "tree_id": "56b65feeef2daed065d4715197829656b24af30b",
+          "url": "https://github.com/jirikostiha/sphysics/commit/cf7cd941dffd0d1cc9fb692883f5f5a33336b4bf"
+        },
+        "date": 1794841106741,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "SPhysics.GravitationalForceBenchmark.Outside",
+            "value": 12319.273462568011,
+            "unit": "ns",
+            "range": "± 19.803189704284872"
           }
         ]
       }

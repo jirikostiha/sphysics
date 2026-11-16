@@ -8,7 +8,7 @@ namespace SPhysics.CelestialMechanics;
 public static class MeanLongitude
 {
     /// <summary>Mean longitude from the longitude of the pericenter and the mean anomaly, L = varpi + M.</summary>
-    /// <remarks> The inverse of <see cref="MeanAnomaly.Eval2{N}"/>. </remarks>
+    /// <remarks> The inverse of <see cref="MeanAnomaly.FromMeanLongitude{N}"/>. </remarks>
     /// <param name="longitudeOfThePericenter"> Longitude of the pericenter, the sum of the longitude of the ascending node and the argument of the pericenter. </param>
     /// <param name="meanAnomaly"> Mean anomaly. </param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

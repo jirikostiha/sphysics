@@ -1,5 +1,8 @@
-using System.Numerics;
+﻿using System.Numerics;
 using System.Runtime.CompilerServices;
+
+using SMath.Geometry2D;
+using SMath.Geometry3D;
 
 namespace SPhysics;
 
@@ -27,12 +30,12 @@ public static class GravitationalEnergy
     /// <param name="mass1"> Mass of point 1 </param>
     /// <param name="mass2"> Mass of point 2 </param>
     /// <param name="distance"> Distance of points. </param>
-    /// /// <param name="gravitationConst"> constant in real world G = 6.67430e-11; // m^3 kg^-1 s^-2 </param>
+    /// <param name="gravitationalConstant"> Gravitational constant, in the real world <see cref="GravitationalConstant.Value"/>. </param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static N Eval<N>(N mass1, N mass2, N distance, N gravitationConst)
+    public static N Eval<N>(N mass1, N mass2, N distance, N gravitationalConstant)
         where N : IMultiplyOperators<N, N, N>, IDivisionOperators<N, N, N>, IUnaryNegationOperators<N, N>
         =>
-        -gravitationConst * mass1 * mass2 / distance;
+        -gravitationalConstant * mass1 * mass2 / distance;
 
     /// <summary>
     /// Softened gravitational energy of two bodies, <c>-G * m1 * m2 / sqrt(r^2 + softening^2)</c>, the energy of the
@@ -42,36 +45,38 @@ public static class GravitationalEnergy
     /// <param name="mass2"> Mass of body 2. </param>
     /// <param name="distanceSquared"> Squared distance of the bodies, so callers that already have it skip a square root. </param>
     /// <param name="softening"> Softening length; the effective squared distance is r^2 + softening^2. </param>
-    /// <param name="gravitationConst"> Gravitational constant. </param>
+    /// <param name="gravitationalConstant"> Gravitational constant. </param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static N Softened<N>(N mass1, N mass2, N distanceSquared, N softening, N gravitationConst)
+    public static N Softened<N>(N mass1, N mass2, N distanceSquared, N softening, N gravitationalConstant)
         where N : IRootFunctions<N>
         =>
-        mass1 * GravitationalPotential.Softened(mass2, distanceSquared, softening, gravitationConst);
+        mass1 * GravitationalPotential.Softened(mass2, distanceSquared, softening, gravitationalConstant);
 
     /// <summary> Total softened gravitational energy of every pair of bodies in a plane (O(n^2)). </summary>
     /// <remarks> Two bodies at the same place without softening hold no finite energy and are left out. </remarks>
     /// <param name="positions"> Positions of the bodies. </param>
     /// <param name="masses"> Masses of the bodies, as many as there are positions. </param>
-    /// <param name="gravitationConst"> Gravitational constant, in the real world 6.67430e-11 m^3 kg^-1 s^-2. </param>
+    /// <param name="gravitationalConstant"> Gravitational constant, in the real world <see cref="GravitationalConstant.Value"/>. </param>
     /// <param name="softening"> Softening length, zero for the plain Newtonian energy. </param>
-    public static N Total<N>(ReadOnlySpan<(N X, N Y)> positions, ReadOnlySpan<N> masses, N gravitationConst, N softening)
+    public static N Total<N>(ReadOnlySpan<(N X, N Y)> positions, ReadOnlySpan<N> masses, N gravitationalConstant, N softening)
         where N : IRootFunctions<N>
     {
         SystemSpans.RequireLengths(positions.Length, masses.Length);
 
-        N softeningSquared = softening * softening;
         N total = N.Zero;
         for (int i = 0; i < positions.Length; i++)
         {
+            // potential of the later bodies at body i, so its mass multiplies once
+            N potential = N.Zero;
             for (int j = i + 1; j < positions.Length; j++)
             {
-                N dx = positions[j].X - positions[i].X;
-                N dy = positions[j].Y - positions[i].Y;
-                N r2 = (dx * dx) + (dy * dy);
-                if (r2 + softeningSquared != N.Zero)
-                    total += Softened(masses[i], masses[j], r2, softening, gravitationConst);
+                var separation = GeometricVector2.Direction.FromCartesian(positions[i], positions[j]);
+                N r2 = GeometricVector2.DotProduct.FromCartesian(separation, separation);
+                if (r2 != N.Zero || softening != N.Zero)
+                    potential += GravitationalPotential.Softened(masses[j], r2, softening, gravitationalConstant);
             }
+
+            total += masses[i] * potential;
         }
 
         return total;
@@ -81,26 +86,27 @@ public static class GravitationalEnergy
     /// <remarks> Two bodies at the same place without softening hold no finite energy and are left out. </remarks>
     /// <param name="positions"> Positions of the bodies. </param>
     /// <param name="masses"> Masses of the bodies, as many as there are positions. </param>
-    /// <param name="gravitationConst"> Gravitational constant, in the real world 6.67430e-11 m^3 kg^-1 s^-2. </param>
+    /// <param name="gravitationalConstant"> Gravitational constant, in the real world <see cref="GravitationalConstant.Value"/>. </param>
     /// <param name="softening"> Softening length, zero for the plain Newtonian energy. </param>
-    public static N Total<N>(ReadOnlySpan<(N X, N Y, N Z)> positions, ReadOnlySpan<N> masses, N gravitationConst, N softening)
+    public static N Total<N>(ReadOnlySpan<(N X, N Y, N Z)> positions, ReadOnlySpan<N> masses, N gravitationalConstant, N softening)
         where N : IRootFunctions<N>
     {
         SystemSpans.RequireLengths(positions.Length, masses.Length);
 
-        N softeningSquared = softening * softening;
         N total = N.Zero;
         for (int i = 0; i < positions.Length; i++)
         {
+            // potential of the later bodies at body i, so its mass multiplies once
+            N potential = N.Zero;
             for (int j = i + 1; j < positions.Length; j++)
             {
-                N dx = positions[j].X - positions[i].X;
-                N dy = positions[j].Y - positions[i].Y;
-                N dz = positions[j].Z - positions[i].Z;
-                N r2 = (dx * dx) + (dy * dy) + (dz * dz);
-                if (r2 + softeningSquared != N.Zero)
-                    total += Softened(masses[i], masses[j], r2, softening, gravitationConst);
+                var separation = GeometricVector3.Direction.FromCartesian(positions[i], positions[j]);
+                N r2 = GeometricVector3.DotProduct.FromCartesian(separation, separation);
+                if (r2 != N.Zero || softening != N.Zero)
+                    potential += GravitationalPotential.Softened(masses[j], r2, softening, gravitationalConstant);
             }
+
+            total += masses[i] * potential;
         }
 
         return total;

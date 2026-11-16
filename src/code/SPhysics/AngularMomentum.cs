@@ -1,6 +1,9 @@
 ﻿using System.Numerics;
 using System.Runtime.CompilerServices;
 
+using SMath.Geometry2D;
+using SMath.Geometry3D;
+
 namespace SPhysics;
 
 /// <summary>Angular momentum</summary>
@@ -50,9 +53,8 @@ public static class AngularMomentum
         N total = N.Zero;
         for (int i = 0; i < positions.Length; i++)
         {
-            N rx = positions[i].X - origin.X;
-            N ry = positions[i].Y - origin.Y;
-            total += masses[i] * ((rx * velocities[i].Y) - (ry * velocities[i].X));
+            var arm = GeometricVector2.Direction.FromCartesian(origin, positions[i]);
+            total += masses[i] * GeometricVector2.CrossProduct.FromCartesian(arm, velocities[i]);
         }
 
         return total;
@@ -78,13 +80,11 @@ public static class AngularMomentum
         N z = N.Zero;
         for (int i = 0; i < positions.Length; i++)
         {
-            N rx = positions[i].X - origin.X;
-            N ry = positions[i].Y - origin.Y;
-            N rz = positions[i].Z - origin.Z;
-            var (vx, vy, vz) = velocities[i];
-            x += masses[i] * ((ry * vz) - (rz * vy));
-            y += masses[i] * ((rz * vx) - (rx * vz));
-            z += masses[i] * ((rx * vy) - (ry * vx));
+            var arm = GeometricVector3.Direction.FromCartesian(origin, positions[i]);
+            var (lx, ly, lz) = GeometricVector3.CrossProduct.FromCartesian(arm, velocities[i]);
+            x += masses[i] * lx;
+            y += masses[i] * ly;
+            z += masses[i] * lz;
         }
 
         return (x, y, z);

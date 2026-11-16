@@ -21,10 +21,10 @@ public static class Mass
     /// <summary>Mass</summary>
     /// <remarks><a href="https://math-physics-calc.com/gravitational-force-calculator">calculator</a></remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static N FromGravitation<N>(N force, N distance, N mass2, N gravitationConst)
+    public static N FromGravitation<N>(N force, N distance, N mass2, N gravitationalConstant)
         where N : IMultiplyOperators<N, N, N>, IDivisionOperators<N, N, N>
         =>
-        force * (distance * distance) / (mass2 * gravitationConst);
+        force * (distance * distance) / (mass2 * gravitationalConstant);
 
     /// <summary> Mass of a body accelerated by the given force, from Newton's second law. </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

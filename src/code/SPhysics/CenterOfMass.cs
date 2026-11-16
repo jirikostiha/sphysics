@@ -15,20 +15,8 @@ public static class CenterOfMass
     public static (N X, N Y) Eval<N>(ReadOnlySpan<(N X, N Y)> positions, ReadOnlySpan<N> masses)
         where N : INumberBase<N>
     {
-        SystemSpans.RequireLengths(positions.Length, masses.Length);
-
-        N totalMass = N.Zero;
-        N x = N.Zero;
-        N y = N.Zero;
-
-        for (int i = 0; i < positions.Length; i++)
-        {
-            totalMass += masses[i];
-            x += positions[i].X * masses[i];
-            y += positions[i].Y * masses[i];
-        }
-
-        return (x / totalMass, y / totalMass);
+        var (sum, mass) = SystemSpans.MassWeighted(positions, masses);
+        return (sum.X / mass, sum.Y / mass);
     }
 
     /// <summary> Center of mass of points in space, <c>sum(m * r) / sum(m)</c>. </summary>
@@ -37,22 +25,8 @@ public static class CenterOfMass
     public static (N X, N Y, N Z) Eval<N>(ReadOnlySpan<(N X, N Y, N Z)> positions, ReadOnlySpan<N> masses)
         where N : INumberBase<N>
     {
-        SystemSpans.RequireLengths(positions.Length, masses.Length);
-
-        N totalMass = N.Zero;
-        N x = N.Zero;
-        N y = N.Zero;
-        N z = N.Zero;
-
-        for (int i = 0; i < positions.Length; i++)
-        {
-            totalMass += masses[i];
-            x += positions[i].X * masses[i];
-            y += positions[i].Y * masses[i];
-            z += positions[i].Z * masses[i];
-        }
-
-        return (x / totalMass, y / totalMass, z / totalMass);
+        var (sum, mass) = SystemSpans.MassWeighted(positions, masses);
+        return (sum.X / mass, sum.Y / mass, sum.Z / mass);
     }
 
     /// <summary> Velocity of the center of mass of points in a plane, <c>sum(m * v) / sum(m)</c>. </summary>
@@ -61,7 +35,6 @@ public static class CenterOfMass
     public static (N X, N Y) Velocity<N>(ReadOnlySpan<(N X, N Y)> velocities, ReadOnlySpan<N> masses)
         where N : INumberBase<N>
         =>
-        // the velocity is weighted by mass exactly as the position is
         Eval(velocities, masses);
 
     /// <summary> Velocity of the center of mass of points in space, <c>sum(m * v) / sum(m)</c>. </summary>

@@ -82,13 +82,13 @@ public class SystemOfBodiesTests
     }
 
     [Fact]
-    public void MomentOfInertiaTotalOfTwoPointsAboutTheirCenterUsesTheReducedMass()
+    public void MomentOfInertiaPolarOfTwoPointsAboutTheirCenterUsesTheReducedMass()
     {
         (double X, double Y, double Z)[] positions = [(0.0, 0.0, 0.0), (0.0, 0.0, 6.0)];
         double[] masses = [1.0, 2.0];
         var center = CenterOfMass.Eval<double>(positions, masses);
 
-        double moment = MomentOfInertia.Total<double>(positions, masses, center);
+        double moment = MomentOfInertia.Polar<double>(positions, masses, center);
 
         Assert.Equal(MomentOfInertia.TwoPoints(1.0, 2.0, 6.0), moment, 10);
     }

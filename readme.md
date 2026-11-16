@@ -95,16 +95,10 @@ N-body force accumulation into a stack allocated span:
 ```cs
 using SPhysics;
 
-const double G = GravitationalConstant.Value;
+(double X, double Y)[] positions = [(0, 0), (3.844e8, 0), (1.496e11, 0)];
+double[] masses = [5.972e24, 7.342e22, 1.989e30];
 
-Span<(double X, double Y, double Mass)> bodies = stackalloc (double, double, double)[]
-{
-    (0, 0, 5.972e24),
-    (3.844e8, 0, 7.342e22),
-    (1.496e11, 0, 1.989e30),
-};
-
-var (fx, fy) = GravitationalForce.Eval<double>(bodies, index: 0, gravitationConst: G);
+var (fx, fy) = GravitationalForce.Eval<double>(positions, masses, index: 0, gravitationalConstant: GravitationalConstant.Value);
 ```
 
 A body is the SMath shape it is made of: its geometry comes from SMath, its physics from SPhysics,

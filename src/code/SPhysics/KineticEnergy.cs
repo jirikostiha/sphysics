@@ -1,6 +1,9 @@
 ﻿using System.Numerics;
 using System.Runtime.CompilerServices;
 
+using SMath.Geometry2D;
+using SMath.Geometry3D;
+
 namespace SPhysics;
 
 /// <summary>Kinetic energy</summary>
@@ -39,8 +42,7 @@ public static class KineticEnergy
         N doubled = N.Zero;
         for (int i = 0; i < velocities.Length; i++)
         {
-            var (vx, vy) = velocities[i];
-            doubled += masses[i] * ((vx * vx) + (vy * vy));
+            doubled += masses[i] * GeometricVector2.DotProduct.FromCartesian(velocities[i], velocities[i]);
         }
 
         return N.CreateTruncating(0.5) * doubled;
@@ -57,8 +59,7 @@ public static class KineticEnergy
         N doubled = N.Zero;
         for (int i = 0; i < velocities.Length; i++)
         {
-            var (vx, vy, vz) = velocities[i];
-            doubled += masses[i] * ((vx * vx) + (vy * vy) + (vz * vz));
+            doubled += masses[i] * GeometricVector3.DotProduct.FromCartesian(velocities[i], velocities[i]);
         }
 
         return N.CreateTruncating(0.5) * doubled;

@@ -26,7 +26,7 @@ public static class OrbitalStateVectors
     /// <param name="eccentricity"> Orbital eccentricity, 0 &lt;= e &lt; 1. </param>
     /// <param name="eccentricAnomaly"> Eccentric anomaly in radians, see <see cref="EccentricAnomaly.FromMeanAnomaly{N}"/>. </param>
     /// <param name="mass"> Mass of the central body; the sum of both masses for a body that is not small. </param>
-    /// <param name="gravitationalConstant"> constant in real world G = 6.67430e-11; // m^3 kg^-1 s^-2 </param>
+    /// <param name="gravitationalConstant"> Gravitational constant, in the real world <see cref="GravitationalConstant.Value"/>. </param>
     public static (N X, N Y) Velocity<N>(N semiMajorAxis, N eccentricity, N eccentricAnomaly, N mass, N gravitationalConstant)
         where N : IFloatingPointIeee754<N>
     {

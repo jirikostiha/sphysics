@@ -65,16 +65,16 @@ public class GravitationalForceTests
     public void EvalAgreesWithNBodyGravityAccelerations()
     {
         // F_i = m_i * a_i, checked against the independent NBodyGravity implementation
-        const double gravitationConst = 1.0;
+        const double gravitationalConstant = 1.0;
         (double X, double Y)[] positions = [(0.0, 0.0), (3.0, 0.0), (0.0, 4.0)];
         double[] masses = [5.0, 2.0, 7.0];
         var accelerations = new (double X, double Y)[3];
 
-        NBodyGravity.ComputeAccelerations<double>(positions, masses, gravitationConst, 0.0, accelerations);
+        NBodyGravity.ComputeAccelerations<double>(positions, masses, gravitationalConstant, 0.0, accelerations);
 
         for (int i = 0; i < positions.Length; i++)
         {
-            var (fx, fy) = GravitationalForce.Eval<double>(positions, masses, i, gravitationConst);
+            var (fx, fy) = GravitationalForce.Eval<double>(positions, masses, i, gravitationalConstant);
 
             Assert.Equal(masses[i] * accelerations[i].X, fx, 10);
             Assert.Equal(masses[i] * accelerations[i].Y, fy, 10);

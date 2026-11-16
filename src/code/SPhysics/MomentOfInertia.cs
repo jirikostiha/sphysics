@@ -1,5 +1,8 @@
 ﻿using System.Numerics;
 
+using SMath.Geometry2D;
+using SMath.Geometry3D;
+
 namespace SPhysics;
 
 /// <summary>Moment of inertia quantity.</summary>
@@ -62,22 +65,21 @@ public static class MomentOfInertia
         N total = N.Zero;
         for (int i = 0; i < positions.Length; i++)
         {
-            N dx = positions[i].X - origin.X;
-            N dy = positions[i].Y - origin.Y;
-            total += masses[i] * ((dx * dx) + (dy * dy));
+            var arm = GeometricVector2.Direction.FromCartesian(origin, positions[i]);
+            total += masses[i] * GeometricVector2.DotProduct.FromCartesian(arm, arm);
         }
 
         return total;
     }
 
     /// <summary>
-    /// Point masses in space about <paramref name="origin"/>, the polar moment <c>sum(m * |r - o|^2)</c>; it is half the
-    /// sum of the moments about three perpendicular axes through the point.
+    /// Polar moment of point masses in space about the point <paramref name="origin"/>, <c>sum(m * |r - o|^2)</c>; it is
+    /// half the sum of the moments about three perpendicular axes through the point, not a moment about an axis.
     /// </summary>
     /// <param name="positions"> Positions of the points. </param>
     /// <param name="masses"> Masses of the points, as many as there are positions. </param>
     /// <param name="origin"> Point the moment is taken about. </param>
-    public static N Total<N>(ReadOnlySpan<(N X, N Y, N Z)> positions, ReadOnlySpan<N> masses, (N X, N Y, N Z) origin)
+    public static N Polar<N>(ReadOnlySpan<(N X, N Y, N Z)> positions, ReadOnlySpan<N> masses, (N X, N Y, N Z) origin)
         where N : INumberBase<N>
     {
         SystemSpans.RequireLengths(positions.Length, masses.Length);
@@ -85,10 +87,8 @@ public static class MomentOfInertia
         N total = N.Zero;
         for (int i = 0; i < positions.Length; i++)
         {
-            N dx = positions[i].X - origin.X;
-            N dy = positions[i].Y - origin.Y;
-            N dz = positions[i].Z - origin.Z;
-            total += masses[i] * ((dx * dx) + (dy * dy) + (dz * dz));
+            var arm = GeometricVector3.Direction.FromCartesian(origin, positions[i]);
+            total += masses[i] * GeometricVector3.DotProduct.FromCartesian(arm, arm);
         }
 
         return total;

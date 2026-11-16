@@ -93,12 +93,12 @@ public static class SphereRegionPhysics
         /// <typeparam name="N"> Number type </typeparam>
         /// <param name="mass"> Mass of the sphere. </param>
         /// <param name="radius"> Radius of the sphere. </param>
-        /// <param name="gravitationConst"> constant in real world G = 6.67430e-11; // m^3 kg^-1 s^-2 </param>
+        /// <param name="gravitationalConstant"> Gravitational constant, in the real world <see cref="GravitationalConstant.Value"/>. </param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public N FromMass<N>(N mass, N radius, N gravitationConst)
+        public N FromMass<N>(N mass, N radius, N gravitationalConstant)
             where N : INumberBase<N>
             =>
-            -(N.CreateChecked(3) / N.CreateChecked(5)) * gravitationConst * mass * mass / radius;
+            -(N.CreateChecked(3) / N.CreateChecked(5)) * gravitationalConstant * mass * mass / radius;
     }
 
     /// <summary> Drag coefficients of a ball in real world, the input of <see cref="DragForce.InFluid{N}"/>. </summary>

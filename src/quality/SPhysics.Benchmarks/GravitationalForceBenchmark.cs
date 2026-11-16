@@ -7,7 +7,7 @@ namespace SPhysics;
 public class GravitationalForceBenchmark
 {
     private const int N = 10000;
-    private const double G = 6.67430e-11;
+    private const double G = GravitationalConstant.Value;
 
     [Benchmark]
     public double Outside()

@@ -4,9 +4,10 @@ using System.Runtime.CompilerServices;
 namespace SPhysics;
 
 /// <summary>Angular velocity.</summary>
-/// <remarks><a href="">wikipedia</a></remarks>
+/// <remarks><a href="https://en.wikipedia.org/wiki/Angular_velocity">wikipedia</a></remarks>
 public static class AngularVelocity
 {
+    /// <summary> Angular velocity of a point moving at <paramref name="velocity"/> on a circle of <paramref name="radius"/>, <c>v / r</c>. </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N FromLinearVelocity<N>(N velocity, N radius)
         where N : IDivisionOperators<N, N, N>

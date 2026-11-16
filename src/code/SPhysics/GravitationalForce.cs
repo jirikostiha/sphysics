@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace SPhysics;
@@ -23,25 +23,25 @@ public static class GravitationalForce
     /// <param name="mass1"> Mass of point 1 </param>
     /// <param name="mass2"> Mass of point 2 </param>
     /// <param name="distance"> Distance of points. </param>
-    /// <param name="gravitationConst"> constant in real world G = 6.67430e-11; // m^3 kg^-1 s^-2 </param>
+    /// <param name="gravitationalConstant"> Gravitational constant, in the real world <see cref="GravitationalConstant.Value"/>. </param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static N Outside<N>(N mass1, N mass2, N distance, N gravitationConst)
+    public static N Outside<N>(N mass1, N mass2, N distance, N gravitationalConstant)
         where N : IMultiplyOperators<N, N, N>, IDivisionOperators<N, N, N>, IUnaryNegationOperators<N, N>
         =>
-        -gravitationConst * mass1 * mass2 / (distance * distance);
+        -gravitationalConstant * mass1 * mass2 / (distance * distance);
 
     /// <summary> Gravitational force on the body at <paramref name="index"/> from all the other bodies in a plane. </summary>
     /// <param name="positions"> Positions of the bodies. </param>
     /// <param name="masses"> Masses of the bodies, as many as there are positions. </param>
     /// <param name="index"> Index of the body the force acts on. </param>
-    /// <param name="gravitationConst"> Gravitational constant, in the real world <see cref="GravitationalConstant.Value"/>. </param>
+    /// <param name="gravitationalConstant"> Gravitational constant, in the real world <see cref="GravitationalConstant.Value"/>. </param>
     /// <remarks> A body at the same place as the target, the target itself included, exerts no force. </remarks>
-    public static (N Fx, N Fy) Eval<N>(ReadOnlySpan<(N X, N Y)> positions, ReadOnlySpan<N> masses, int index, N gravitationConst)
+    public static (N Fx, N Fy) Eval<N>(ReadOnlySpan<(N X, N Y)> positions, ReadOnlySpan<N> masses, int index, N gravitationalConstant)
         where N : IRootFunctions<N>
     {
         SystemSpans.RequireLengths(positions.Length, masses.Length);
 
-        return Eval(positions[index], masses[index], positions, masses, gravitationConst);
+        return Eval(positions[index], masses[index], positions, masses, gravitationalConstant);
     }
 
     /// <summary> Gravitational force on a target body from the bodies in a plane. </summary>
@@ -49,15 +49,15 @@ public static class GravitationalForce
     /// <param name="targetMass"> Mass of the body the force acts on. </param>
     /// <param name="positions"> Positions of the attracting bodies. </param>
     /// <param name="masses"> Masses of the attracting bodies, as many as there are positions. </param>
-    /// <param name="gravitationConst"> Gravitational constant, in the real world <see cref="GravitationalConstant.Value"/>. </param>
+    /// <param name="gravitationalConstant"> Gravitational constant, in the real world <see cref="GravitationalConstant.Value"/>. </param>
     /// <remarks> A body at the same place as the target exerts no force, which leaves the target itself out if it is among them. </remarks>
-    public static (N Fx, N Fy) Eval<N>((N X, N Y) target, N targetMass, ReadOnlySpan<(N X, N Y)> positions, ReadOnlySpan<N> masses, N gravitationConst)
+    public static (N Fx, N Fy) Eval<N>((N X, N Y) target, N targetMass, ReadOnlySpan<(N X, N Y)> positions, ReadOnlySpan<N> masses, N gravitationalConstant)
         where N : IRootFunctions<N>
     {
         SystemSpans.RequireLengths(positions.Length, masses.Length);
 
         N Fx = N.Zero, Fy = N.Zero;
-        N GmTarget = gravitationConst * targetMass; // Precompute constant G * mTarget for optimization
+        N GmTarget = gravitationalConstant * targetMass;
 
         for (int i = 0; i < positions.Length; i++)
         {
@@ -71,10 +71,10 @@ public static class GravitationalForce
             N invR3 = invR * invR * invR;
             N F_over_r = GmTarget * masses[i] * invR3; // Force magnitude divided by the distance, so multiplying by dx/dy gives the components
 
-            Fx += F_over_r * dx; // Calculate the x-component of the force
-            Fy += F_over_r * dy; // Calculate the y-component of the force
+            Fx += F_over_r * dx;
+            Fy += F_over_r * dy;
         }
 
-        return (Fx, Fy); // Return the total gravitational force components
+        return (Fx, Fy);
     }
 }

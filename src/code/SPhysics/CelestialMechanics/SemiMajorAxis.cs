@@ -14,7 +14,7 @@ public static class SemiMajorAxis
     /// <typeparam name="N"> Number type </typeparam>
     /// <param name="mass"> Mass of the central body. </param>
     /// <param name="orbitalPeriod"> Orbital period. </param>
-    /// <param name="gravitationalConstant"> constant in real world G = 6.67430e-11; // m^3 kg^-1 s^-2 </param>
+    /// <param name="gravitationalConstant"> Gravitational constant, in the real world <see cref="GravitationalConstant.Value"/>. </param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N FromOrbitalPeriod<N>(N mass, N orbitalPeriod, N gravitationalConstant)
         where N : ITrigonometricFunctions<N>, IPowerFunctions<N>

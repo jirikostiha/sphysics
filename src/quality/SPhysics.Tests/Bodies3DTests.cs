@@ -69,7 +69,7 @@ public class Bodies3DTests
     [Fact]
     public void CentralPressureMatchesTheIntegratedHydrostaticEquation()
     {
-        const double g = 6.67430e-11;
+        const double g = GravitationalConstant.Value;
         const double mass = 5.972e24;
         const double radius = 6.371e6;
         double density = Density.Average(Sphere.Region.Volume.FromRadius(radius), mass);
@@ -83,7 +83,7 @@ public class Bodies3DTests
     [Fact]
     public void CentralPressureOfTheEarthIsAbout170Gigapascals()
     {
-        var pressure = Sphere.Region.CentralPressure.FromMass(5.972e24, 6.371e6, 6.67430e-11);
+        var pressure = Sphere.Region.CentralPressure.FromMass(5.972e24, 6.371e6, GravitationalConstant.Value);
 
         Assert.InRange(pressure, 1.6e11, 1.8e11);
     }
@@ -104,13 +104,13 @@ public class Bodies3DTests
     public void GravitationalEnergyHoldsThreeFifthsOfThePointEnergy()
     {
         // -3/5 * G * m^2 / r = -0.6 * 1.5 * 2 * 2 / 4
-        Assert.Equal(-0.9, Sphere.Region.GravitationalEnergy.FromMass(mass: 2.0, radius: 4.0, gravitationConst: 1.5), Precision);
+        Assert.Equal(-0.9, Sphere.Region.GravitationalEnergy.FromMass(mass: 2.0, radius: 4.0, gravitationalConstant: 1.5), Precision);
     }
 
     [Fact]
     public void GravitationalEnergyGivesTheBindingEnergyOfTheEarth()
     {
-        double energy = Sphere.Region.GravitationalEnergy.FromMass(mass: 5.972e24, radius: 6.371e6, gravitationConst: 6.6743e-11);
+        double energy = Sphere.Region.GravitationalEnergy.FromMass(mass: 5.972e24, radius: 6.371e6, gravitationalConstant: GravitationalConstant.Value);
 
         // About 2.24e32 J for a uniform Earth.
         Assert.Equal(-2.2417e32, energy, tolerance: 0.0001e32);

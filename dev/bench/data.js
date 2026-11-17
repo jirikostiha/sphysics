@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794841724579,
+  "lastUpdate": 1794905871405,
   "repoUrl": "https://github.com/jirikostiha/sphysics",
   "entries": {
     "Benchmark.Net": [
@@ -3386,6 +3386,36 @@ window.BENCHMARK_DATA = {
             "value": 20112.786653958836,
             "unit": "ns",
             "range": "± 18.036554246903624"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "committer": {
+            "email": "ijkdata@gmail.com",
+            "name": "Jiri Kostiha",
+            "username": "jirikostiha"
+          },
+          "distinct": true,
+          "id": "e93d631b3c26c6df5efc9e30c1feb4f2452af18d",
+          "message": "refactor: ThermalRadiation - take the fourth root from SMath\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-17T09:35:33+01:00",
+          "tree_id": "e466ce489ab0a5367bc001c5d0ae38e4cd1a4805",
+          "url": "https://github.com/jirikostiha/sphysics/commit/e93d631b3c26c6df5efc9e30c1feb4f2452af18d"
+        },
+        "date": 1794905871104,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "SPhysics.GravitationalForceBenchmark.Outside",
+            "value": 13371.962712969098,
+            "unit": "ns",
+            "range": "± 34.0578019991166"
           }
         ]
       }

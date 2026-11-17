@@ -23,6 +23,23 @@ public static class Velocity
         =>
         angularVelocity * radius;
 
+    /// <summary>
+    /// Share of its velocity a body of the given mass keeps after a time under linear drag, the force <c>-b * v</c>:
+    /// <c>exp(-b * t / m)</c>, the exact solution of <c>m * dv/dt = -b * v</c>.
+    /// </summary>
+    /// <remarks>
+    /// <a href="https://en.wikipedia.org/wiki/Drag_(physics)#Very_low_Reynolds_numbers:_Stokes'_drag">wikipedia</a>.
+    /// Exact for any time, so a step of any length neither overshoots nor reverses the motion.
+    /// </remarks>
+    /// <param name="dragCoefficient"> Linear drag coefficient <c>b</c>, force per velocity. </param>
+    /// <param name="mass"> Mass of the body. </param>
+    /// <param name="time"> Time spent under the drag. </param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static N RetainedUnderLinearDrag<N>(N dragCoefficient, N mass, N time)
+        where N : IExponentialFunctions<N>
+        =>
+        N.Exp(-(dragCoefficient * time / mass));
+
     /// <summary> Average velocity over a distance travelled in a time span. </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N Eval<N>(N distance, N time)

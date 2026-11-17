@@ -31,6 +31,23 @@ public class BasicFormulaTests
     }
 
     [Fact]
+    public void RetainedUnderLinearDragDecaysExponentially()
+    {
+        // b / m = 0.5 per second: after 2 s the body keeps e^-1 of its velocity
+        Assert.Equal(Math.Exp(-1.0), Velocity.RetainedUnderLinearDrag(dragCoefficient: 2.0, mass: 4.0, time: 2.0), 12);
+        Assert.Equal(1.0, Velocity.RetainedUnderLinearDrag(dragCoefficient: 2.0, mass: 4.0, time: 0.0), 12);
+        Assert.Equal(1.0, Velocity.RetainedUnderLinearDrag(dragCoefficient: 0.0, mass: 4.0, time: 2.0), 12);
+    }
+
+    [Fact]
+    public void RetainedUnderLinearDragOverTwoStepsEqualsOneOverTheirSum()
+    {
+        double twoSteps = Velocity.RetainedUnderLinearDrag(3.0, 5.0, 0.7) * Velocity.RetainedUnderLinearDrag(3.0, 5.0, 1.3);
+
+        Assert.Equal(Velocity.RetainedUnderLinearDrag(3.0, 5.0, 2.0), twoSteps, 12);
+    }
+
+    [Fact]
     public void KineticEnergyAndSpeedRoundTrip()
     {
         var energy = KineticEnergy.Linear(mass: 7.35e22, velocity: 1.022e3);

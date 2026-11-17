@@ -1,6 +1,7 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
+using SMath.Functions1;
 using SMath.Geometry3D;
 
 namespace SPhysics;
@@ -30,7 +31,7 @@ public static class ThermalRadiation
     public static N TemperatureFromPower<N>(N power, N area, N emissivity, N stefanBoltzmannConstant)
         where N : IRootFunctions<N>
         =>
-        FourthRoot(power / (emissivity * stefanBoltzmannConstant * area));
+        Root4.Eval(power / (emissivity * stefanBoltzmannConstant * area));
 
     /// <summary>Irradiance (flux density) at a distance from an isotropic source, E = P / (4 pi d^2).</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -38,10 +39,4 @@ public static class ThermalRadiation
         where N : IFloatingPointConstants<N>
         =>
         power / Sphere.Surface.Area.FromRadius(distance);
-
-    // inverse of the fourth power of the temperature, two square roots are cheaper and more exact than Pow(x, 0.25)
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static N FourthRoot<N>(N value)
-        where N : IRootFunctions<N>
-        => N.Sqrt(N.Sqrt(value));
 }

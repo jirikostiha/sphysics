@@ -146,9 +146,123 @@ public class NBodyGravityKernelTests
         Assert.Throws<ArgumentException>(() => NBodyGravity.Soa.ComputeAccelerations<double>(two, two, two, two, 1.0, 0.0, new double[2], new double[2], new double[3]));
     }
 
-    // every pull summed directly, in a different order than the pair kernel
+    [Fact]
+    public void CutoffMatchesTheDirectSumOfThePairsWithinIt()
+    {
+        const double cutoff = 80;
+        var random = new Random(13);
+        for (int run = 0; run < Runs; run++)
+        {
+            int n = random.Next(0, 70);
+            var (x, y, z) = (Values(random, n), Values(random, n), Values(random, n));
+            var masses = Values(random, n).Select(Math.Abs).ToArray();
+            var constants = Values(random, n).Select(v => Math.Abs(v) / 50).ToArray();
+            var zeros = new double[n];
+            var planarExpected = DirectSum(x, y, zeros, masses, constants, 0.3, cutoff);
+            var spatialExpected = DirectSum(x, y, z, masses, constants, 0.3, cutoff);
+            var (ax, ay, az) = (new double[n], new double[n], new double[n]);
+            var planar = new (double X, double Y)[n];
+            var spatial = new (double X, double Y, double Z)[n];
+
+            NBodyGravity.Soa.ComputeAccelerations<double>(x, y, masses, constants, 0.3, cutoff, ax, ay);
+            AssertClose(planarExpected, ax, ay, zeros);
+
+            NBodyGravity.Soa.ComputeAccelerations<double>(x, y, z, masses, constants, 0.3, cutoff, ax, ay, az);
+            AssertClose(spatialExpected, ax, ay, az);
+
+            NBodyGravity.Scalar.ComputeAccelerations<double>(x.Zip(y).ToArray(), masses, constants, 0.3, cutoff, planar);
+            AssertClose(planarExpected, planar.Select(a => (a.X, a.Y, 0.0)).ToArray());
+
+            NBodyGravity.Scalar.ComputeAccelerations<double>(Spatial(x, y, z), masses, constants, 0.3, cutoff, spatial);
+            AssertClose(spatialExpected, spatial);
+
+            NBodyGravity.ComputeAccelerations<double>(x.Zip(y).ToArray(), masses, constants, 0.3, cutoff, planar);
+            AssertClose(planarExpected, planar.Select(a => (a.X, a.Y, 0.0)).ToArray());
+
+            NBodyGravity.ComputeAccelerations<double>(Spatial(x, y, z), masses, constants, 0.3, cutoff, spatial);
+            AssertClose(spatialExpected, spatial);
+        }
+    }
+
+    // float fills twice as many lanes of a vector as double, so the mask of the cutoff runs at another width
+    [Fact]
+    public void CutoffOfFloatBodiesMatchesTheDirectSumOfThePairsWithinIt()
+    {
+        const double cutoff = 80;
+        var random = new Random(19);
+        for (int run = 0; run < Runs; run++)
+        {
+            int n = random.Next(0, 70);
+            var (x, y, z) = (Floats(Values(random, n)), Floats(Values(random, n)), Floats(Values(random, n)));
+            var masses = Floats(Values(random, n).Select(Math.Abs));
+            var constants = Floats(Values(random, n).Select(v => Math.Abs(v) / 50));
+            var zeros = new double[n];
+            var (ax, ay, az) = (new float[n], new float[n], new float[n]);
+
+            NBodyGravity.Soa.ComputeAccelerations<float>(x, y, masses, constants, 0.3f, (float)cutoff, ax, ay);
+            AssertClose(DirectSum(Doubles(x), Doubles(y), zeros, Doubles(masses), Doubles(constants), 0.3f, cutoff), Doubles(ax), Doubles(ay), zeros, 1e-5);
+
+            NBodyGravity.Soa.ComputeAccelerations<float>(x, y, z, masses, constants, 0.3f, (float)cutoff, ax, ay, az);
+            AssertClose(DirectSum(Doubles(x), Doubles(y), Doubles(z), Doubles(masses), Doubles(constants), 0.3f, cutoff), Doubles(ax), Doubles(ay), Doubles(az), 1e-5);
+        }
+
+        static float[] Floats(IEnumerable<double> values) => values.Select(v => (float)v).ToArray();
+        static double[] Doubles(float[] values) => values.Select(v => (double)v).ToArray();
+    }
+
+    [Fact]
+    public void InfiniteCutoffGivesTheAccelerationsWithoutACutoff()
+    {
+        var random = new Random(17);
+        var (x, y, z) = (Values(random, 37), Values(random, 37), Values(random, 37));
+        var masses = Values(random, 37).Select(Math.Abs).ToArray();
+        var constants = Values(random, 37).Select(v => Math.Abs(v) / 50).ToArray();
+        var (ax1, ay1, az1) = (new double[37], new double[37], new double[37]);
+        var (ax2, ay2, az2) = (new double[37], new double[37], new double[37]);
+        var (spatial1, spatial2) = (new (double X, double Y, double Z)[37], new (double X, double Y, double Z)[37]);
+
+        NBodyGravity.Soa.ComputeAccelerations<double>(x, y, z, masses, constants, 0.1, ax1, ay1, az1);
+        NBodyGravity.Soa.ComputeAccelerations<double>(x, y, z, masses, constants, 0.1, double.PositiveInfinity, ax2, ay2, az2);
+        NBodyGravity.Scalar.ComputeAccelerations<double>(Spatial(x, y, z), masses, constants, 0.1, spatial1);
+        NBodyGravity.Scalar.ComputeAccelerations<double>(Spatial(x, y, z), masses, constants, 0.1, double.PositiveInfinity, spatial2);
+
+        Assert.Equal(ax1, ax2);
+        Assert.Equal(ay1, ay2);
+        Assert.Equal(az1, az2);
+        Assert.Equal(spatial1, spatial2);
+    }
+
+    [Theory]
+    [InlineData(2.0, -0.25)]
+    [InlineData(1.999, 0.0)]
+    public void PairAtTheCutoffStillPullsAndAPairBeyondItDoesNot(double cutoff, double expected)
+    {
+        var (ax, ay) = (new double[2], new double[2]);
+        var planar = new (double X, double Y)[2];
+
+        NBodyGravity.Soa.ComputeAccelerations<double>([0.0, 2.0], [0.0, 0.0], [1.0, 4.0], [1.0, 1.0], 0.0, cutoff, ax, ay);
+        NBodyGravity.Scalar.ComputeAccelerations<double>([(0.0, 0.0), (2.0, 0.0)], [1.0, 4.0], [1.0, 1.0], 0.0, cutoff, planar);
+
+        // G * m / r^2 with r = 2, pointing at the other body
+        Assert.Equal(expected, ax[1]);
+        Assert.Equal(expected, planar[1].X);
+    }
+
+    [Theory]
+    [InlineData(-1.0)]
+    [InlineData(double.NaN)]
+    public void CutoffThatIsNoDistanceIsRejected(double cutoff)
+    {
+        double[] two = [0, 1];
+
+        Assert.Throws<ArgumentOutOfRangeException>(() => NBodyGravity.Soa.ComputeAccelerations<double>(two, two, two, two, 0.0, cutoff, new double[2], new double[2]));
+        Assert.Throws<ArgumentOutOfRangeException>(() => NBodyGravity.Scalar.ComputeAccelerations<double>([(0.0, 0.0), (1.0, 1.0)], two, two, 0.0, cutoff, new (double X, double Y)[2]));
+        Assert.Throws<ArgumentOutOfRangeException>(() => NBodyGravity.ComputeAccelerations<double>([(0.0, 0.0, 0.0), (1.0, 1.0, 1.0)], two, two, 0.0, cutoff, new (double X, double Y, double Z)[2]));
+    }
+
+    // every pull summed directly, in a different order than the pair kernel, from the bodies within the cutoff
     private static (double X, double Y, double Z)[] DirectSum(
-        double[] x, double[] y, double[] z, double[] masses, double[] constants, double softening)
+        double[] x, double[] y, double[] z, double[] masses, double[] constants, double softening, double cutoff = double.PositiveInfinity)
     {
         var accelerations = new (double X, double Y, double Z)[x.Length];
         for (int i = 0; i < x.Length; i++)
@@ -159,6 +273,9 @@ public class NBodyGravityKernelTests
                     continue;
 
                 var (rx, ry, rz) = (x[j] - x[i], y[j] - y[i], z[j] - z[i]);
+                if ((rx * rx) + (ry * ry) + (rz * rz) > cutoff * cutoff)
+                    continue;
+
                 double k = constants[i] * masses[j] / Math.Pow((rx * rx) + (ry * ry) + (rz * rz) + (softening * softening), 1.5);
                 accelerations[i] = (accelerations[i].X + (rx * k), accelerations[i].Y + (ry * k), accelerations[i].Z + (rz * k));
             }
@@ -171,9 +288,9 @@ public class NBodyGravityKernelTests
         => AssertClose(expected, actual.Select(a => a.X).ToArray(), actual.Select(a => a.Y).ToArray(), actual.Select(a => a.Z).ToArray());
 
     // the pulls on a body may cancel out, so the rounding is measured against the largest acceleration
-    private static void AssertClose((double X, double Y, double Z)[] expected, double[] ax, double[] ay, double[] az)
+    private static void AssertClose((double X, double Y, double Z)[] expected, double[] ax, double[] ay, double[] az, double relative = 1e-12)
     {
-        double tolerance = 1e-12 * expected.Select(a => Math.Abs(a.X) + Math.Abs(a.Y) + Math.Abs(a.Z)).DefaultIfEmpty().Max();
+        double tolerance = relative * expected.Select(a => Math.Abs(a.X) + Math.Abs(a.Y) + Math.Abs(a.Z)).DefaultIfEmpty().Max();
         for (int i = 0; i < expected.Length; i++)
         {
             Assert.InRange(Math.Abs(ax[i] - expected[i].X), 0, tolerance);

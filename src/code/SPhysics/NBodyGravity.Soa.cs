@@ -33,7 +33,32 @@ public static partial class NBodyGravity
             ReadOnlySpan<N> masses, ReadOnlySpan<N> gravitationalConstants, N softening,
             Span<N> accelerationsX, Span<N> accelerationsY)
             where N : IRootFunctions<N>
-            => Kernel(x, y, default, masses, gravitationalConstants, N.Zero, softening, accelerationsX, accelerationsY, default, perBody: true, spatial: false);
+            => Kernel(x, y, default, masses, gravitationalConstants, N.Zero, softening, Cutoff<N>.None, accelerationsX, accelerationsY, default, perBody: true, spatial: false);
+
+        /// <summary>
+        /// Computes gravitational accelerations for all bodies in 2D pairwise (O(n^2)), a gravitational constant per body,
+        /// each body pulled only by the bodies within <paramref name="cutoff"/>.
+        /// </summary>
+        /// <typeparam name="N"> Number type. </typeparam>
+        /// <param name="x"> X components of the positions. </param>
+        /// <param name="y"> Y components of the positions. </param>
+        /// <param name="masses"> Body masses. </param>
+        /// <param name="gravitationalConstants"> Per-body gravitational constant. </param>
+        /// <param name="softening"> Softening length; the effective squared distance is r^2 + softening^2. </param>
+        /// <param name="cutoff">
+        /// Farthest distance at which two bodies still pull on each other; a pair farther apart is skipped, positive
+        /// infinity skips none. A numerical cutoff, not a law of physics: see the remarks of <see cref="NBodyGravity"/>.
+        /// </param>
+        /// <param name="accelerationsX"> Output buffer of the x components. </param>
+        /// <param name="accelerationsY"> Output buffer of the y components. </param>
+        /// <exception cref="ArgumentException"> A span differs in length from <paramref name="x"/>. </exception>
+        /// <exception cref="ArgumentOutOfRangeException"> <paramref name="cutoff"/> is negative or NaN. </exception>
+        public static void ComputeAccelerations<N>(
+            ReadOnlySpan<N> x, ReadOnlySpan<N> y,
+            ReadOnlySpan<N> masses, ReadOnlySpan<N> gravitationalConstants, N softening, N cutoff,
+            Span<N> accelerationsX, Span<N> accelerationsY)
+            where N : IRootFunctions<N>
+            => Kernel(x, y, default, masses, gravitationalConstants, N.Zero, softening, Cutoff<N>.Of(cutoff), accelerationsX, accelerationsY, default, perBody: true, spatial: false);
 
         /// <summary>Computes gravitational accelerations for all bodies in 2D pairwise (O(n^2)), one gravitational constant shared by every body.</summary>
         /// <typeparam name="N"> Number type. </typeparam>
@@ -50,7 +75,7 @@ public static partial class NBodyGravity
             ReadOnlySpan<N> masses, N gravitationalConstant, N softening,
             Span<N> accelerationsX, Span<N> accelerationsY)
             where N : IRootFunctions<N>
-            => Kernel(x, y, default, masses, default, gravitationalConstant, softening, accelerationsX, accelerationsY, default, perBody: false, spatial: false);
+            => Kernel(x, y, default, masses, default, gravitationalConstant, softening, Cutoff<N>.None, accelerationsX, accelerationsY, default, perBody: false, spatial: false);
 
         /// <summary>Computes gravitational accelerations for all bodies in 3D pairwise (O(n^2)), a gravitational constant per body.</summary>
         /// <typeparam name="N"> Number type. </typeparam>
@@ -69,7 +94,34 @@ public static partial class NBodyGravity
             ReadOnlySpan<N> masses, ReadOnlySpan<N> gravitationalConstants, N softening,
             Span<N> accelerationsX, Span<N> accelerationsY, Span<N> accelerationsZ)
             where N : IRootFunctions<N>
-            => Kernel(x, y, z, masses, gravitationalConstants, N.Zero, softening, accelerationsX, accelerationsY, accelerationsZ, perBody: true, spatial: true);
+            => Kernel(x, y, z, masses, gravitationalConstants, N.Zero, softening, Cutoff<N>.None, accelerationsX, accelerationsY, accelerationsZ, perBody: true, spatial: true);
+
+        /// <summary>
+        /// Computes gravitational accelerations for all bodies in 3D pairwise (O(n^2)), a gravitational constant per body,
+        /// each body pulled only by the bodies within <paramref name="cutoff"/>.
+        /// </summary>
+        /// <typeparam name="N"> Number type. </typeparam>
+        /// <param name="x"> X components of the positions. </param>
+        /// <param name="y"> Y components of the positions. </param>
+        /// <param name="z"> Z components of the positions. </param>
+        /// <param name="masses"> Body masses. </param>
+        /// <param name="gravitationalConstants"> Per-body gravitational constant. </param>
+        /// <param name="softening"> Softening length; the effective squared distance is r^2 + softening^2. </param>
+        /// <param name="cutoff">
+        /// Farthest distance at which two bodies still pull on each other; a pair farther apart is skipped, positive
+        /// infinity skips none. A numerical cutoff, not a law of physics: see the remarks of <see cref="NBodyGravity"/>.
+        /// </param>
+        /// <param name="accelerationsX"> Output buffer of the x components. </param>
+        /// <param name="accelerationsY"> Output buffer of the y components. </param>
+        /// <param name="accelerationsZ"> Output buffer of the z components. </param>
+        /// <exception cref="ArgumentException"> A span differs in length from <paramref name="x"/>. </exception>
+        /// <exception cref="ArgumentOutOfRangeException"> <paramref name="cutoff"/> is negative or NaN. </exception>
+        public static void ComputeAccelerations<N>(
+            ReadOnlySpan<N> x, ReadOnlySpan<N> y, ReadOnlySpan<N> z,
+            ReadOnlySpan<N> masses, ReadOnlySpan<N> gravitationalConstants, N softening, N cutoff,
+            Span<N> accelerationsX, Span<N> accelerationsY, Span<N> accelerationsZ)
+            where N : IRootFunctions<N>
+            => Kernel(x, y, z, masses, gravitationalConstants, N.Zero, softening, Cutoff<N>.Of(cutoff), accelerationsX, accelerationsY, accelerationsZ, perBody: true, spatial: true);
 
         /// <summary>Computes gravitational accelerations for all bodies in 3D pairwise (O(n^2)), one gravitational constant shared by every body.</summary>
         /// <typeparam name="N"> Number type. </typeparam>
@@ -88,13 +140,13 @@ public static partial class NBodyGravity
             ReadOnlySpan<N> masses, N gravitationalConstant, N softening,
             Span<N> accelerationsX, Span<N> accelerationsY, Span<N> accelerationsZ)
             where N : IRootFunctions<N>
-            => Kernel(x, y, z, masses, default, gravitationalConstant, softening, accelerationsX, accelerationsY, accelerationsZ, perBody: false, spatial: true);
+            => Kernel(x, y, z, masses, default, gravitationalConstant, softening, Cutoff<N>.None, accelerationsX, accelerationsY, accelerationsZ, perBody: false, spatial: true);
     }
 
     // z and az are read only when spatial, the gravitational constants only when perBody
     private static void Kernel<N>(
         ReadOnlySpan<N> x, ReadOnlySpan<N> y, ReadOnlySpan<N> z,
-        ReadOnlySpan<N> masses, ReadOnlySpan<N> gravitationalConstants, N gravitationalConstant, N softening,
+        ReadOnlySpan<N> masses, ReadOnlySpan<N> gravitationalConstants, N gravitationalConstant, N softening, Cutoff<N> cutoff,
         Span<N> ax, Span<N> ay, Span<N> az,
         bool perBody, bool spatial)
         where N : IRootFunctions<N>
@@ -124,14 +176,18 @@ public static partial class NBodyGravity
             var (sx, sy, sz) = (N.Zero, N.Zero, N.Zero);
             // fewer pairs than lanes are left to the scalar loop, the vector setup would cost more than they do
             if (Vector.IsHardwareAccelerated && Vector<N>.IsSupported && n - j >= Vector<N>.Count)
-                (j, sx, sy, sz) = VectorPairs(i, x, y, z, masses, gravitationalConstants, gI, soft2, ax, ay, az, perBody, spatial);
+                (j, sx, sy, sz) = VectorPairs(i, x, y, z, masses, gravitationalConstants, gI, soft2, cutoff, ax, ay, az, perBody, spatial);
 
             for (; j < n; j++)
             {
                 N rx = x[j] - xi;
                 N ry = y[j] - yi;
                 N rz = spatial ? z[j] - zi : N.Zero;
-                N invR3 = InverseCube(rx * rx + ry * ry + rz * rz + soft2);
+                N r2 = rx * rx + ry * ry + rz * rz;
+                if (cutoff.Skips(r2))
+                    continue;
+
+                N invR3 = InverseCube(r2 + soft2);
 
                 N kI = gI * masses[j] * invR3;
                 sx += rx * kI;
@@ -158,7 +214,7 @@ public static partial class NBodyGravity
     private static (int J, N X, N Y, N Z) VectorPairs<N>(
         int i,
         ReadOnlySpan<N> x, ReadOnlySpan<N> y, ReadOnlySpan<N> z,
-        ReadOnlySpan<N> masses, ReadOnlySpan<N> gravitationalConstants, N gI, N soft2,
+        ReadOnlySpan<N> masses, ReadOnlySpan<N> gravitationalConstants, N gI, N soft2, Cutoff<N> cutoff,
         Span<N> ax, Span<N> ay, Span<N> az,
         bool perBody, bool spatial)
         where N : IRootFunctions<N>
@@ -181,6 +237,7 @@ public static partial class NBodyGravity
         var vgI = new Vector<N>(gI);
         var mI = new Vector<N>(masses[i]);
         var vSoft2 = new Vector<N>(soft2);
+        var vCutoff2 = new Vector<N>(cutoff.Squared);
         var sx = Vector<N>.Zero;
         var sy = Vector<N>.Zero;
         var sz = Vector<N>.Zero;
@@ -195,8 +252,11 @@ public static partial class NBodyGravity
                 var rx = Vector.LoadUnsafe(ref x0, at) - xi;
                 var ry = Vector.LoadUnsafe(ref y0, at) - yi;
                 var rz = Vector.LoadUnsafe(ref z0, at) - zi;
-                var invR = Vector<N>.One / Vector.SquareRoot(rx * rx + ry * ry + rz * rz + vSoft2);
+                var r2 = rx * rx + ry * ry + rz * rz;
+                var invR = Vector<N>.One / Vector.SquareRoot(r2 + vSoft2);
                 var invR3 = invR * invR * invR;
+                if (cutoff.Limited)
+                    invR3 = Vector.ConditionalSelect(Vector.LessThanOrEqual(r2, vCutoff2), invR3, Vector<N>.Zero);
 
                 var kI = vgI * Vector.LoadUnsafe(ref m0, at) * invR3;
                 sx += rx * kI;
@@ -216,8 +276,11 @@ public static partial class NBodyGravity
                 nuint at = (nuint)j;
                 var rx = Vector.LoadUnsafe(ref x0, at) - xi;
                 var ry = Vector.LoadUnsafe(ref y0, at) - yi;
-                var invR = Vector<N>.One / Vector.SquareRoot(rx * rx + ry * ry + vSoft2);
+                var r2 = rx * rx + ry * ry;
+                var invR = Vector<N>.One / Vector.SquareRoot(r2 + vSoft2);
                 var invR3 = invR * invR * invR;
+                if (cutoff.Limited)
+                    invR3 = Vector.ConditionalSelect(Vector.LessThanOrEqual(r2, vCutoff2), invR3, Vector<N>.Zero);
 
                 var kI = vgI * Vector.LoadUnsafe(ref m0, at) * invR3;
                 sx += rx * kI;

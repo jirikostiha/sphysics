@@ -136,6 +136,10 @@ const double g = 9.81, dt = 0.001;
   spans (structure of arrays) and skips the copies.
 - **Scalar**, `NBodyGravity.Scalar`: pair by pair on the tuples, no copies.
 
+The overloads with a gravitational constant per body take an optional **cutoff**: a pair farther apart is skipped, which limits the reach of gravity in a
+simulation. It is a numerical tool like the softening, not a law of physics, and the one exception to the rule that
+SPhysics holds only real physics; the remarks of `NBodyGravity` explain it.
+
 Time of one evaluation, float bodies, a gravitational constant per body
 ([NBodyGravityBenchmark](src/quality/SPhysics.Benchmarks/NBodyGravityBenchmark.cs), x64 with AVX2):
 

@@ -30,7 +30,36 @@ public static partial class NBodyGravity
             where N : IRootFunctions<N>
         {
             SystemSpans.RequireLengths(positions.Length, masses.Length, gravitationalConstants.Length, accelerations.Length);
-            PlanarScalar(positions, masses, gravitationalConstants, N.Zero, softening, accelerations, perBody: true);
+            PlanarScalar(positions, masses, gravitationalConstants, N.Zero, softening, Cutoff<N>.None, accelerations, perBody: true);
+        }
+
+        /// <summary>
+        /// Computes gravitational accelerations for all bodies in 2D pairwise (O(n^2)), a gravitational constant per
+        /// body, each body pulled only by the bodies within <paramref name="cutoff"/>.
+        /// </summary>
+        /// <typeparam name="N"> Number type. </typeparam>
+        /// <param name="positions"> Body positions. </param>
+        /// <param name="masses"> Body masses (length must equal <paramref name="positions"/>). </param>
+        /// <param name="gravitationalConstants"> Per-body gravitational constant (length must equal <paramref name="positions"/>). </param>
+        /// <param name="softening"> Softening length; the effective squared distance is r^2 + softening^2. </param>
+        /// <param name="cutoff">
+        /// Farthest distance at which two bodies still pull on each other; a pair farther apart is skipped, positive
+        /// infinity skips none. A numerical cutoff, not a law of physics: see the remarks of <see cref="NBodyGravity"/>.
+        /// </param>
+        /// <param name="accelerations"> Output buffer (length must equal <paramref name="positions"/>). </param>
+        /// <exception cref="ArgumentException"> A span differs in length from <paramref name="positions"/>. </exception>
+        /// <exception cref="ArgumentOutOfRangeException"> <paramref name="cutoff"/> is negative or NaN. </exception>
+        public static void ComputeAccelerations<N>(
+            ReadOnlySpan<(N X, N Y)> positions,
+            ReadOnlySpan<N> masses,
+            ReadOnlySpan<N> gravitationalConstants,
+            N softening,
+            N cutoff,
+            Span<(N X, N Y)> accelerations)
+            where N : IRootFunctions<N>
+        {
+            SystemSpans.RequireLengths(positions.Length, masses.Length, gravitationalConstants.Length, accelerations.Length);
+            PlanarScalar(positions, masses, gravitationalConstants, N.Zero, softening, Cutoff<N>.Of(cutoff), accelerations, perBody: true);
         }
 
         /// <summary>Computes gravitational accelerations for all bodies in 2D pairwise (O(n^2)), one gravitational constant shared by every body.</summary>
@@ -50,7 +79,7 @@ public static partial class NBodyGravity
             where N : IRootFunctions<N>
         {
             SystemSpans.RequireLengths(positions.Length, masses.Length, accelerations.Length);
-            PlanarScalar(positions, masses, default, gravitationalConstant, softening, accelerations, perBody: false);
+            PlanarScalar(positions, masses, default, gravitationalConstant, softening, Cutoff<N>.None, accelerations, perBody: false);
         }
 
         /// <summary>Computes gravitational accelerations for all bodies in 3D pairwise (O(n^2)), a gravitational constant per body.</summary>
@@ -70,7 +99,36 @@ public static partial class NBodyGravity
             where N : IRootFunctions<N>
         {
             SystemSpans.RequireLengths(positions.Length, masses.Length, gravitationalConstants.Length, accelerations.Length);
-            SpatialScalar(positions, masses, gravitationalConstants, N.Zero, softening, accelerations, perBody: true);
+            SpatialScalar(positions, masses, gravitationalConstants, N.Zero, softening, Cutoff<N>.None, accelerations, perBody: true);
+        }
+
+        /// <summary>
+        /// Computes gravitational accelerations for all bodies in 3D pairwise (O(n^2)), a gravitational constant per
+        /// body, each body pulled only by the bodies within <paramref name="cutoff"/>.
+        /// </summary>
+        /// <typeparam name="N"> Number type. </typeparam>
+        /// <param name="positions"> Body positions. </param>
+        /// <param name="masses"> Body masses (length must equal <paramref name="positions"/>). </param>
+        /// <param name="gravitationalConstants"> Per-body gravitational constant (length must equal <paramref name="positions"/>). </param>
+        /// <param name="softening"> Softening length; the effective squared distance is r^2 + softening^2. </param>
+        /// <param name="cutoff">
+        /// Farthest distance at which two bodies still pull on each other; a pair farther apart is skipped, positive
+        /// infinity skips none. A numerical cutoff, not a law of physics: see the remarks of <see cref="NBodyGravity"/>.
+        /// </param>
+        /// <param name="accelerations"> Output buffer (length must equal <paramref name="positions"/>). </param>
+        /// <exception cref="ArgumentException"> A span differs in length from <paramref name="positions"/>. </exception>
+        /// <exception cref="ArgumentOutOfRangeException"> <paramref name="cutoff"/> is negative or NaN. </exception>
+        public static void ComputeAccelerations<N>(
+            ReadOnlySpan<(N X, N Y, N Z)> positions,
+            ReadOnlySpan<N> masses,
+            ReadOnlySpan<N> gravitationalConstants,
+            N softening,
+            N cutoff,
+            Span<(N X, N Y, N Z)> accelerations)
+            where N : IRootFunctions<N>
+        {
+            SystemSpans.RequireLengths(positions.Length, masses.Length, gravitationalConstants.Length, accelerations.Length);
+            SpatialScalar(positions, masses, gravitationalConstants, N.Zero, softening, Cutoff<N>.Of(cutoff), accelerations, perBody: true);
         }
 
         /// <summary>Computes gravitational accelerations for all bodies in 3D pairwise (O(n^2)), one gravitational constant shared by every body.</summary>
@@ -90,7 +148,7 @@ public static partial class NBodyGravity
             where N : IRootFunctions<N>
         {
             SystemSpans.RequireLengths(positions.Length, masses.Length, accelerations.Length);
-            SpatialScalar(positions, masses, default, gravitationalConstant, softening, accelerations, perBody: false);
+            SpatialScalar(positions, masses, default, gravitationalConstant, softening, Cutoff<N>.None, accelerations, perBody: false);
         }
     }
 
@@ -109,6 +167,7 @@ public static partial class NBodyGravity
         ReadOnlySpan<N> gravitationalConstants,
         N gravitationalConstant,
         N softening,
+        Cutoff<N> cutoff,
         Span<(N X, N Y)> accelerations,
         bool perBody)
         where N : IRootFunctions<N>
@@ -130,7 +189,11 @@ public static partial class NBodyGravity
                 var pj = positions[j];
                 N rx = pj.X - pi.X;
                 N ry = pj.Y - pi.Y;
-                N invR3 = InverseCube(rx * rx + ry * ry + soft2);
+                N r2 = rx * rx + ry * ry;
+                if (cutoff.Skips(r2))
+                    continue;
+
+                N invR3 = InverseCube(r2 + soft2);
 
                 N kI = gI * masses[j] * invR3;
                 aix += rx * kI;
@@ -152,6 +215,7 @@ public static partial class NBodyGravity
         ReadOnlySpan<N> gravitationalConstants,
         N gravitationalConstant,
         N softening,
+        Cutoff<N> cutoff,
         Span<(N X, N Y, N Z)> accelerations,
         bool perBody)
         where N : IRootFunctions<N>
@@ -174,7 +238,11 @@ public static partial class NBodyGravity
                 N rx = pj.X - pi.X;
                 N ry = pj.Y - pi.Y;
                 N rz = pj.Z - pi.Z;
-                N invR3 = InverseCube(rx * rx + ry * ry + rz * rz + soft2);
+                N r2 = rx * rx + ry * ry + rz * rz;
+                if (cutoff.Skips(r2))
+                    continue;
+
+                N invR3 = InverseCube(r2 + soft2);
 
                 N kI = gI * masses[j] * invR3;
                 aix += rx * kI;

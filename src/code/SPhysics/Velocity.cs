@@ -77,4 +77,23 @@ public static class Velocity
         where N : IRootFunctions<N>
         =>
         N.Sqrt(N.CreateChecked(2) * kineticEnergy / mass);
+
+    /// <summary>
+    /// Terminal velocity of a body falling through a fluid, where the drag of <see cref="DragForce.InFluid{N}"/> balances the weight:
+    /// <c>sqrt(2 * m * g / (rho * A * Cd))</c>.
+    /// </summary>
+    /// <remarks>
+    /// <a href="https://en.wikipedia.org/wiki/Terminal_velocity">wikipedia</a>.
+    /// Neglects buoyancy; to include it, pass the mass of the body less the mass of the fluid it displaces.
+    /// </remarks>
+    /// <param name="mass"> Mass of the body. </param>
+    /// <param name="gravity"> Gravitational acceleration. </param>
+    /// <param name="fluidDensity"> Density of the fluid. </param>
+    /// <param name="area"> Projected area of the body. </param>
+    /// <param name="dragCoef"> Drag coefficient. </param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static N Terminal<N>(N mass, N gravity, N fluidDensity, N area, N dragCoef)
+        where N : IRootFunctions<N>
+        =>
+        N.Sqrt(N.CreateChecked(2) * mass * gravity / (fluidDensity * area * dragCoef));
 }

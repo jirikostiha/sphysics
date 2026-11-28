@@ -17,4 +17,18 @@ public static class Pressure
         where N : IDivisionOperators<N, N, N>
         =>
         force / area;
+
+    /// <summary> Hydrostatic pressure of a fluid at rest at the given depth, <c>rho * g * h</c>. </summary>
+    /// <remarks>
+    /// <a href="https://en.wikipedia.org/wiki/Hydrostatics#Hydrostatic_pressure">wikipedia</a>.
+    /// Gauge pressure of an incompressible fluid in a uniform gravity; add the pressure at the surface for the absolute one.
+    /// </remarks>
+    /// <param name="fluidDensity"> Density of the fluid. </param>
+    /// <param name="gravity"> Gravitational acceleration. </param>
+    /// <param name="depth"> Depth below the surface. </param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static N Hydrostatic<N>(N fluidDensity, N gravity, N depth)
+        where N : IMultiplyOperators<N, N, N>
+        =>
+        fluidDensity * gravity * depth;
 }

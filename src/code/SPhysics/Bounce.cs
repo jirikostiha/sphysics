@@ -1,5 +1,7 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using SMath.Geometry2D;
+using SMath.Geometry3D;
 
 namespace SPhysics;
 
@@ -36,14 +38,13 @@ public static class Bounce
         ArgumentOutOfRangeException.ThrowIfNegative(obstacleRadius);
         ThrowIfInvalidSurface(restitution, restingSpeed);
 
-        N dx = position.X - center.X;
-        N dy = position.Y - center.Y;
-        N distance = N.Sqrt(dx * dx + dy * dy);
+        var offset = GeometricVector2.Direction.FromCartesian(center, position);
+        N distance = GeometricVector2.Magnitude.FromCartesian(offset);
         N reach = radius + obstacleRadius;
         if (distance >= reach || distance <= N.Zero)
             return null;
 
-        return Respond(position, velocity, (dx / distance, dy / distance), reach - distance, restitution, restingSpeed);
+        return Respond(position, velocity, (offset.X / distance, offset.Y / distance), reach - distance, restitution, restingSpeed);
     }
 
     /// <summary> Bounces a body off the outside of a sphere (an immovable ball); a point when its radius is zero. </summary>
@@ -64,15 +65,13 @@ public static class Bounce
         ArgumentOutOfRangeException.ThrowIfNegative(obstacleRadius);
         ThrowIfInvalidSurface(restitution, restingSpeed);
 
-        N dx = position.X - center.X;
-        N dy = position.Y - center.Y;
-        N dz = position.Z - center.Z;
-        N distance = N.Sqrt(dx * dx + dy * dy + dz * dz);
+        var offset = GeometricVector3.Direction.FromCartesian(center, position);
+        N distance = GeometricVector3.Magnitude.FromCartesian(offset);
         N reach = radius + obstacleRadius;
         if (distance >= reach || distance <= N.Zero)
             return null;
 
-        return Respond(position, velocity, (dx / distance, dy / distance, dz / distance), reach - distance, restitution, restingSpeed);
+        return Respond(position, velocity, (offset.X / distance, offset.Y / distance, offset.Z / distance), reach - distance, restitution, restingSpeed);
     }
 
     /// <summary> Bounces a body off a line segment, a wall of no thickness at any angle. </summary>
@@ -88,10 +87,10 @@ public static class Bounce
     public static ((N X, N Y) Position, (N X, N Y) Velocity)? OffSegment<N>(
         (N X, N Y) position, (N X, N Y) velocity, N radius,
         (N X, N Y) start, (N X, N Y) end, N restitution, N restingSpeed)
-        where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
+        where N : INumber<N>, IRootFunctions<N>
     {
         // the segment touches the body at its nearest point, which acts as a point obstacle
-        return OffBall(position, velocity, radius, NearestOnSegment(position, start, end), N.Zero, restitution, restingSpeed);
+        return OffBall(position, velocity, radius, Line.Segment.And.Point.ClosestPoint.FromPoints(start, end, position), N.Zero, restitution, restingSpeed);
     }
 
     /// <summary> Bounces a body off a line segment in space, a rod of no thickness. </summary>
@@ -107,10 +106,10 @@ public static class Bounce
     public static ((N X, N Y, N Z) Position, (N X, N Y, N Z) Velocity)? OffSegment<N>(
         (N X, N Y, N Z) position, (N X, N Y, N Z) velocity, N radius,
         (N X, N Y, N Z) start, (N X, N Y, N Z) end, N restitution, N restingSpeed)
-        where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
+        where N : INumber<N>, IRootFunctions<N>
     {
         // the segment touches the body at its nearest point, which acts as a point obstacle
-        return OffBall(position, velocity, radius, NearestOnSegment(position, start, end), N.Zero, restitution, restingSpeed);
+        return OffBall(position, velocity, radius, Line3.Segment.And.Point.ClosestPoint.FromPoints(start, end, position), N.Zero, restitution, restingSpeed);
     }
 
     /// <summary> Bounces a body off a half-plane: the line through <paramref name="point"/> is its edge and everything behind it is solid. </summary>
@@ -130,10 +129,10 @@ public static class Bounce
         where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
     {
         ThrowIfInvalidSurface(restitution, restingSpeed);
-        N length = NormalLength(N.Sqrt(normal.X * normal.X + normal.Y * normal.Y), nameof(normal));
+        N length = NormalLength(GeometricVector2.Magnitude.FromCartesian(normal), nameof(normal));
 
-        var unit = (normal.X / length, normal.Y / length);
-        N height = (position.X - point.X) * unit.Item1 + (position.Y - point.Y) * unit.Item2;
+        (N X, N Y) unit = (normal.X / length, normal.Y / length);
+        N height = GeometricVector2.DotProduct.FromCartesian(GeometricVector2.Direction.FromCartesian(point, position), unit);
         if (height >= radius)
             return null;
 
@@ -157,10 +156,10 @@ public static class Bounce
         where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
     {
         ThrowIfInvalidSurface(restitution, restingSpeed);
-        N length = NormalLength(N.Sqrt(normal.X * normal.X + normal.Y * normal.Y + normal.Z * normal.Z), nameof(normal));
+        N length = NormalLength(GeometricVector3.Magnitude.FromCartesian(normal), nameof(normal));
 
-        var unit = (normal.X / length, normal.Y / length, normal.Z / length);
-        N height = (position.X - point.X) * unit.Item1 + (position.Y - point.Y) * unit.Item2 + (position.Z - point.Z) * unit.Item3;
+        (N X, N Y, N Z) unit = (normal.X / length, normal.Y / length, normal.Z / length);
+        N height = GeometricVector3.DotProduct.FromCartesian(GeometricVector3.Direction.FromCartesian(point, position), unit);
         if (height >= radius)
             return null;
 
@@ -180,11 +179,9 @@ public static class Bounce
     public static ((N X, N Y) Position, (N X, N Y) Velocity)? OffBox<N>(
         (N X, N Y) position, (N X, N Y) velocity, N radius,
         (N X, N Y) corner1, (N X, N Y) corner2, N restitution, N restingSpeed)
-        where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
+        where N : INumber<N>, IRootFunctions<N>
     {
-        var (minX, maxX) = Order(corner1.X, corner2.X);
-        var (minY, maxY) = Order(corner1.Y, corner2.Y);
-        var nearest = (Clamp(position.X, minX, maxX), Clamp(position.Y, minY, maxY));
+        var nearest = Rectangle.ClosestPointByCorners(corner1, corner2, position);
         if (nearest != position)
         {
             // outside, the nearest point of the rectangle acts as a point obstacle; that covers the corners too
@@ -193,8 +190,8 @@ public static class Bounce
 
         ThrowIfInvalidSurface(restitution, restingSpeed);
         // the centre leaves through the nearest face; of equally near faces the one on the earlier axis
-        var x = NearestFace(position.X, minX, maxX);
-        var y = NearestFace(position.Y, minY, maxY);
+        var x = NearestFace(position.X, corner1.X, corner2.X);
+        var y = NearestFace(position.Y, corner1.Y, corner2.Y);
         return y.Depth < x.Depth
             ? Respond(position, velocity, (N.Zero, y.Sign), y.Depth + radius, restitution, restingSpeed)
             : Respond(position, velocity, (x.Sign, N.Zero), x.Depth + radius, restitution, restingSpeed);
@@ -213,12 +210,9 @@ public static class Bounce
     public static ((N X, N Y, N Z) Position, (N X, N Y, N Z) Velocity)? OffBox<N>(
         (N X, N Y, N Z) position, (N X, N Y, N Z) velocity, N radius,
         (N X, N Y, N Z) corner1, (N X, N Y, N Z) corner2, N restitution, N restingSpeed)
-        where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
+        where N : INumber<N>, IRootFunctions<N>
     {
-        var (minX, maxX) = Order(corner1.X, corner2.X);
-        var (minY, maxY) = Order(corner1.Y, corner2.Y);
-        var (minZ, maxZ) = Order(corner1.Z, corner2.Z);
-        var nearest = (Clamp(position.X, minX, maxX), Clamp(position.Y, minY, maxY), Clamp(position.Z, minZ, maxZ));
+        var nearest = Cuboid.ClosestPointByCorners(corner1, corner2, position);
         if (nearest != position)
         {
             // outside, the nearest point of the box acts as a point obstacle; that covers the edges and corners too
@@ -227,9 +221,9 @@ public static class Bounce
 
         ThrowIfInvalidSurface(restitution, restingSpeed);
         // the centre leaves through the nearest face; of equally near faces the one on the earlier axis
-        var x = NearestFace(position.X, minX, maxX);
-        var y = NearestFace(position.Y, minY, maxY);
-        var z = NearestFace(position.Z, minZ, maxZ);
+        var x = NearestFace(position.X, corner1.X, corner2.X);
+        var y = NearestFace(position.Y, corner1.Y, corner2.Y);
+        var z = NearestFace(position.Z, corner1.Z, corner2.Z);
         if (z.Depth < x.Depth && z.Depth < y.Depth)
             return Respond(position, velocity, (N.Zero, N.Zero, z.Sign), z.Depth + radius, restitution, restingSpeed);
 
@@ -253,51 +247,52 @@ public static class Bounce
     public static ((N X, N Y) Position, (N X, N Y) Velocity)? OffTriangle<N>(
         (N X, N Y) position, (N X, N Y) velocity, N radius,
         (N X, N Y) a, (N X, N Y) b, (N X, N Y) c, N restitution, N restingSpeed)
-        where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
+        where N : INumber<N>, IRootFunctions<N>
     {
         ThrowIfInvalidSurface(restitution, restingSpeed);
-        N area = Cross(a, b, c);
+        N area = Triangle.Region.SignedArea.FromVertices(a, b, c);
         if (!(N.Abs(area) > N.Zero))
             throw new ArgumentException("The vertices must not lie on one line.", nameof(c));
 
         // seen from inside, the centre is on the same side of every edge; the orientation of the triangle tells which
         N orientation = area > N.Zero ? N.One : -N.One;
-        N sideAB = Cross(a, b, position) * orientation;
-        N sideBC = Cross(b, c, position) * orientation;
-        N sideCA = Cross(c, a, position) * orientation;
+        N sideAB = Triangle.Region.SignedArea.FromVertices(a, b, position) * orientation;
+        N sideBC = Triangle.Region.SignedArea.FromVertices(b, c, position) * orientation;
+        N sideCA = Triangle.Region.SignedArea.FromVertices(c, a, position) * orientation;
         if (sideAB < N.Zero || sideBC < N.Zero || sideCA < N.Zero)
         {
             // outside, the nearest point of the edges acts as a point obstacle; that covers the vertices too
-            var nearest = NearestOnSegment(position, a, b);
-            var other = NearestOnSegment(position, b, c);
-            if (DistanceSquared(position, other) < DistanceSquared(position, nearest))
+            var nearest = Line.Segment.And.Point.ClosestPoint.FromPoints(a, b, position);
+            var other = Line.Segment.And.Point.ClosestPoint.FromPoints(b, c, position);
+            if (GeometricVector2.Distance.FromCartesian(position, other) < GeometricVector2.Distance.FromCartesian(position, nearest))
                 nearest = other;
 
-            other = NearestOnSegment(position, c, a);
-            if (DistanceSquared(position, other) < DistanceSquared(position, nearest))
+            other = Line.Segment.And.Point.ClosestPoint.FromPoints(c, a, position);
+            if (GeometricVector2.Distance.FromCartesian(position, other) < GeometricVector2.Distance.FromCartesian(position, nearest))
                 nearest = other;
 
             return OffBall(position, velocity, radius, nearest, N.Zero, restitution, restingSpeed);
         }
 
-        // the centre leaves through the nearest edge; of equally near edges the earlier one
+        // the centre leaves through the nearest edge, its distance being twice the area over the edge; of equally near edges the earlier one
         var edge = (a, b);
-        N depth = sideAB / Length(a, b);
-        N next = sideBC / Length(b, c);
+        N depth = sideAB / GeometricVector2.Distance.FromCartesian(a, b);
+        N next = sideBC / GeometricVector2.Distance.FromCartesian(b, c);
         if (next < depth)
         {
             depth = next;
             edge = (b, c);
         }
 
-        next = sideCA / Length(c, a);
+        next = sideCA / GeometricVector2.Distance.FromCartesian(c, a);
         if (next < depth)
         {
             depth = next;
             edge = (c, a);
         }
 
-        N length = Length(edge.Item1, edge.Item2);
+        depth += depth;
+        N length = GeometricVector2.Distance.FromCartesian(edge.Item1, edge.Item2);
         var outward = ((edge.Item2.Y - edge.Item1.Y) * orientation / length, (edge.Item1.X - edge.Item2.X) * orientation / length);
         return Respond(position, velocity, outward, depth + radius, restitution, restingSpeed);
     }
@@ -317,48 +312,44 @@ public static class Bounce
     public static ((N X, N Y, N Z) Position, (N X, N Y, N Z) Velocity)? OffTriangle<N>(
         (N X, N Y, N Z) position, (N X, N Y, N Z) velocity, N radius,
         (N X, N Y, N Z) a, (N X, N Y, N Z) b, (N X, N Y, N Z) c, N restitution, N restingSpeed)
-        where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
+        where N : INumber<N>, IRootFunctions<N>
     {
         ThrowIfInvalidSurface(restitution, restingSpeed);
-        var normal = Cross(Subtract(b, a), Subtract(c, a));
-        N normalSquared = Dot(normal, normal);
-        if (!(normalSquared > N.Zero))
+        var normal = GeometricVector3.CrossProduct.FromCartesian(GeometricVector3.Direction.FromCartesian(a, b), GeometricVector3.Direction.FromCartesian(a, c));
+        if (!(GeometricVector3.MagnitudeSquared.FromCartesian(normal) > N.Zero))
             throw new ArgumentException("The vertices must not lie on one line.", nameof(c));
 
         // the centre is over the triangle when it is on the inner side of all three edges
-        var offset = Subtract(position, a);
-        bool over = Dot(Cross(Subtract(b, a), offset), normal) >= N.Zero
-            && Dot(Cross(Subtract(c, b), Subtract(position, b)), normal) >= N.Zero
-            && Dot(Cross(Subtract(a, c), Subtract(position, c)), normal) >= N.Zero;
+        var offset = GeometricVector3.Direction.FromCartesian(a, position);
+        bool over = GeometricVector3.TripleProduct.FromCartesian(normal, GeometricVector3.Direction.FromCartesian(a, b), offset) >= N.Zero
+            && GeometricVector3.TripleProduct.FromCartesian(normal, GeometricVector3.Direction.FromCartesian(b, c), GeometricVector3.Direction.FromCartesian(b, position)) >= N.Zero
+            && GeometricVector3.TripleProduct.FromCartesian(normal, GeometricVector3.Direction.FromCartesian(c, a), GeometricVector3.Direction.FromCartesian(c, position)) >= N.Zero;
         if (!over)
         {
             // beside it, the nearest point of the edges acts as a point obstacle; that covers the vertices too
-            var nearest = NearestOnSegment(position, a, b);
-            var other = NearestOnSegment(position, b, c);
-            if (DistanceSquared(position, other) < DistanceSquared(position, nearest))
+            var nearest = Line3.Segment.And.Point.ClosestPoint.FromPoints(a, b, position);
+            var other = Line3.Segment.And.Point.ClosestPoint.FromPoints(b, c, position);
+            if (GeometricVector3.Distance.FromCartesian(position, other) < GeometricVector3.Distance.FromCartesian(position, nearest))
                 nearest = other;
 
-            other = NearestOnSegment(position, c, a);
-            if (DistanceSquared(position, other) < DistanceSquared(position, nearest))
+            other = Line3.Segment.And.Point.ClosestPoint.FromPoints(c, a, position);
+            if (GeometricVector3.Distance.FromCartesian(position, other) < GeometricVector3.Distance.FromCartesian(position, nearest))
                 nearest = other;
 
             return OffBall(position, velocity, radius, nearest, N.Zero, restitution, restingSpeed);
         }
 
-        N along = Dot(offset, normal);
-        if (along != N.Zero)
+        if (GeometricVector3.DotProduct.FromCartesian(offset, normal) != N.Zero)
         {
             // above or below, the foot of the perpendicular acts as a point obstacle
-            N share = along / normalSquared;
-            var foot = (position.X - normal.X * share, position.Y - normal.Y * share, position.Z - normal.Z * share);
+            var foot = GeometricVector3.Direction.FromCartesian(GeometricVector3.Projection.FromCartesian(offset, normal), position);
             return OffBall(position, velocity, radius, foot, N.Zero, restitution, restingSpeed);
         }
 
         // on the triangle itself, the body leaves on the side it came from
-        N length = N.Sqrt(normalSquared);
-        var unit = (normal.X / length, normal.Y / length, normal.Z / length);
-        if (Dot(velocity, unit) > N.Zero)
-            unit = (-unit.Item1, -unit.Item2, -unit.Item3);
+        var unit = GeometricVector3.Cartesian.Normalized(normal);
+        if (GeometricVector3.DotProduct.FromCartesian(velocity, unit) > N.Zero)
+            unit = (-unit.X, -unit.Y, -unit.Z);
 
         return Respond(position, velocity, unit, radius, restitution, restingSpeed);
     }
@@ -376,7 +367,7 @@ public static class Bounce
     public static ((N X, N Y) Position, (N X, N Y) Velocity)? InsideBox<N>(
         (N X, N Y) position, (N X, N Y) velocity, N radius,
         (N X, N Y) corner1, (N X, N Y) corner2, N restitution, N restingSpeed)
-        where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
+        where N : INumber<N>, IRootFunctions<N>
     {
         ThrowIfInvalidSurface(restitution, restingSpeed);
         bool touched = false;
@@ -399,7 +390,7 @@ public static class Bounce
     public static ((N X, N Y, N Z) Position, (N X, N Y, N Z) Velocity)? InsideBox<N>(
         (N X, N Y, N Z) position, (N X, N Y, N Z) velocity, N radius,
         (N X, N Y, N Z) corner1, (N X, N Y, N Z) corner2, N restitution, N restingSpeed)
-        where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
+        where N : INumber<N>, IRootFunctions<N>
     {
         ThrowIfInvalidSurface(restitution, restingSpeed);
         bool touched = false;
@@ -423,20 +414,19 @@ public static class Bounce
     public static ((N X, N Y) Position, (N X, N Y) Velocity)? InsideBall<N>(
         (N X, N Y) position, (N X, N Y) velocity, N radius,
         (N X, N Y) center, N containerRadius, N restitution, N restingSpeed)
-        where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
+        where N : INumber<N>, IRootFunctions<N>
     {
         ArgumentOutOfRangeException.ThrowIfNegative(containerRadius);
         ThrowIfInvalidSurface(restitution, restingSpeed);
 
-        N dx = position.X - center.X;
-        N dy = position.Y - center.Y;
-        N distance = N.Sqrt(dx * dx + dy * dy);
-        N limit = Max(containerRadius - radius, N.Zero);
+        var offset = GeometricVector2.Direction.FromCartesian(center, position);
+        N distance = GeometricVector2.Magnitude.FromCartesian(offset);
+        N limit = N.Max(containerRadius - radius, N.Zero);
         if (distance <= limit)
             return null;
 
         // the wall faces the centre, so its normal points inwards
-        return Respond(position, velocity, (-dx / distance, -dy / distance), distance - limit, restitution, restingSpeed);
+        return Respond(position, velocity, (-offset.X / distance, -offset.Y / distance), distance - limit, restitution, restingSpeed);
     }
 
     /// <summary> Keeps a body inside a spherical container. </summary>
@@ -452,21 +442,19 @@ public static class Bounce
     public static ((N X, N Y, N Z) Position, (N X, N Y, N Z) Velocity)? InsideBall<N>(
         (N X, N Y, N Z) position, (N X, N Y, N Z) velocity, N radius,
         (N X, N Y, N Z) center, N containerRadius, N restitution, N restingSpeed)
-        where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
+        where N : INumber<N>, IRootFunctions<N>
     {
         ArgumentOutOfRangeException.ThrowIfNegative(containerRadius);
         ThrowIfInvalidSurface(restitution, restingSpeed);
 
-        N dx = position.X - center.X;
-        N dy = position.Y - center.Y;
-        N dz = position.Z - center.Z;
-        N distance = N.Sqrt(dx * dx + dy * dy + dz * dz);
-        N limit = Max(containerRadius - radius, N.Zero);
+        var offset = GeometricVector3.Direction.FromCartesian(center, position);
+        N distance = GeometricVector3.Magnitude.FromCartesian(offset);
+        N limit = N.Max(containerRadius - radius, N.Zero);
         if (distance <= limit)
             return null;
 
         // the wall faces the centre, so its normal points inwards
-        return Respond(position, velocity, (-dx / distance, -dy / distance, -dz / distance), distance - limit, restitution, restingSpeed);
+        return Respond(position, velocity, (-offset.X / distance, -offset.Y / distance, -offset.Z / distance), distance - limit, restitution, restingSpeed);
     }
 
     // Written as !(x >= 0), so that NaN is rejected as well.
@@ -487,7 +475,7 @@ public static class Bounce
         where N : INumberBase<N>, IComparisonOperators<N, N, bool>
     {
         var pushed = (position.X + normal.X * depth, position.Y + normal.Y * depth);
-        N approach = velocity.X * normal.X + velocity.Y * normal.Y;
+        N approach = GeometricVector2.DotProduct.FromCartesian(velocity, normal);
         if (approach >= N.Zero)
             return (pushed, velocity);
 
@@ -503,7 +491,7 @@ public static class Bounce
         where N : INumberBase<N>, IComparisonOperators<N, N, bool>
     {
         var pushed = (position.X + normal.X * depth, position.Y + normal.Y * depth, position.Z + normal.Z * depth);
-        N approach = velocity.X * normal.X + velocity.Y * normal.Y + velocity.Z * normal.Z;
+        N approach = GeometricVector3.DotProduct.FromCartesian(velocity, normal);
         if (approach >= N.Zero)
             return (pushed, velocity);
 
@@ -521,9 +509,10 @@ public static class Bounce
     // One axis of a body held between two walls: the position clamped between them and the velocity reflected off the wall it hit.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static (N Position, N Velocity) Confine<N>(N position, N velocity, N radius, N wall1, N wall2, N restitution, N restingSpeed, ref bool touched)
-        where N : INumberBase<N>, IComparisonOperators<N, N, bool>
+        where N : INumber<N>
     {
-        var (min, max) = Order(wall1, wall2);
+        N min = N.Min(wall1, wall2);
+        N max = N.Max(wall1, wall2);
         N low = min + radius;
         N high = max - radius;
         if (low > high)
@@ -546,85 +535,17 @@ public static class Bounce
         return (position, velocity);
     }
 
-    // The nearer of the two faces of one axis to a centre between them: its distance and the sign of its normal; the lower face when equally near.
+    // The nearer of the two faces of one axis, given in any order, to a centre between them: its distance and the sign of its normal; the lower face when equally near.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static (N Depth, N Sign) NearestFace<N>(N position, N min, N max)
-        where N : INumberBase<N>, IComparisonOperators<N, N, bool>
-        => position - min <= max - position ? (position - min, -N.One) : (max - position, N.One);
-
-    // Where the projection of a point falls along a segment, from 0 at its start to 1 at its end; 0 for a segment of no length.
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static N SegmentParameter<N>(N projection, N lengthSquared)
-        where N : INumberBase<N>, IComparisonOperators<N, N, bool>
-        => lengthSquared > N.Zero ? Clamp(projection / lengthSquared, N.Zero, N.One) : N.Zero;
-
-    // The point of a segment nearest to a point; the start for a segment of no length.
-    private static (N X, N Y) NearestOnSegment<N>((N X, N Y) point, (N X, N Y) start, (N X, N Y) end)
-        where N : INumberBase<N>, IComparisonOperators<N, N, bool>
+    private static (N Depth, N Sign) NearestFace<N>(N position, N face1, N face2)
+        where N : INumber<N>
     {
-        N ax = end.X - start.X;
-        N ay = end.Y - start.Y;
-        N t = SegmentParameter((point.X - start.X) * ax + (point.Y - start.Y) * ay, ax * ax + ay * ay);
-        return (start.X + ax * t, start.Y + ay * t);
+        N min = N.Min(face1, face2);
+        N max = N.Max(face1, face2);
+        return position - min <= max - position ? (position - min, -N.One) : (max - position, N.One);
     }
-
-    // The point of a segment in space nearest to a point; the start for a segment of no length.
-    private static (N X, N Y, N Z) NearestOnSegment<N>((N X, N Y, N Z) point, (N X, N Y, N Z) start, (N X, N Y, N Z) end)
-        where N : INumberBase<N>, IComparisonOperators<N, N, bool>
-    {
-        var axis = Subtract(end, start);
-        N t = SegmentParameter(Dot(Subtract(point, start), axis), Dot(axis, axis));
-        return (start.X + axis.X * t, start.Y + axis.Y * t, start.Z + axis.Z * t);
-    }
-
-    // Twice the signed area of the triangle of three points: positive when they run counter-clockwise.
-    private static N Cross<N>((N X, N Y) a, (N X, N Y) b, (N X, N Y) c)
-        where N : INumberBase<N>
-        => (b.X - a.X) * (c.Y - a.Y) - (b.Y - a.Y) * (c.X - a.X);
-
-    private static (N X, N Y, N Z) Cross<N>((N X, N Y, N Z) u, (N X, N Y, N Z) v)
-        where N : INumberBase<N>
-        => (u.Y * v.Z - u.Z * v.Y, u.Z * v.X - u.X * v.Z, u.X * v.Y - u.Y * v.X);
-
-    private static N Dot<N>((N X, N Y, N Z) u, (N X, N Y, N Z) v)
-        where N : INumberBase<N>
-        => u.X * v.X + u.Y * v.Y + u.Z * v.Z;
-
-    private static (N X, N Y, N Z) Subtract<N>((N X, N Y, N Z) u, (N X, N Y, N Z) v)
-        where N : INumberBase<N>
-        => (u.X - v.X, u.Y - v.Y, u.Z - v.Z);
-
-    private static N DistanceSquared<N>((N X, N Y) a, (N X, N Y) b)
-        where N : INumberBase<N>
-        => (a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y);
-
-    private static N DistanceSquared<N>((N X, N Y, N Z) a, (N X, N Y, N Z) b)
-        where N : INumberBase<N>
-    {
-        var d = Subtract(a, b);
-        return Dot(d, d);
-    }
-
-    private static N Length<N>((N X, N Y) a, (N X, N Y) b)
-        where N : IRootFunctions<N>
-        => N.Sqrt(DistanceSquared(a, b));
 
     private static N NormalLength<N>(N length, string paramName)
         where N : INumberBase<N>, IComparisonOperators<N, N, bool>
         => length > N.Zero ? length : throw new ArgumentException("The normal must have a non-zero length.", paramName);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static (N Min, N Max) Order<N>(N first, N second)
-        where N : IComparisonOperators<N, N, bool>
-        => first <= second ? (first, second) : (second, first);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static N Clamp<N>(N value, N min, N max)
-        where N : IComparisonOperators<N, N, bool>
-        => value < min ? min : value > max ? max : value;
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static N Max<N>(N first, N second)
-        where N : IComparisonOperators<N, N, bool>
-        => first >= second ? first : second;
 }

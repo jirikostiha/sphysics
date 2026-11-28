@@ -9,8 +9,8 @@ namespace SPhysics;
 /// </remarks>
 public static class DragForce
 {
-    public static N InFluid<N>(N massDensity, N flowVelocity, N area, N dragCoef)
+    public static N InFluid<N>(N fluidDensity, N flowVelocity, N area, N dragCoef)
         where N : INumberBase<N>
         =>
-        (N.One / N.CreateTruncating(2)) * massDensity * (flowVelocity * flowVelocity) * area * dragCoef;
+        (N.One / N.CreateTruncating(2)) * fluidDensity * (flowVelocity * flowVelocity) * area * dragCoef;
 }

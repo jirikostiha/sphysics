@@ -47,6 +47,7 @@ giving call sites like `GravitationalForce.Outside(m1, m2, r)` or
 | Energy & Power | `Energy`, `Work`, `KineticEnergy`, `PotentialEnergy`, `GravitationalEnergy`, `Power`, `ThermalRadiation`, `Heat` |
 | Gravitation | `GravitationalConstant`, `Gravity`, `GravitationalForce`, `GravitationalIntensity`, `GravitationalPotential`, `NBodyGravity` |
 | Celestial mechanics | `Barycenter`, `EscapeVelocity`, `MeanAnomaly`, `MeanMotion`, `OrbitalEccentricity`, `OrbitalPeriod`, `SemiMajorAxis`, `TrueAnomaly`, `OrbitalVelocity`, `HillSphere`, `RocheLimit`, `EccentricAnomaly`, `OrbitalStateVectors`, `MeanLongitude` |
+| Constants | `SpeedOfLight`, `BoltzmannConstant`, `PlanckConstant`, `AvogadroConstant` |
 | Other | `Density`, `Volume`, `Distance`, `PlaneAngle`, `SolidAngle`, `Frequency`, `Pressure`, `AbsorbedDose` |
 
 ## Setup

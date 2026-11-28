@@ -30,4 +30,20 @@ public class SemiMajorAxisTests
 
         Assert.Equal(expected, SemiMajorAxis.FromOrbitalPeriod(mass, period, gravitationalConstant), 10);
     }
+
+    [Theory]
+    [InlineData(2.0)]
+    [InlineData(5.0)]
+    [InlineData(8.0)]
+    public void FollowsFromTheSpecificOrbitalEnergyAnywhereOnTheOrbit(double distance)
+    {
+        const double mass = 3.0;
+        const double semiMajorAxis = 5.0;
+        const double gravitationalConstant = 2.0;
+
+        var speed = OrbitalVelocity.VisViva(mass, distance, semiMajorAxis, gravitationalConstant);
+        var energy = SpecificOrbitalEnergy.Eval(mass, distance, speed, gravitationalConstant);
+
+        Assert.Equal(semiMajorAxis, SemiMajorAxis.FromSpecificOrbitalEnergy(mass, energy, gravitationalConstant), 12);
+    }
 }

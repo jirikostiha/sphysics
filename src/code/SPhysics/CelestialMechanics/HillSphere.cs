@@ -26,5 +26,5 @@ public static class HillSphere
     public static N Eval<N>(N mass, N centralMass, N semiMajorAxis, N eccentricity)
         where N : IRootFunctions<N>
         =>
-        Eval(mass, centralMass, semiMajorAxis * (N.One - eccentricity));
+        Eval(mass, centralMass, Apsis.Pericenter(semiMajorAxis, eccentricity));
 }

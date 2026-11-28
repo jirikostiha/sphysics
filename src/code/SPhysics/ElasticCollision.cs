@@ -1,5 +1,7 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using SMath.Geometry2D;
+using SMath.Geometry3D;
 
 namespace SPhysics;
 
@@ -26,16 +28,15 @@ public static class ElasticCollision
         (N X, N Y) p2, (N X, N Y) v2, N m2, N r2)
         where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
     {
-        N dx = p2.X - p1.X;
-        N dy = p2.Y - p1.Y;
-        N distance = N.Sqrt(dx * dx + dy * dy);
+        var offset = GeometricVector2.Direction.FromCartesian(p1, p2);
+        N distance = GeometricVector2.Magnitude.FromCartesian(offset);
         N minDistance = r1 + r2;
 
         if (distance >= minDistance || distance <= N.Zero)
             return null;
 
-        N nx = dx / distance;
-        N ny = dy / distance;
+        N nx = offset.X / distance;
+        N ny = offset.Y / distance;
 
         if (!InverseMasses(m1, m2, out N invMass1, out N invMass2, out N totalInverseMass))
             return null;
@@ -47,9 +48,7 @@ public static class ElasticCollision
         var p2Out = (p2.X + nx * corr2, p2.Y + ny * corr2);
 
         // 2. Velocity update (impulse-based elastic collision).
-        N rvx = v2.X - v1.X;
-        N rvy = v2.Y - v1.Y;
-        N velocityAlongNormal = rvx * nx + rvy * ny;
+        N velocityAlongNormal = GeometricVector2.DotProduct.FromCartesian(GeometricVector2.Direction.FromCartesian(v1, v2), (nx, ny));
 
         var v1Out = v1;
         var v2Out = v2;
@@ -102,18 +101,16 @@ public static class ElasticCollision
         (N X, N Y, N Z) p2, (N X, N Y, N Z) v2, N m2, N r2)
         where N : IRootFunctions<N>, IComparisonOperators<N, N, bool>
     {
-        N dx = p2.X - p1.X;
-        N dy = p2.Y - p1.Y;
-        N dz = p2.Z - p1.Z;
-        N distance = N.Sqrt(dx * dx + dy * dy + dz * dz);
+        var offset = GeometricVector3.Direction.FromCartesian(p1, p2);
+        N distance = GeometricVector3.Magnitude.FromCartesian(offset);
         N minDistance = r1 + r2;
 
         if (distance >= minDistance || distance <= N.Zero)
             return null;
 
-        N nx = dx / distance;
-        N ny = dy / distance;
-        N nz = dz / distance;
+        N nx = offset.X / distance;
+        N ny = offset.Y / distance;
+        N nz = offset.Z / distance;
 
         if (!InverseMasses(m1, m2, out N invMass1, out N invMass2, out N totalInverseMass))
             return null;
@@ -125,7 +122,7 @@ public static class ElasticCollision
         var p2Out = (p2.X + nx * corr2, p2.Y + ny * corr2, p2.Z + nz * corr2);
 
         // 2. Velocity update (impulse-based elastic collision).
-        N velocityAlongNormal = (v2.X - v1.X) * nx + (v2.Y - v1.Y) * ny + (v2.Z - v1.Z) * nz;
+        N velocityAlongNormal = GeometricVector3.DotProduct.FromCartesian(GeometricVector3.Direction.FromCartesian(v1, v2), (nx, ny, nz));
 
         var v1Out = v1;
         var v2Out = v2;

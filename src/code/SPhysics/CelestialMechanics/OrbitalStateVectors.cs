@@ -1,4 +1,5 @@
 using System.Numerics;
+using SMath.Geometry2D;
 
 namespace SPhysics.CelestialMechanics;
 
@@ -18,7 +19,7 @@ public static class OrbitalStateVectors
         where N : IFloatingPointIeee754<N>
     {
         (N sin, N cos) = N.SinCos(eccentricAnomaly);
-        return (semiMajorAxis * (cos - eccentricity), semiMajorAxis * MinorAxisRatio(eccentricity) * sin);
+        return (semiMajorAxis * (cos - eccentricity), semiMajorAxis * Ellipse.AxisRatio.FromEccentricity(eccentricity) * sin);
     }
 
     /// <summary>Perifocal velocity on the orbit, sqrt(G * M / a) / (1 - e * cos(E)) * (-sin(E), sqrt(1 - e^2) * cos(E)).</summary>
@@ -32,7 +33,7 @@ public static class OrbitalStateVectors
     {
         (N sin, N cos) = N.SinCos(eccentricAnomaly);
         N speed = OrbitalVelocity.Circular(mass, semiMajorAxis, gravitationalConstant) / (N.One - eccentricity * cos);
-        return (-speed * sin, speed * MinorAxisRatio(eccentricity) * cos);
+        return (-speed * sin, speed * Ellipse.AxisRatio.FromEccentricity(eccentricity) * cos);
     }
 
     /// <summary>Rotates a perifocal vector into the reference frame by the orientation elements of the orbit, R_z(Omega) * R_x(i) * R_z(omega).</summary>
@@ -43,20 +44,13 @@ public static class OrbitalStateVectors
     public static (N X, N Y, N Z) ToReferenceFrame<N>((N X, N Y) perifocal, N longitudeOfAscendingNode, N inclination, N argumentOfPericenter)
         where N : IFloatingPointIeee754<N>
     {
-        (N sinNode, N cosNode) = N.SinCos(longitudeOfAscendingNode);
         (N sinInclination, N cosInclination) = N.SinCos(inclination);
-        (N sinPericenter, N cosPericenter) = N.SinCos(argumentOfPericenter);
 
-        // the perifocal vector turned by the argument of the pericenter within the orbital plane
-        N x = perifocal.X * cosPericenter - perifocal.Y * sinPericenter;
-        N y = perifocal.X * sinPericenter + perifocal.Y * cosPericenter;
-        N tilted = y * cosInclination;
+        // the perifocal vector turned by the argument of the pericenter within the orbital plane, tilted about
+        // the line of nodes and turned by the longitude of the node about the Z axis
+        var inPlane = GeometricVector2.Rotation.FromCartesian(perifocal, argumentOfPericenter);
+        var turned = GeometricVector2.Rotation.FromCartesian((inPlane.X, inPlane.Y * cosInclination), longitudeOfAscendingNode);
 
-        return (x * cosNode - tilted * sinNode, x * sinNode + tilted * cosNode, y * sinInclination);
+        return (turned.X, turned.Y, inPlane.Y * sinInclination);
     }
-
-    // b / a = sqrt(1 - e^2), the product form keeps the precision for e close to 1
-    private static N MinorAxisRatio<N>(N eccentricity)
-        where N : IFloatingPointIeee754<N>
-        => N.Sqrt((N.One - eccentricity) * (N.One + eccentricity));
 }

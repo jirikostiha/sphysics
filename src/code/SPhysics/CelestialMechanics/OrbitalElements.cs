@@ -60,7 +60,6 @@ public static class OrbitalElements
         N standardGravitationalParameter = gravitationalConstant * mass;
         N distance = GeometricVector3.Magnitude.FromCartesian(position);
         var momentum = SpecificAngularMomentum.Eval(position, velocity);
-        N momentumMagnitude = GeometricVector3.Magnitude.FromCartesian(momentum);
 
         // e = v x h / (G * M) - r / |r|, pointing to the pericenter
         var turn = GeometricVector3.CrossProduct.FromCartesian(velocity, momentum);
@@ -74,8 +73,9 @@ public static class OrbitalElements
             ? (N.One, N.Zero, N.Zero)
             : (-momentum.Y, momentum.X, N.Zero);
 
-        N argumentOfPericenter = AngleAlongMotion(node, eccentricity, momentum, momentumMagnitude);
-        N argumentOfLatitude = AngleAlongMotion(node, position, momentum, momentumMagnitude);
+        // both angles about the angular momentum, so in the sense of the motion
+        N argumentOfPericenter = GeometricVector3.Angle.FromCartesian(node, eccentricity, momentum);
+        N argumentOfLatitude = GeometricVector3.Angle.FromCartesian(node, position, momentum);
         N energy = SpecificOrbitalEnergy.Eval(mass, distance, velocity, gravitationalConstant);
 
         return (
@@ -86,12 +86,4 @@ public static class OrbitalElements
             momentum,
             node);
     }
-
-    // angle from the reference to the vector about the angular momentum, so in the sense of the motion
-    private static N AngleAlongMotion<N>((N X, N Y, N Z) reference, (N X, N Y, N Z) vector, (N X, N Y, N Z) momentum, N momentumMagnitude)
-        where N : IFloatingPointIeee754<N>
-        =>
-        N.Atan2(
-            GeometricVector3.TripleProduct.FromCartesian(momentum, reference, vector),
-            GeometricVector3.DotProduct.FromCartesian(reference, vector) * momentumMagnitude);
 }

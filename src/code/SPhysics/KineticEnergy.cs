@@ -38,6 +38,15 @@ public static class KineticEnergy
         =>
         N.CreateTruncating(0.5) * momentOfInertia * (angularVelocity * angularVelocity);
 
+    /// <summary> Kinetic energy of a rigid body in space spinning at an angular velocity, <c>omega^T * I * omega / 2</c>. </summary>
+    /// <param name="inertiaTensor"> Inertia tensor of the body, in the frame of the angular velocity. </param>
+    /// <param name="angularVelocity"> Angular velocity of the body. </param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static N Spinning<N>((N XX, N YY, N ZZ, N XY, N XZ, N YZ) inertiaTensor, (N X, N Y, N Z) angularVelocity)
+        where N : INumberBase<N>
+        =>
+        N.CreateTruncating(0.5) * GeometricVector3.DotProduct.FromCartesian(angularVelocity, InertiaTensor.Apply(inertiaTensor, angularVelocity));
+
     /// <summary>Kinetic energy of linear motion from momentum.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static N FromMomentum<N>(N momentum, N mass)

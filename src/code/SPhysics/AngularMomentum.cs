@@ -29,6 +29,15 @@ public static class AngularMomentum
         =>
         momentOfInertia * angularVelocity;
 
+    /// <summary> Angular momentum of a rigid body in space spinning at an angular velocity, <c>L = I * omega</c>. </summary>
+    /// <param name="inertiaTensor"> Inertia tensor of the body, in the frame of the angular velocity. </param>
+    /// <param name="angularVelocity"> Angular velocity of the body. </param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static (N X, N Y, N Z) FromInertiaTensor<N>((N XX, N YY, N ZZ, N XY, N XZ, N YZ) inertiaTensor, (N X, N Y, N Z) angularVelocity)
+        where N : INumberBase<N>
+        =>
+        InertiaTensor.Apply(inertiaTensor, angularVelocity);
+
     /// <summary>
     /// Total angular momentum of bodies in a plane about <paramref name="origin"/>, <c>sum(m * (r - o) x v)</c>; the
     /// result is its component perpendicular to the plane, positive for a counterclockwise motion.

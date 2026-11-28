@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Runtime.CompilerServices;
 
 using SMath.Geometry2D;
 using SMath.Geometry3D;
@@ -35,6 +36,15 @@ public static class MomentOfInertia
         where N : IMultiplyOperators<N, N, N>, IAdditionOperators<N, N, N>
         =>
         centerOfMassMoment + mass * (distance * distance);
+
+    /// <summary> Moment of inertia about an axis through the point an inertia tensor is taken about, <c>n^T * I * n</c>. </summary>
+    /// <param name="inertiaTensor"> Inertia tensor of the body. </param>
+    /// <param name="axis"> Unit vector along the axis. </param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static N FromInertiaTensor<N>((N XX, N YY, N ZZ, N XY, N XZ, N YZ) inertiaTensor, (N X, N Y, N Z) axis)
+        where N : INumberBase<N>
+        =>
+        GeometricVector3.DotProduct.FromCartesian(axis, InertiaTensor.Apply(inertiaTensor, axis));
 
     #region objects
 

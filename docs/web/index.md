@@ -34,10 +34,12 @@ dotnet add package SPhysics
 
 | Area | Types & Capabilities |
 | :--- | :--- |
-| **Base Quantities** | `Length`, `Mass`, `Time`, `ElectricCurrent`, `Temperature`, `AmountOfSubstance`, `LuminousIntensity` |
-| **Mechanics** | `Velocity`, `Acceleration`, `Jerk`, `Momentum`, `AngularMomentum`, `AngularVelocity`, `Impulse`, `Force`, `FrictionForce`, `DragForce`, `MomentOfInertia`, `InertiaTensor`, `Precession`, `CenterOfMass`, `CenterOfGravity`, `VelocityVerlet`, `ElasticCollision` |
-| **Bodies** | members of the SMath shapes: `Circle.Region`, `Rectangle.Region`, `Triangle.Region`, `Sphere.Region`, `Cuboid.Region` |
-| **Energy & Power** | `Energy`, `KineticEnergy`, `PotentialEnergy`, `GravitationalEnergy`, `Power`, `ThermalRadiation` |
-| **Gravitation** | `Gravity`, `GravitationalForce`, `GravitationalIntensity`, `GravitationalPotential`, `NBodyGravity` |
-| **Celestial Mechanics** | `Barycenter`, `EscapeVelocity`, `MeanAnomaly`, `MeanMotion`, `OrbitalEccentricity`, `OrbitalPeriod`, `SemiMajorAxis`, `TrueAnomaly`, `OrbitalVelocity`, `HillSphere`, `RocheLimit`, `EccentricAnomaly`, `OrbitalStateVectors`, `MeanLongitude`, `OrbitalElements`, `SpecificOrbitalEnergy`, `SpecificAngularMomentum`, `Apsis` |
-| **Other Quantities** | `Density`, `Distance`, `PlaneAngle`, `SolidAngle`, `Frequency`, `Pressure`, `AbsorbedDose` |
+| **Base quantities** | `Length`, `Mass`, `Time`, `ElectricCurrent`, `Temperature`, `AmountOfSubstance`, `LuminousIntensity` |
+| **Mechanics** | `Velocity`, `Acceleration`, `Jerk`, `Momentum`, `AngularMomentum`, `AngularVelocity`, `AngularAcceleration`, `Torque`, `Impulse`, `Force`, `FrictionForce`, `DragForce`, `MomentOfInertia`, `InertiaTensor`, `Precession`, `RadiusOfGyration`, `CenterOfMass`, `CenterOfGravity`, `ReducedMass`, `VelocityVerlet`, `ElasticCollision`, `InelasticCollision`, `Restitution`, `Bounce` |
+| **Bodies** | members of the SMath shapes: `Circle.Region`, `Ellipse.Region`, `Rectangle.Region`, `Square.Region`, `Triangle.Region`, `Sphere.Region`, `SphericalShell.Region`, `Ellipsoid.Region`, `Cuboid.Region`, `Cube.Region`, `Cylinder.Region`, `Cone.Region`, `Torus.Region` |
+| **Energy & Power** | `Energy`, `Work`, `KineticEnergy`, `PotentialEnergy`, `GravitationalEnergy`, `Power`, `ThermalRadiation`, `Heat` |
+| **Gravitation** | `GravitationalConstant`, `Gravity`, `GravitationalForce`, `GravitationalIntensity`, `GravitationalPotential`, `NBodyGravity` |
+| **Celestial mechanics** | `Barycenter`, `EscapeVelocity`, `MeanAnomaly`, `MeanMotion`, `OrbitalEccentricity`, `OrbitalPeriod`, `SemiMajorAxis`, `TrueAnomaly`, `OrbitalVelocity`, `HillSphere`, `RocheLimit`, `EccentricAnomaly`, `OrbitalStateVectors`, `MeanLongitude`, `OrbitalElements`, `SpecificOrbitalEnergy`, `SpecificAngularMomentum`, `Apsis` |
+| **Fluids** | `BuoyantForce`, `ReynoldsNumber`, `Pressure.Hydrostatic`, `Velocity.Terminal` |
+| **Constants** | `SpeedOfLight`, `BoltzmannConstant`, `PlanckConstant`, `AvogadroConstant` |
+| **Other** | `Density`, `Volume`, `Distance`, `PlaneAngle`, `SolidAngle`, `Frequency`, `Pressure`, `AbsorbedDose` |
